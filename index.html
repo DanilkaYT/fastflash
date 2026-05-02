@@ -2,26 +2,34 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>fastflash</title>
+    
+    <!-- Единый шрифт Roboto для всех устройств -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            /* Исправляет разницу в размере шрифтов между ПК и мобильными */
+            -webkit-text-size-adjust: 100%;
         }
         
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            /* Темный фон, чтобы матрица смотрелась эффектно */
+            font-family: 'Roboto', sans-serif;
             background: #000;
             color: #e0ffe0;
             min-height: 100vh;
             padding: 20px;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Стили для фоновой анимации */
+        /* Фон Матрица */
         #matrix {
             position: fixed;
             top: 0;
@@ -29,8 +37,8 @@
             width: 100%;
             height: 100%;
             z-index: 0;
-            opacity: 0.3; /* Прозрачность матрицы */
-            pointer-events: none; /* Пропускает клики сквозь себя */
+            opacity: 0.3;
+            pointer-events: none;
         }
         
         .container {
@@ -38,11 +46,11 @@
             margin: 0 auto;
             text-align: center;
             position: relative;
-            z-index: 1; /* Контент поверх матрицы */
+            z-index: 1;
         }
         
         header {
-            padding: 40px 20px;
+            padding: 60px 20px;
             animation: fadeInDown 1s ease;
         }
         
@@ -52,101 +60,107 @@
             text-transform: uppercase;
             letter-spacing: 5px;
             color: #2ecc71;
-            text-shadow: 0 0 10px rgba(46, 204, 113, 0.7),
-                         0 0 20px rgba(46, 204, 113, 0.4),
-                         0 0 30px rgba(46, 204, 113, 0.2);
+            text-shadow: 0 0 15px rgba(46, 204, 113, 0.6);
+            font-weight: 700;
         }
         
         .subtitle {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #81c784;
             max-width: 600px;
             margin: 0 auto 40px auto;
-            opacity: 0.8;
-            background: rgba(0, 0, 0, 0.5); /* Фон для читаемости */
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 5px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 8px;
+            line-height: 1.5;
         }
         
-        .avito-link {
+        /* Стили кнопок */
+        .links-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn {
             display: flex; 
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px auto; 
+            width: 100%;
             max-width: 400px;
-            background: rgba(0, 0, 0, 0.7); /* Полупрозрачный фон кнопок */
-            color: #2ecc71;
             text-decoration: none;
-            padding: 18px 45px;
+            padding: 18px 20px;
             border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            border: 2px solid #2ecc71;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 15px rgba(46, 204, 113, 0.2);
+            font-size: 1rem;
+            font-weight: 700;
             text-transform: uppercase;
+            transition: all 0.3s ease;
+            border: 2px solid #2ecc71;
+            letter-spacing: 1px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #2ecc71;
+            box-shadow: 0 0 15px rgba(46, 204, 113, 0.1);
         }
-        
-        .avito-link:hover {
-            background: #2ecc71;
-            color: #000;
-            box-shadow: 0 0 30px rgba(46, 204, 113, 0.6);
-            transform: scale(1.05);
+
+        .btn:hover {
+            background: rgba(46, 204, 113, 0.1);
+            transform: scale(1.03);
+            border-color: #fff;
+            color: #fff;
+            box-shadow: 0 0 25px rgba(46, 204, 113, 0.4);
         }
         
         footer {
             margin-top: 80px;
-            padding: 20px;
-            font-size: 0.9rem;
+            padding: 30px;
+            font-size: 0.85rem;
             color: #1b5e20;
-            border-top: 1px solid rgba(27, 94, 32, 0.3);
-            background: rgba(0, 0, 0, 0.5);
+            border-top: 1px solid rgba(46, 204, 113, 0.2);
         }
         
         @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-                filter: blur(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-                filter: blur(0);
-            }
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
+        /* Адаптация под телефоны */
         @media (max-width: 768px) {
-            h1 { font-size: 2.2rem; }
-            .avito-link { width: 90%; }
+            h1 { font-size: 2.5rem; letter-spacing: 2px; }
+            .btn { width: 90%; font-size: 0.9rem; padding: 15px; }
+            .subtitle { font-size: 1rem; }
         }
     </style>
 </head>
 <body>
-    <!-- Холст для матрицы -->
     <canvas id="matrix"></canvas>
 
     <div class="container">
         <header>
             <h1>fastflash</h1>
-            <p class="subtitle">Широкий выбор техники в Стерлитамаке • Гарантия качества • Лучшие цены</p>
+            <p class="subtitle">Техника в Стерлитамаке • Гарантия качества • Лучшие цены</p>
         </header>
         
-        <a href="https://www.avito.ru/user/d67b1a105ae799e493174694ce400bdf/profile" target="_blank" class="avito-link">
-            Перейти в наш Avito
-        </a>
+        <div class="links-group">
+            <!--  -->
+            <a href="https://fastflash.shop/services" class="btn">
+                Наши Услуги
+            </a>
 
-        <a href="https://t.me/+5ewfWB0mk90zZmRi" target="_blank" class="avito-link">
-            ПЕРЕКУПЫ СТЕРЛИТАМАКА
-        </a>
+            <a href="https://www.avito.ru/user/d67b1a105ae799e493174694ce400bdf/profile" target="_blank" class="btn">
+                Наш Avito
+            </a>
+
+            <a href="https://t.me/+5ewfWB0mk90zZmRi" target="_blank" class="btn">
+                Перекупы Стерлитамака
+            </a>
+        </div>
         
         <footer>
             <p>© 2026 FastFlash</p>
         </footer>
     </div>
 
-    <!-- Подключение скрипта анимации -->
     <script src="script.js"></script>
 </body>
 </html>
