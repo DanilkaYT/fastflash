@@ -1,39 +1,59 @@
 const canvas = document.getElementById('matrix');
 const ctx = canvas.getContext('2d');
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-const katakana = '01';
+// Переменные для настройки
+const chars = '01';
 const fontSize = 16;
-const columns = canvas.width / fontSize;
+let columns = 0;
+let drops = [];
 
-const drops = [];
-for (let x = 0; x < columns; x++) {
-    drops[x] = 1;
+// Функция инициализации и подстройки под размер
+function setupCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Пересчитываем количество колонок исходя из новой ширины
+    columns = Math.floor(canvas.width / fontSize);
+    
+    // Создаем массив капель заново, чтобы они заполнили весь экран
+    drops = [];
+    for (let x = 0; x < columns; x++) {
+        // Устанавливаем случайную начальную позицию по вертикали, 
+        // чтобы при изменении размера они не падали ровной линией
+        drops[x] = Math.random() * -100; 
+    }
 }
 
+// Запускаем настройку при загрузке
+setupCanvas();
+
 function draw() {
+    // Полупрозрачный слой для создания эффекта шлейфа
     ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = '#2ecc71'; // Цвет текста (в тон вашего сайта)
+    ctx.fillStyle = '#2ecc71';
     ctx.font = fontSize + 'px monospace';
 
     for (let i = 0; i < drops.length; i++) {
-        const text = katakana.charAt(Math.floor(Math.random() * katakana.length));
+        const text = chars.charAt(Math.floor(Math.random() * chars.length));
+        
+        // Рисуем символ
         ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
+        // Если капля достигла низа экрана — отправляем её наверх с шансом 2.5%
         if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
             drops[i] = 0;
         }
+        
         drops[i]++;
     }
 }
 
+// Плавная отрисовка
 setInterval(draw, 33);
 
+// Слушатель изменения размера окна (включая масштаб)
 window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    setupCanvas();
 });
