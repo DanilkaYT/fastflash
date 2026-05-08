@@ -2,127 +2,223 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Подключение FastFlash Proxy</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #007AFF;
-            --dark: #121212;
-            --surface: #1e1e1e;
-            --text: #ffffff;
-            --text-dim: #a0a0a0;
-        }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FastFlash | Подключение</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
-        body {
+    <style>
+        * {
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            box-sizing: border-box;
+            -webkit-text-size-adjust: 100%;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #000;
+            color: #e0ffe0;
             min-height: 100vh;
-            background-color: var(--dark);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            color: var(--text);
+            padding: 20px;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
+        #matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        
         .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
             text-align: center;
-            background: var(--surface);
-            padding: 40px 30px;
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            max-width: 400px;
-            width: 90%;
-            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            z-index: 1;
         }
-
-        .logo {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 10px;
-            letter-spacing: -1px;
+        
+        header {
+            padding: 40px 20px;
+            animation: fadeInDown 1s ease;
         }
-
-        .logo span {
-            color: var(--primary);
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: #2ecc71;
+            text-shadow: 0 0 15px rgba(46, 204, 113, 0.6);
+            font-weight: 700;
         }
-
-        .description {
-            color: var(--text-dim);
-            margin-bottom: 30px;
+        
+        .subtitle {
+            font-size: 1.1rem;
+            color: #81c784;
+            max-width: 600px;
+            margin: 0 auto 40px auto;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 8px;
             line-height: 1.5;
         }
-
-        .btn-happ {
+        
+        .links-group {
             display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .btn-main {
+            display: flex; 
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            background: var(--primary);
-            color: white;
+            width: 100%;
+            max-width: 450px;
             text-decoration: none;
-            padding: 18px 30px;
-            border-radius: 16px;
+            padding: 22px 25px;
+            border-radius: 50px;
             font-size: 1.1rem;
-            font-weight: 600;
+            font-weight: 700;
+            text-transform: uppercase;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(0, 122, 255, 0.3);
+            border: 2px solid #2ecc71;
+            letter-spacing: 2px;
+            background: #2ecc71;
+            color: #000;
+            box-shadow: 0 0 20px rgba(46, 204, 113, 0.4);
+            cursor: pointer;
         }
 
-        .btn-happ:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 30px rgba(0, 122, 255, 0.4);
-            background: #0084ff;
+        .btn-main:hover {
+            background: #000;
+            color: #2ecc71;
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(46, 204, 113, 0.6);
         }
 
-        .btn-happ:active {
-            transform: translateY(0);
-        }
-
-        .help-text {
-            margin-top: 25px;
-            font-size: 0.85rem;
-            color: var(--text-dim);
-        }
-
-        .help-text a {
-            color: var(--primary);
+        .secondary-link {
+            color: #1b5e20;
             text-decoration: none;
+            font-size: 0.9rem;
+            margin-top: 15px;
+            transition: color 0.3s;
+        }
+
+        .secondary-link:hover {
+            color: #2ecc71;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding: 20px;
+            font-size: 0.85rem;
+            color: #1b5e20;
+            border-top: 1px solid rgba(46, 204, 113, 0.1);
+        }
+        
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; letter-spacing: 2px; }
+            .btn-main { width: 95%; font-size: 0.95rem; }
+            .subtitle { font-size: 0.9rem; }
         }
     </style>
 </head>
 <body>
+    <canvas id="matrix"></canvas>
 
     <div class="container">
-        <div class="logo">Fast<span>Flash</span></div>
-        <p class="description">Нажмите кнопку ниже, чтобы автоматически импортировать настройки защищенного соединения в приложение Happ Proxy.</p>
+        <header>
+            <h1>fastflash</h1>
+            <p class="subtitle">Автоматическое подключение прокси-сервиса.<br>Нажмите кнопку для импорта настроек в Happ.</p>
+        </header>
+        
+        <div class="links-group">
+            <!-- Сюда вставляем готовую crypt5 ссылку после обработки через API -->
+            <a href="happ://crypt5/ВАША_ССЫЛКА_ПОСЛЕ_API" class="btn-main" id="happAction">
+                Добавить в Happ Proxy
+            </a>
 
-        <!-- ВСТАВЬТЕ ВАШУ ССЫЛКУ В HREF -->
-        <a href="happ://crypt5/ВАША_ССЫЛКА_ПОСЛЕ_API" class="btn-happ" id="happLink">
-            <i class="fa-solid fa-bolt-lightning"></i>
-            Добавить в Happ
-        </a>
-
-        <div class="help-text">
-            Нет приложения? <a href="https://www.happ.su/main/download" target="_blank">Скачать Happ Proxy</a>
+            <a href="https://www.happ.su/main/download" target="_blank" class="secondary-link">
+                У меня еще нет приложения
+            </a>
         </div>
+        
+        <footer>
+            <p>© 2026 FastFlash • Стерлитамак</p>
+        </footer>
     </div>
 
     <script>
-        document.getElementById('happLink').addEventListener('click', function(e) {
+        // Matrix Effect
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+
+        for (let i = 0; i < columns; i++) {
+            drops[i] = 1;
+        }
+
+        function draw() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#0F0";
+            ctx.font = fontSize + "px Roboto";
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = letters.charAt(Math.floor(Math.random() * letters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(draw, 33);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Проверка открытия приложения
+        document.getElementById('happAction').addEventListener('click', function(e) {
             const start = Date.now();
-            
-            // Если через 2 секунды браузер все еще на этой странице, значит приложение не открылось
             setTimeout(function() {
                 if (Date.now() - start < 2500) {
-                    if (confirm("Похоже, Happ Proxy не установлен. Перейти на страницу загрузки?")) {
+                    if (confirm("Похоже, Happ Proxy не открылся. Перейти на страницу установки?")) {
                         window.location.href = "https://www.happ.su/main/download";
                     }
                 }
             }, 2000);
         });
     </script>
-
 </body>
 </html>
