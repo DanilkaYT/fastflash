@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подключить Happ Proxy</title>
+    <style>
+        .btn-happ {
+            display: inline-block;
+            padding: 15px 25px;
+            background-color: #007AFF; /* Фирменный синий цвет */
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-family: sans-serif;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .btn-happ:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Ваша подписка готова</h2>
+    <p>Нажмите кнопку ниже, чтобы автоматически добавить конфигурации в приложение Happ.</p>
+
+    <!-- Ссылка с использованием схемы happ:// -->
+    <a href="happ://crypt5/eyid084196726c06830722369641753930335f6148523063484d364c79396a6147566a61334d75614746776343357a64533931636d773d23416c6c5f4e6f6465735f46617374466c617368" class="btn-happ">
+        Открыть в Happ Proxy
+    </a>
+
+    <script>
+        // Дополнительная логика: если приложение не установлено, 
+        // можно перенаправить пользователя в App Store или Google Play через 2 секунды.
+        document.querySelector('.btn-happ').onclick = function() {
+            setTimeout(function() {
+                if (confirm("Приложение Happ не открылось. Перейти к установке?")) {
+                    window.location.href = "https://www.happ.su/main/download";
+                }
+            }, 2000);
+        };
+    </script>
+
+</body>
+</html>
