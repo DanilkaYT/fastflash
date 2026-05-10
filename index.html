@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>fastflash</title>
+    <title>FastFlash — Техника в Стерлитамаке</title>
     
-    <!-- Единый шрифт Roboto для всех устройств -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -15,7 +14,6 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            /* Исправляет разницу в размере шрифтов между ПК и мобильными */
             -webkit-text-size-adjust: 100%;
         }
         
@@ -24,12 +22,12 @@
             background: #000;
             color: #e0ffe0;
             min-height: 100vh;
-            padding: 20px;
+            display: flex;
+            flex-direction: column;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Фон Матрица */
         #matrix {
             position: fixed;
             top: 0;
@@ -37,7 +35,7 @@
             width: 100%;
             height: 100%;
             z-index: 0;
-            opacity: 0.3;
+            opacity: 0.25;
             pointer-events: none;
         }
         
@@ -47,10 +45,12 @@
             text-align: center;
             position: relative;
             z-index: 1;
+            flex-grow: 1;
+            padding: 20px;
         }
         
         header {
-            padding: 60px 20px;
+            padding: 60px 20px 40px;
             animation: fadeInDown 1s ease;
         }
         
@@ -68,19 +68,20 @@
             font-size: 1.1rem;
             color: #81c784;
             max-width: 600px;
-            margin: 0 auto 40px auto;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 10px 20px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 12px 20px;
             border-radius: 8px;
             line-height: 1.5;
+            border: 1px solid rgba(46, 204, 113, 0.2);
         }
         
-        /* Стили кнопок */
         .links-group {
             display: flex;
             flex-direction: column;
             gap: 15px;
             align-items: center;
+            margin-top: 40px;
         }
 
         .btn {
@@ -98,25 +99,61 @@
             transition: all 0.3s ease;
             border: 2px solid #2ecc71;
             letter-spacing: 1px;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.8);
             color: #2ecc71;
-            box-shadow: 0 0 15px rgba(46, 204, 113, 0.1);
+            box-shadow: 0 0 10px rgba(46, 204, 113, 0.1);
+        }
+
+        /* Стиль для одинакового отображения иконок */
+        .icon {
+            margin-right: 12px;
+            font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
+            font-style: normal;
+            font-size: 1.2rem;
+            display: inline-block;
+            vertical-align: middle;
         }
 
         .btn:hover {
             background: rgba(46, 204, 113, 0.1);
-            transform: scale(1.03);
-            border-color: #fff;
             color: #fff;
-            box-shadow: 0 0 25px rgba(46, 204, 113, 0.4);
+            border-color: #fff;
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(46, 204, 113, 0.4);
         }
-        
+
+        .cube-section {
+            margin: 50px auto 30px;
+            width: 250px;
+            height: 250px;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #cube-canvas {
+            background: rgba(0, 20, 0, 0.2);
+            border-radius: 20px;
+        }
+
+        .cube-label {
+            font-size: 10px;
+            color: #2ecc71;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-top: 15px;
+            opacity: 0.7;
+        }
+
         footer {
-            margin-top: 80px;
             padding: 30px;
             font-size: 0.85rem;
             color: #1b5e20;
-            border-top: 1px solid rgba(46, 204, 113, 0.2);
+            border-top: 1px solid rgba(46, 204, 113, 0.1);
+            background: rgba(0,0,0,0.8);
+            z-index: 1;
         }
         
         @keyframes fadeInDown {
@@ -124,11 +161,10 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        /* Адаптация под телефоны */
         @media (max-width: 768px) {
             h1 { font-size: 2.5rem; letter-spacing: 2px; }
             .btn { width: 90%; font-size: 0.9rem; padding: 15px; }
-            .subtitle { font-size: 1rem; }
+            .cube-section { width: 200px; height: 200px; }
         }
     </style>
 </head>
@@ -138,29 +174,38 @@
     <div class="container">
         <header>
             <h1>fastflash</h1>
-            <p class="subtitle">Техника в Стерлитамаке • Гарантия качества • Лучшие цены</p>
+            <p class="subtitle">Техника в Стерлитамаке • Гарантия • Лучшие цены</p>
         </header>
         
         <div class="links-group">
-            <!--  -->
+            <a href="https://t.me/FastFlashBot" target="_blank" class="btn">
+                <i class="icon">🤖</i> Telegram БОТ
+            </a>
+
             <a href="https://fastflash.shop/services" class="btn">
-                Наши Услуги
+                <i class="icon">🛠️</i> Наши Услуги
             </a>
 
             <a href="https://www.avito.ru/user/d67b1a105ae799e493174694ce400bdf/profile" target="_blank" class="btn">
-                Наш Avito
+                <i class="icon">📦</i> Наш Avito
             </a>
 
             <a href="https://t.me/perekupstr" target="_blank" class="btn">
-                Перекупы Стерлитамака
+                <i class="icon">🤝</i> Перекупы Стерлитамака
             </a>
         </div>
-        
-        <footer>
-            <p>© 2026 FastFlash</p>
-        </footer>
+
+        <div class="cube-section">
+            <canvas id="cube-canvas" width="250" height="250"></canvas>
+            <p class="cube-label"></p>
+        </div>
     </div>
 
+    <footer>
+        <p></p>
+    </footer>
+
     <script src="script.js"></script>
+    <script src="cube.js"></script>
 </body>
 </html>
