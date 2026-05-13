@@ -1,8 +1,0 @@
-vless://8e967a80-1a1a-4d7a-8d1e-2c967a801a1a@188.114.97.3:443?encryption=none&security=tls&sni=r123t.verc.ru&type=ws&host=r123t.verc.ru&path=%2F#🇷🇺%20RU-LTE-1
-vless://3934d79d-39d2-431c-b26a-93f8e0780282@172.67.181.185:443?encryption=none&security=tls&sni=cf-vless.888820.xyz&type=ws&host=cf-vless.888820.xyz&path=%2F%3Fed%3D2560#🇺🇸fastflash.shop
-vless://b6645314-539c-450e-be5b-9d413348880d@80.85.155.138:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=yandex.ru&fp=chrome&pbk=E-L6X7mN9_6fI-T36_9vA-m79vA-m79vA-m79vA-m7w&sid=6ba6b212&type=grpc&serviceName=grpc#🇷🇺%20RU-LTE-2
-vless://3f89e211-12c1-4b11-9a11-8c11e2113f89@141.101.123.32:443?encryption=none&security=tls&sni=vless.ngenix.net&type=ws&host=vless.ngenix.net&path=%2F#🇷🇺%20RU-LTE-3
-hysteria2://107e0344-933e-468a-9f5b-6c466e313576@135.181.164.84:10722/?sni=[www.bing.com](https://www.bing.com)&obfs=salamander&obfs-password=107e0344-933e-468a-9f5b-6c466e313576#🇫🇮%20FI-1
-hysteria2://432a0344-933e-468a-9f5b-6c466e313576@135.181.164.84:27142/?sni=[www.bing.com](https://www.bing.com)&obfs=salamander&obfs-password=432a0344-933e-468a-9f5b-6c466e313576#🇫🇮%20FI-2
-hysteria2://6a920344-933e-468a-9f5b-6c466e313576@135.181.164.84:39102/?sni=[www.bing.com](https://www.bing.com)&obfs=salamander&obfs-password=6a920344-933e-468a-9f5b-6c466e313576#🇫🇮%20FI-3
-trojan://04b1279a-1c1a-4d1a-8c1a-2c1a279a04b1@95.164.17.18:443?security=tls&sni=tr.ros.tel&type=grpc&serviceName=brutal&mode=multi#🇩🇪%20DE-BRUTAL-500+mbps
