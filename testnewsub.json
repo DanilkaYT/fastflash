@@ -1,0 +1,115 @@
+{
+  "log": {
+    "access": "/private/var/mobile/Containers/Shared/AppGroup/6A711856-8991-4F7D-8421-9FCCA6D5D62D/Library/Application Support/Xray/logs/access.log",
+    "loglevel": "warning"
+  },
+  "dns": {
+    "servers": [
+      "https://1.1.1.1/dns-query",
+      "8.8.8.8",
+      "localhost"
+    ],
+    "queryStrategy": "UseIPv4"
+  },
+  "inbounds": [
+    {
+      "listen": "127.0.0.1",
+      "port": 10808,
+      "protocol": "socks",
+      "settings": { "udp": true },
+      "sniffing": { "enabled": true, "destOverride": ["http", "tls", "quic"], "routeOnly": true },
+      "tag": "socks-in"
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "vless",
+      "tag": "DE-Germany",
+      "settings": {
+        "vnext": [{
+          "address": "62.152.60.2",
+          "port": 443,
+          "users": [{ "id": "411c1913-996e-4aa6-89fe-0d25ac621e83", "encryption": "none", "flow": "xtls-rprx-vision" }]
+        }]
+      },
+      "streamSettings": {
+        "network": "tcp", "security": "reality",
+        "realitySettings": {
+          "fingerprint": "firefox", "serverName": "5post-gate-test.x5.ru",
+          "publicKey": "Hw1ONT6E1621MrKxVA7Rih8d_fK94tKFr26l7qaaAQA", "shortId": "5bac1a71e1e66bfa"
+        }
+      }
+    },
+    {
+      "protocol": "vless",
+      "tag": "BH-Bahrain",
+      "settings": {
+        "vnext": [{
+          "address": "149.104.106.86",
+          "port": 443,
+          "users": [{ "id": "411c1913-996e-4aa6-89fe-0d25ac621e83", "encryption": "none", "flow": "xtls-rprx-vision" }]
+        }]
+      },
+      "streamSettings": {
+        "network": "tcp", "security": "reality",
+        "realitySettings": {
+          "fingerprint": "firefox", "serverName": "bax.novaboostervps.pro",
+          "publicKey": "Io3RTdOBFSDsIiaSn95-sWsXh2n6EFeZfZg0P_kKRR8", "shortId": "1fd5d9"
+        }
+      }
+    },
+    {
+      "protocol": "vless",
+      "tag": "PL-Poland",
+      "settings": {
+        "vnext": [{
+          "address": "130.49.155.253",
+          "port": 443,
+          "users": [{ "id": "411c1913-996e-4aa6-89fe-0d25ac621e83", "encryption": "none", "flow": "xtls-rprx-vision" }]
+        }]
+      },
+      "streamSettings": {
+        "network": "tcp", "security": "reality",
+        "realitySettings": {
+          "fingerprint": "firefox", "serverName": "poland.novaboostervps.pro",
+          "publicKey": "Io3RTdOBFSDsIiaSn95-sWsXh2n6EFeZfZg0P_kKRR8", "shortId": "a3f9c2d7"
+        }
+      }
+    },
+    {
+      "protocol": "vless",
+      "tag": "EE-Estonia",
+      "settings": {
+        "vnext": [{
+          "address": "146.19.143.131",
+          "port": 443,
+          "users": [{ "id": "411c1913-996e-4aa6-89fe-0d25ac621e83", "encryption": "none", "flow": "xtls-rprx-vision" }]
+        }]
+      },
+      "streamSettings": {
+        "network": "tcp", "security": "reality",
+        "realitySettings": {
+          "fingerprint": "firefox", "serverName": "est.novaboostervps.pro",
+          "publicKey": "Io3RTdOBFSDsIiaSn95-sWsXh2n6EFeZfZg0P_kKRR8", "shortId": "9d7c0e2a"
+        }
+      }
+    },
+    { "protocol": "freedom", "tag": "direct" },
+    { "protocol": "blackhole", "tag": "block" }
+  ],
+  "routing": {
+    "domainStrategy": "IPIfNonMatch",
+    "balancers": [
+      {
+        "tag": "all-proxies",
+        "selector": ["DE-Germany", "BH-Bahrain", "PL-Poland", "EE-Estonia"],
+        "strategy": { "type": "leastPing" }
+      }
+    ],
+    "rules": [
+      { "type": "field", "ip": ["geoip:ru", "geoip:private"], "outboundTag": "direct" },
+      { "type": "field", "domain": ["geosite:category-ru"], "outboundTag": "direct" },
+      { "type": "field", "network": "tcp,udp", "balancerTag": "all-proxies" }
+    ]
+  }
+}
