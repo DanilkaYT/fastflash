@@ -24,7 +24,7 @@
   "outbounds": [
     {
       "protocol": "vless",
-      "tag": "DE-Germany",
+      "tag": "🇩🇪 Germany | fastflash.shop",
       "settings": {
         "vnext": [{
           "address": "62.152.60.2",
@@ -42,7 +42,7 @@
     },
     {
       "protocol": "vless",
-      "tag": "BH-Bahrain",
+      "tag": "🇧🇭 Bahrain | fastflash.shop",
       "settings": {
         "vnext": [{
           "address": "149.104.106.86",
@@ -60,7 +60,7 @@
     },
     {
       "protocol": "vless",
-      "tag": "PL-Poland",
+      "tag": "🇵🇱 Poland | fastflash.shop",
       "settings": {
         "vnext": [{
           "address": "130.49.155.253",
@@ -78,7 +78,7 @@
     },
     {
       "protocol": "vless",
-      "tag": "EE-Estonia",
+      "tag": "🇪🇪 Estonia | fastflash.shop",
       "settings": {
         "vnext": [{
           "address": "146.19.143.131",
@@ -94,22 +94,104 @@
         }
       }
     },
+    {
+      "protocol": "vless",
+      "tag": "🇸🇪 Sweden | fastflash.shop",
+      "settings": {
+        "vnext": [{
+          "address": "146.19.143.130",
+          "port": 443,
+          "users": [{ "id": "411c1913-996e-4aa6-89fe-0d25ac621e83", "encryption": "none", "flow": "xtls-rprx-vision" }]
+        }]
+      },
+      "streamSettings": {
+        "network": "tcp", "security": "reality",
+        "realitySettings": {
+          "fingerprint": "firefox", "serverName": "sw.novaboostervps.pro",
+          "publicKey": "Io3RTdOBFSDsIiaSn95-sWsXh2n6EFeZfZg0P_kKRR8", "shortId": "7b3d9e"
+        }
+      }
+    },
+    {
+      "protocol": "vless",
+      "tag": "🇬🇧 United Kingdom | fastflash.shop",
+      "settings": {
+        "vnext": [{
+          "address": "149.104.106.84",
+          "port": 443,
+          "users": [{ "id": "411c1913-996e-4aa6-89fe-0d25ac621e83", "encryption": "none", "flow": "xtls-rprx-vision" }]
+        }]
+      },
+      "streamSettings": {
+        "network": "tcp", "security": "reality",
+        "realitySettings": {
+          "fingerprint": "firefox", "serverName": "uk.novaboostervps.pro",
+          "publicKey": "Io3RTdOBFSDsIiaSn95-sWsXh2n6EFeZfZg0P_kKRR8", "shortId": "4c2a8d"
+        }
+      }
+    },
+    {
+      "protocol": "vless",
+      "tag": "🇳🇱 Netherlands | fastflash.shop",
+      "settings": {
+        "vnext": [{
+          "address": "146.19.143.129",
+          "port": 443,
+          "users": [{ "id": "411c1913-996e-4aa6-89fe-0d25ac621e83", "encryption": "none", "flow": "xtls-rprx-vision" }]
+        }]
+      },
+      "streamSettings": {
+        "network": "tcp", "security": "reality",
+        "realitySettings": {
+          "fingerprint": "firefox", "serverName": "nl.novaboostervps.pro",
+          "publicKey": "Io3RTdOBFSDsIiaSn95-sWsXh2n6EFeZfZg0P_kKRR8", "shortId": "1a3f5c"
+        }
+      }
+    },
+    {
+      "protocol": "vless",
+      "tag": "🇱🇻 Latvia | fastflash.shop",
+      "settings": {
+        "vnext": [{
+          "address": "149.104.106.85",
+          "port": 443,
+          "users": [{ "id": "411c1913-996e-4aa6-89fe-0d25ac621e83", "encryption": "none", "flow": "xtls-rprx-vision" }]
+        }]
+      },
+      "streamSettings": {
+        "network": "tcp", "security": "reality",
+        "realitySettings": {
+          "fingerprint": "firefox", "serverName": "lv.novaboostervps.pro",
+          "publicKey": "Io3RTdOBFSDsIiaSn95-sWsXh2n6EFeZfZg0P_kKRR8", "shortId": "6d9b1c"
+        }
+      }
+    },
+    {
+      "protocol": "vless",
+      "tag": "🇺🇸 USA | fastflash.shop",
+      "settings": {
+        "vnext": [{
+          "address": "130.49.155.254",
+          "port": 443,
+          "users": [{ "id": "411c1913-996e-4aa6-89fe-0d25ac621e83", "encryption": "none", "flow": "xtls-rprx-vision" }]
+        }]
+      },
+      "streamSettings": {
+        "network": "tcp", "security": "reality",
+        "realitySettings": {
+          "fingerprint": "firefox", "serverName": "us.novaboostervps.pro",
+          "publicKey": "Io3RTdOBFSDsIiaSn95-sWsXh2n6EFeZfZg0P_kKRR8", "shortId": "3e2b7a"
+        }
+      }
+    },
     { "protocol": "freedom", "tag": "direct" },
     { "protocol": "blackhole", "tag": "block" }
   ],
   "routing": {
     "domainStrategy": "IPIfNonMatch",
-    "balancers": [
-      {
-        "tag": "all-proxies",
-        "selector": ["DE-Germany", "BH-Bahrain", "PL-Poland", "EE-Estonia"],
-        "strategy": { "type": "leastPing" }
-      }
-    ],
     "rules": [
       { "type": "field", "ip": ["geoip:ru", "geoip:private"], "outboundTag": "direct" },
-      { "type": "field", "domain": ["geosite:category-ru"], "outboundTag": "direct" },
-      { "type": "field", "network": "tcp,udp", "balancerTag": "all-proxies" }
+      { "type": "field", "domain": ["geosite:category-ru"], "outboundTag": "direct" }
     ]
   }
 }
