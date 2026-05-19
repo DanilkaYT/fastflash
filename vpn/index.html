@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastFlash VPN — Тарифы</title>
+    <style>
+        /* Основные переменные в стиле FastFlash */
+        :root {
+            --bg-color: #0b0e14;
+            --card-bg: rgba(22, 27, 34, 0.85); /* Полупрозрачный для эффекта стекла */
+            --accent-color: #00f2ff; 
+            --text-color: #ffffff;
+            --text-secondary: #8b949e;
+            --border-color: rgba(48, 54, 61, 0.6);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Настройка фона Matrix */
+        #matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.2; /* Прозрачность матрицы, чтобы не отвлекала от текста */
+        }
+
+        /* Контейнер для контента */
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 60px 20px;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 50px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: linear-gradient(90deg, #fff, var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* Карточка тарифа */
+        .price-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px); /* Эффект размытия фона за карточкой */
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .price-card:hover {
+            transform: translateY(-12px);
+            border-color: var(--accent-color);
+            box-shadow: 0 10px 30px rgba(0, 242, 255, 0.1);
+        }
+
+        .price-card.featured {
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.15);
+        }
+
+        .badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent-color);
+            color: #000;
+            padding: 6px 20px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .price-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .price {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: baseline;
+        }
+
+        .price span {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-left: 8px;
+            font-weight: normal;
+        }
+
+        .features {
+            list-style: none;
+            margin-bottom: 40px;
+            flex-grow: 1;
+        }
+
+        .features li {
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+        }
+
+        .features li::before {
+            content: "✦";
+            color: var(--accent-color);
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+
+        /* Кнопка действия */
+        .btn {
+            display: block;
+            text-align: center;
+            padding: 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+            background: transparent;
+        }
+
+        .price-card.featured .btn, .btn:hover {
+            background: var(--accent-color);
+            color: #000;
+            box-shadow: 0 0 15px var(--accent-color);
+        }
+
+        /* Адаптивность для мобильных */
+        @media (max-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            .price-card {
+                max-width: 400px;
+                margin: 0 auto;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="matrix"></canvas>
+
+    <div class="wrapper">
+        <h1 class="section-title">Тарифы FastFlash VPN</h1>
+
+        <div class="pricing-grid">
+            <div class="price-card">
+                <h3>Лайт</h3>
+                <div class="price">199₽ <span>/ мес</span></div>
+                <ul class="features">
+                    <li>1 активное устройство</li>
+                    <li>Протоколы VLESS / Reality</li>
+                    <li>Сервер: Нидерланды</li>
+                    <li>Поддержка в чате</li>
+                </ul>
+                <a href="https://t.me/fastflash_shop_bot" class="btn">Купить</a>
+            </div>
+
+            <div class="price-card featured">
+                <div class="badge">Популярный</div>
+                <h3>Оптимальный</h3>
+                <div class="price">349₽ <span>/ мес</span></div>
+                <ul class="features">
+                    <li>3 устройства одновременно</li>
+                    <li>Доступ ко всем локациям</li>
+                    <li>Приоритетный канал 1 Гбит/с</li>
+                    <li>Hysteria2 (для плохого интернета)</li>
+                </ul>
+                <a href="https://t.me/fastflash_shop_bot" class="btn">Купить</a>
+            </div>
+
+            <div class="price-card">
+                <h3>Бизнес</h3>
+                <div class="price">899₽ <span>/ 3 мес</span></div>
+                <ul class="features">
+                    <li>5 устройств одновременно</li>
+                    <li>Личный выделенный IP</li>
+                    <li>Максимальная анонимность</li>
+                    <li>Доступ к скрытым серверам</li>
+                </ul>
+                <a href="https://t.me/fastflash_shop_bot" class="btn">Купить</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://fastflash.shop/script.js"></script>
+    
+</body>
+</html>
