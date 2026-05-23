@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Биография | FastFlash</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="canvas-bg"></canvas>
+
+    <nav>
+        <div class="logo">FastFlash<span>.shop</span></div>
+        <div class="links">
+            <a href="#about">Обо мне</a>
+            <a href="#projects">Проекты</a>
+            <a href="#skills">Скиллы</a>
+            <a href="#contact">Связь</a>
+        </div>
+    </nav>
+
+    <header id="about" class="hero">
+        <div class="hero-content">
+            <p class="greeting">Привет, я разработчик и тех-энтузиаст.</p>
+            <h1>Я создаю <br><span class="typing-text"></span><span class="cursor">|</span></h1>
+            <a href="#projects" class="btn">Смотреть работы</a>
+        </div>
+    </header>
+
+    <section id="projects" class="container">
+        <h2 class="section-title">Мои Проекты</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="card-content">
+                    <h3>FastFlash.shop VPN</h3>
+                    <p>Автоматизированная платформа для управления подписками. Генерация ссылок, работа с протоколами 🇳🇱 NL-VLESS-TCP и Trojan.</p>
+                    <span class="tag">Python</span>
+                    <span class="tag">FastAPI</span>
+                    <span class="tag">Network</span>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="card-content">
+                    <h3>Custom Router Firmware</h3>
+                    <p>Прошивка и настройка роутеров (например, Xiaomi 4A GE) под кастомные задачи. Интеграция ShellClash и оптимизация памяти.</p>
+                    <span class="tag">Shell</span>
+                    <span class="tag">Hardware</span>
+                    <span class="tag">Linux</span>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="card-content">
+                    <h3>Tech Resale & Modding</h3>
+                    <p>Платформа для работы с б/у электроникой. Разблокировка аккаунтов, прошивка Android/iPhone и технический моддинг.</p>
+                    <span class="tag">JS</span>
+                    <span class="tag">Mobile</span>
+                    <span class="tag">Hardware</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="container">
+        <h2 class="section-title">Технологии</h2>
+        <div class="skills-grid">
+            <div class="skill-box">JavaScript & DOM</div>
+            <div class="skill-box">Python & Telegram Bots</div>
+            <div class="skill-box">VLESS / Trojan / Hysteria2</div>
+            <div class="skill-box">HTML5 & CSS3</div>
+            <div class="skill-box">Linux & Bash</div>
+            <div class="skill-box">Hardware Flashing</div>
+        </div>
+    </section>
+
+    <section id="contact" class="container contact-section">
+        <h2 class="section-title">Связаться со мной</h2>
+        <form class="contact-form">
+            <input type="text" placeholder="Имя" required>
+            <input type="email" placeholder="Email" required>
+            <textarea rows="5" placeholder="Сообщение..." required></textarea>
+            <button type="submit" class="btn">Отправить</button>
+        </form>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
