@@ -1,3 +1,4 @@
+#profile-update-interval: 1
 vless://411c1913-996e-4aa6-89fe-0d25ac621e83@212.233.91.194:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=vk.ru&fp=chrome&pbk=akCWFrGBboGajZT5HS4m5fw32uJsdw6esUTC1qN4LR0&sid=79ed76c157977111&type=tcp#🇷🇺Russia @fastflashvpnbot
 vless://411c1913-996e-4aa6-89fe-0d25ac621e83@95.213.143.142:8443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=sfera.x5.ru&fp=chrome&pbk=FbLeX1Otd_D8-8c5fWlgIvpRWsiqkHU_DcMstoEGqW8&sid=5bac1a71e1e66bfa&type=tcp#🇪🇺Europe @fastflashvpnbot
 vless://b6ce8a51-19b9-4979-91ba-b42918861d85@89.208.231.81:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=ozon.ru&fp=chrome&pbk=mAu8QDi3pbmMCFg_zWq6-20YVj9b-o9n4y1y_X4V-ks&sid=ad7dab462a323acb&type=tcp#🇵🇱Poland 1 @fastflashvpnbot
