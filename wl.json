@@ -1,4 +1,3 @@
-#profile-update-interval: 1
 {
   "burstObservatory" : {
     "pingConfig" : {
@@ -113,7 +112,9 @@
     "loglevel" : "Info"
   },
   "meta" : {
-    "serverDescription" : "✅ Работает на LTE и WI-FI"
+    "serverDescription" : "✅ Работает на LTE и WI-FI",
+    "updateInterval" : 3600,
+    "autoUpdate" : true
   },
   "outbounds" : [
     {
