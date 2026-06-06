@@ -1,9 +1,7 @@
-#profile-title: RosTunnel
-#profile-update-interval: 6
-#support-url: https://r123t.vercel.app
-#profile-web-page-url: https://rostunnel.vercel.app
-#announce: base64:4pqhINCi0JPQmjogQHJvY3R1bm5lbCDimqEKCuKaoO+4jyDQkNC9YnduY3w0YLQuC3QWLRuNCw0g0LTQuDFFIdxURSDimqDvU8RDZ0C+0LvRjNC60L4gLTQu9GP9GPIExURSDimqDvuI8=
-#subscription-userinfo: upload=0; download=2175400935424; total=0
+#profile-title: spizdil podpisku
+#profile-update-interval: 1
+#support-url: https://fastflash.shop
+#profile-web-page-url: https://fastflash.shop
 #hide-settings: 1
 vless://dummy@0.0.0.0:1?security=none&fp=chrome&type=tcp&packetEncoding=xudp&encryption=none#%F0%9F%87%B7%F0%9F%87%BA%20%RD0%A0%RD0%BE%RD1%81%RD0%A2%RD1%83%RD0%BD%RD0%BD%RD0%B5%RD0%BB%RD1%8C%20%7C%20%RD1%82%RD0%B3%RD0%BA%3A%20%40rostunnel
 hy2://odtx99ails7bjez4@news.dd.msk.su:443?obfs=salamander&obfs-password=9b5cujsexdbp59&sni=news.dd.msk.su#%F0%9F%87%AA%F0%9F%87%BA%20%RD0%A3%RD0%BD%RD0%B8%RD0%B2%RD0%B5%RD0%B5%RD1%80%RD1%81%RD0%B0%RD0%BB%RD1%8C%RD0%BD%RD1%8B%RD0%B9%20%7C%20%RD1%82%RD0%B3%RD0%BA%3A%20%40rostunnel
