@@ -1,3 +1,4 @@
+#profile-title: FastFlashVPN 🧅Extended🧅
 #profile-update-interval: 1
 vless://411c1913-996e-0011-89fe-0d25ac621e83@62.152.60.2:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=gw-cmdm.x5.ru&fp=firefox&pbk=akCWFrGBboGajZT5HS4m5fw32uJsdw6esUTC1qN4LR0&sid=79ed76c157977111&type=tcp#🇧🇭 Бахрейн | @fastflashvpnbot
 vless://411c1913-996e-000d-89fe-0d25ac621e83@62.152.56.226:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=gw-cft-tsk.x5.ru&fp=firefox&pbk=akCWFrGBboGajZT5HS4m5fw32uJsdw6esUTC1qN4LR0&sid=79ed76c157977111&type=tcp#🇬🇧 Великобритания 1 | @fastflashvpnbot
