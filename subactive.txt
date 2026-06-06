@@ -1,3 +1,4 @@
+#profile-title: FastFlashVPN 🧅Standart🧅
 #profile-update-interval: 1
 vless://411c1913-996e-4aa6-89fe-0d25ac621e83@212.233.91.194:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=vk.ru&fp=chrome&pbk=akCWFrGBboGajZT5HS4m5fw32uJsdw6esUTC1qN4LR0&sid=79ed76c157977111&type=tcp#🇷🇺 Россия | @fastflashvpnbot
 vless://e98b7c6a-5d4e-4f3a-b2c1-d0a9b8c7d6e5@vpn.deltarise.ru:54321?encryption=none&flow=xtls-rprx-vision&security=reality&sni=www.google.com&fp=chrome&pbk=XP-VrSM3tDKBRXUnmgsDQfjrNAWDrqcNBgfivBf94F8&sid=abbcd128&type=tcp#🇩🇪 Германия | @fastflashvpnbot
