@@ -1,3 +1,8 @@
+#profile-title: ахуеть
+#profile-update-interval: 1
+#support-url: https://fastflash.shop
+#profile-web-page-url: https://fastflash.shop
+#hide-settings: 1
 vless://e928d85d-f223-07d0-a1d2-a56e9fbd50e0@87.228.74.142:52006?flow=xtls-rprx-vision&encryption=none&type=tcp&security=tls&fp=chrome&alpn=http/1.1#%F0%9F%87%B7%F0%9F%87%BA%20LTE%201%20%7C%20%D1%82%D0%B3%D0%BA%3A%20%40fastflashvpnbot
 vless://2b8a999b-cbe6-07d0-9e40-d1cb6b48dca1@87.228.74.142:52006?flow=xtls-rprx-vision&encryption=none&type=tcp&security=tls&fp=chrome&alpn=http/1.1#%F0%9F%87%B7%F0%9F%87%BA%20LTE%202%20%7C%20%D1%82%D0%B3%D0%BA%3A%20%40fastflashvpnbot
 vless://8dc2d7d6-fc93-07d0-a911-e01486357252@178.72.162.179:52006?flow=xtls-rprx-vision&encryption=none&type=tcp&security=tls&fp=chrome&alpn=http/1.1#%F0%9F%87%A6%F0%9F%87%B2%20LTE%203%20%7C%20%D1%82%D0%B3%D0%BA%3A%20%40fastflashvpnbot
