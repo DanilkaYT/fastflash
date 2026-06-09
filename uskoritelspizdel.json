@@ -1,0 +1,123 @@
+{
+  "dns" : {
+    "queryStrategy" : "UseIPv4",
+    "servers" : [
+      {
+        "address" : "https:\/\/cloudflare-dns.com\/dns-query",
+        "skipFallback" : true
+      },
+      {
+        "address" : "77.88.8.8",
+        "domains" : [
+          "domain:ru",
+          "domain:xn--p1ai"
+        ],
+        "skipFallback" : true
+      }
+    ]
+  },
+  "inbounds" : [
+    {
+      "listen" : "127.0.0.1",
+      "port" : 10808,
+      "protocol" : "socks",
+      "settings" : {
+        "auth" : "noauth",
+        "udp" : true
+      },
+      "sniffing" : {
+        "destOverride" : [
+          "http",
+          "tls",
+          "quic"
+        ],
+        "enabled" : true,
+        "routeOnly" : false
+      },
+      "tag" : "socks"
+    },
+    {
+      "listen" : "127.0.0.1",
+      "port" : 10809,
+      "protocol" : "http",
+      "settings" : {
+        "allowTransparent" : false
+      },
+      "sniffing" : {
+        "destOverride" : [
+          "http",
+          "tls",
+          "quic"
+        ],
+        "enabled" : true,
+        "routeOnly" : false
+      },
+      "tag" : "http"
+    }
+  ],
+  "log" : {
+    "access" : "\/private\/var\/mobile\/Containers\/Shared\/AppGroup\/987FE1C6-4CA7-4702-B714-94178337A400\/Library\/Application Support\/Xray\/logs\/access.log",
+    "dnsLog" : true,
+    "loglevel" : "Warning"
+  },
+  "outbounds" : [
+    {
+      "protocol" : "vless",
+      "settings" : {
+        "vnext" : [
+          {
+            "address" : "51.250.7.93",
+            "port" : 443,
+            "users" : [
+              {
+                "encryption" : "none",
+                "flow" : "",
+                "id" : "e3e93291-536d-4217-b908-cc17260cbeb1"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings" : {
+        "grpcSettings" : {
+          "authority" : "",
+          "mode" : true,
+          "serviceName" : "grpc"
+        },
+        "network" : "grpc",
+        "realitySettings" : {
+          "fingerprint" : "chrome",
+          "publicKey" : "QZzESNPVnqTap_8NG2WuC5oIKUy8hOMLBJF9g6KeKxM",
+          "serverName" : "api-maps.yandex.ru",
+          "shortId" : "98707553fb19a632",
+          "spiderX" : "\/"
+        },
+        "security" : "reality"
+      },
+      "tag" : "proxy"
+    },
+    {
+      "protocol" : "freedom",
+      "tag" : "direct"
+    },
+    {
+      "protocol" : "blackhole",
+      "tag" : "block"
+    }
+  ],
+  "remarks" : "🇩🇪 Германия WL | @fastflashvpnbot",
+  "routing" : {
+    "domainMatcher" : "hybrid",
+    "domainStrategy" : "IPIfNonMatch",
+    "rules" : [
+      {
+        "domain" : [
+          "domain:ru",
+          "domain:xn--p1ai"
+        ],
+        "outboundTag" : "direct",
+        "type" : "field"
+      }
+    ]
+  }
+}
