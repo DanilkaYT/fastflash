@@ -3,11 +3,8 @@
 #support-url: https://fastflash.shop
 #profile-web-page-url: https://fastflash.shop
 #hide-settings: 1
-vless://d8c53e79-4d7a-4605-9c93-a4c54a591b75@34.76.233.185:443?encryption=none&flow=xtls-rprx-vision&type=tcp&security=reality&sni=api-maps.yandex.ru&fp=chrome&pbk=Fq5JjTGB2NqS1VzXcN4stFnKU1AUvtAJaFx9FIe2ND4#🇧🇪 Бельгия | @fastflashvpnbot
-vless://43d78e97-d2a8-4371-b13f-2f4201c06bea@95.85.237.48:443?security=reality&type=tcp&headerType=&path=&host=&flow=xtls-rprx-vision&sni=cdnjs.com&fp=chrome&pbk=LCbjlpZeyt-k8ZwbFLMFsgE1-is1CWYGng-9nsKRWis&sid=#🇩🇪 Германия 1 | @fastflashvpnbot
-vless://d8c53e79-4d7a-4605-9c93-a4c54a591b75@ge.homevpn.net:443?encryption=none&flow=xtls-rprx-vision&type=tcp&security=reality&sni=api-maps.yandex.ru&fp=chrome&pbk=Fq5JjTGB2NqS1VzXcN4stFnKU1AUvtAJaFx9FIe2ND4#🇩🇪 Германия 2 | @fastflashvpnbot
-vless://d8c53e79-4d7a-4605-9c93-a4c54a591b75@191.44.112.66:443?encryption=none&flow=xtls-rprx-vision&type=tcp&security=reality&sni=api-maps.yandex.ru&fp=chrome&pbk=Fq5JjTGB2NqS1VzXcN4stFnKU1AUvtAJaFx9FIe2ND4#🇩🇪 Германия 3 | @fastflashvpnbot
-vless://d8c53e79-4d7a-4605-9c93-a4c54a591b75@34.175.36.106:443?encryption=none&flow=xtls-rprx-vision&type=tcp&security=reality&sni=api-maps.yandex.ru&fp=chrome&pbk=Fq5JjTGB2NqS1VzXcN4stFnKU1AUvtAJaFx9FIe2ND4#🇪🇸 Испания | @fastflashvpnbot
+vless://d8c53e79-4d7a-4605-9c93-a4c54a591b75@ge.homevpn.net:443?encryption=none&flow=xtls-rprx-vision&type=tcp&security=reality&sni=api-maps.yandex.ru&fp=chrome&pbk=Fq5JjTGB2NqS1VzXcN4stFnKU1AUvtAJaFx9FIe2ND4#🇩🇪 Германия 1 | @fastflashvpnbot
+vless://d8c53e79-4d7a-4605-9c93-a4c54a591b75@191.44.112.66:443?encryption=none&flow=xtls-rprx-vision&type=tcp&security=reality&sni=api-maps.yandex.ru&fp=chrome&pbk=Fq5JjTGB2NqS1VzXcN4stFnKU1AUvtAJaFx9FIe2ND4#🇩🇪 Германия 2 | @fastflashvpnbot
 vless://d8c53e79-4d7a-4605-9c93-a4c54a591b75@fin1.homevpn.net:443?encryption=none&flow=xtls-rprx-vision&type=tcp&security=reality&sni=api-maps.yandex.ru&fp=chrome&pbk=Fq5JjTGB2NqS1VzXcN4stFnKU1AUvtAJaFx9FIe2ND4#🇫🇮 Финляндия 1 | @fastflashvpnbot
 vless://d8c53e79-4d7a-4605-9c93-a4c54a591b75@fin2.homevpn.net:443?encryption=none&flow=xtls-rprx-vision&type=tcp&security=reality&sni=api-maps.yandex.ru&fp=chrome&pbk=Fq5JjTGB2NqS1VzXcN4stFnKU1AUvtAJaFx9FIe2ND4#🇫🇮 Финляндия 2 | @fastflashvpnbot
 vless://d8c53e79-4d7a-4605-9c93-a4c54a591b75@35.228.128.143:443?encryption=none&flow=xtls-rprx-vision&type=tcp&security=reality&sni=api-maps.yandex.ru&fp=chrome&pbk=Fq5JjTGB2NqS1VzXcN4stFnKU1AUvtAJaFx9FIe2ND4#🇫🇮 Финляндия 3 | @fastflashvpnbot
