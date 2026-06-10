@@ -282,7 +282,8 @@
         }
 
         .locations-dropdown.open .dropdown-content {
-            max-height: 350px; /* Достаточно для всего списка */
+            max-height: 350px;
+            /* Достаточно для всего списка */
             padding: 5px 15px 15px 15px;
             overflow-y: auto;
         }
@@ -412,8 +413,10 @@
         }
         
         @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0;
+            transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0);
+            }
         }
         
         @media (max-width: 1150px) {
@@ -428,8 +431,10 @@
         }
 
         @media (max-width: 768px) {
-            h1 { font-size: 2.2rem; letter-spacing: 2px; }
-            .subtitle { font-size: 1rem; }
+            h1 { font-size: 2.2rem;
+            letter-spacing: 2px; }
+            .subtitle { font-size: 1rem;
+            }
         }
     </style>
 </head>
@@ -456,18 +461,16 @@
                 </div>
                 <ul class="features-list">
                     <li><span class="li-icon">✦</span> Лимит устройств: 1</li>
-                    <li><span class="li-icon">✦</span> Идеально для смартфонов и модемов</li>
-                    <li><span class="li-icon">✦</span> Автоматический обход ограничений операторов</li>
+                    <li><span class="li-icon">✦</span> Доступ к стабильным европейским серверам</li>
+                    <li><span class="li-icon">✦</span> Идеально для смартфонов и мессенджеров</li>
                     <li><span class="li-icon">✦</span> Поддержка в чате</li>
                 </ul>
 
                 <div class="locations-dropdown">
-                    <button class="dropdown-trigger" onclick="toggleDropdown(this)">Доступные локации</button>
+                    <button class="dropdown-trigger" onclick="toggleDropdown(this)">Доступные локации (5)</button>
                     <div class="dropdown-content">
-                        <div class="loc-item">
-                            <span class="loc-name"><span class="flag">🇷🇺</span> Автовыбор – SIM</span>
-                            <span class="protocol">VLESS | JSON</span>
-                        </div>
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🇩🇪</span> Германия (2 сервера)</span><span class="protocol">VLESS</span></div>
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🇫🇮</span> Финляндия (3 сервера)</span><span class="protocol">VLESS</span></div>
                     </div>
                 </div>
 
@@ -485,24 +488,26 @@
                 <ul class="features-list">
                     <li><span class="li-icon">✦</span> Лимит устройств: 2</li>
                     <li><span class="li-icon">✦</span> Стабильный протокол шифрования VLESS</li>
-                    <li><span class="li-icon">✦</span> 11 серверов по всему миру</li>
+                    <li><span class="li-icon">✦</span> 19 серверов по всему миру</li>
                     <li><span class="li-icon">✦</span> Оптимальный выбор для работы и стриминга</li>
                 </ul>
 
                 <div class="locations-dropdown">
-                    <button class="dropdown-trigger" onclick="toggleDropdown(this)">Доступные локации (11)</button>
+                    <button class="dropdown-trigger" onclick="toggleDropdown(this)">Доступные локации (19)</button>
                     <div class="dropdown-content">
                         <div class="loc-item"><span class="loc-name"><span class="flag">🇷🇺</span> Россия</span><span class="protocol">VLESS</span></div>
-                        <div class="loc-item"><span class="loc-name"><span class="flag">🇩🇪</span> Германия</span><span class="protocol">VLESS</span></div>
-                        <div class="loc-item"><span class="loc-name"><span class="flag">🇳🇱</span> Нидерланды 1</span><span class="protocol">VLESS</span></div>
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🇩🇪</span> Германия (3 сервера)</span><span class="protocol">VLESS</span></div>
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🇳🇱</span> Нидерланды (2 сервера)</span><span class="protocol">VLESS</span></div>
                         <div class="loc-item"><span class="loc-name"><span class="flag">🇺🇸</span> США</span><span class="protocol">VLESS</span></div>
                         <div class="loc-item"><span class="loc-name"><span class="flag">🇧🇭</span> Бахрейн</span><span class="protocol">VLESS</span></div>
-                        <div class="loc-item"><span class="loc-name"><span class="flag">🇵🇱</span> Польша 2</span><span class="protocol">VLESS</span></div>
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🇵🇱</span> Польша</span><span class="protocol">VLESS</span></div>
                         <div class="loc-item"><span class="loc-name"><span class="flag">🇪🇪</span> Эстония</span><span class="protocol">VLESS</span></div>
                         <div class="loc-item"><span class="loc-name"><span class="flag">🇸🇪</span> Швеция</span><span class="protocol">VLESS</span></div>
                         <div class="loc-item"><span class="loc-name"><span class="flag">🇬🇧</span> Великобритания</span><span class="protocol">VLESS</span></div>
-                        <div class="loc-item"><span class="loc-name"><span class="flag">🇳🇱</span> Нидерланды 2</span><span class="protocol">VLESS</span></div>
                         <div class="loc-item"><span class="loc-name"><span class="flag">🇱🇻</span> Латвия</span><span class="protocol">VLESS</span></div>
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🇧🇪</span> Бельгия</span><span class="protocol">VLESS</span></div>
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🇪🇸</span> Испания</span><span class="protocol">VLESS</span></div>
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🇫🇮</span> Финляндия (3 сервера)</span><span class="protocol">VLESS</span></div>
                     </div>
                 </div>
 
@@ -520,27 +525,35 @@
                 </div>
                 <ul class="features-list">
                     <li><span class="li-icon">✦</span> Лимит устройств: 5</li>
-                    <li><span class="li-icon">✦</span> Все локации Standart + LITE подписка в подарок</li>
-                    <li><span class="li-icon">✦</span> 12 серверов (включая 6 высокоскоростных LTE)</li>
-                    <li><span class="li-icon">✦</span> Приоритетный выделенный канал</li>
+                    <li><span class="li-icon">✦</span> Максимальный пул: 35 мощных серверов</li>
+                    <li><span class="li-icon">✦</span> Эксклюзивные гео-локации и протоколы</li>
+                    <li><span class="li-icon">✦</span> Приоритетный выделенный канал передачи</li>
                 </ul>
 
                 <div class="locations-dropdown">
-                    <button class="dropdown-trigger" onclick="toggleDropdown(this)">Доступные локации (12)</button>
+                    <button class="dropdown-trigger" onclick="toggleDropdown(this)">Доступные локации (35)</button>
                     <div class="dropdown-content">
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🇬🇧</span> Великобритания (11 серверов)</span><span class="protocol">VLESS</span></div>
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🇲🇩</span> Молдова (7 серверов)</span><span class="protocol">VLESS</span></div>
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🇳🇱</span> Нидерланды (3 сервера)</span><span class="protocol">VLESS | VMess</span></div>
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🇫🇷</span> Франция (8 серверов)</span><span class="protocol">VLESS</span></div>
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🇩🇪</span> Германия (3 сервера)</span><span class="protocol">VLESS</span></div>
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🇫🇮</span> Финляндия (2 сервера)</span><span class="protocol">VLESS</span></div>
                         <div class="loc-item"><span class="loc-name"><span class="flag">🇷🇺</span> Россия</span><span class="protocol">VLESS</span></div>
-                        <div class="loc-item"><span class="loc-name"><span class="flag">🇩🇪</span> Германия</span><span class="protocol">VLESS</span></div>
-                        <div class="loc-item"><span class="loc-name"><span class="flag">🇳🇱</span> Нидерланды 1</span><span class="protocol">VLESS</span></div>
-                        <div class="loc-item"><span class="loc-name"><span class="flag">🇺🇸</span> США</span><span class="protocol">VLESS</span></div>
-                        <div class="loc-item"><span class="loc-name"><span class="flag">🇧🇭</span> Бахрейн</span><span class="protocol">VLESS</span></div>
-                        <div class="loc-item"><span class="loc-name"><span class="flag">🇵🇱</span> Польша 2</span><span class="protocol">VLESS</span></div>
-                        <div class="loc-item"><span class="loc-name"><span class="flag">🇪🇪</span> Эстония</span><span class="protocol">VLESS</span></div>
-                        <div class="loc-item"><span class="loc-name"><span class="flag">🇸🇪</span> Швеция</span><span class="protocol">VLESS</span></div>
-                        <div class="loc-item"><span class="loc-name"><span class="flag">🇬🇧</span> Великобритания</span><span class="protocol">VLESS</span></div>
-                        <div class="loc-item"><span class="loc-name"><span class="flag">🇳🇱</span> Нидерланды 2</span><span class="protocol">VLESS</span></div>
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🇵🇱</span> Польша</span><span class="protocol">VLESS</span></div>
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🇸🇪</span> Швеция (2 сервера)</span><span class="protocol">VLESS</span></div>
                         <div class="loc-item"><span class="loc-name"><span class="flag">🇱🇻</span> Латвия</span><span class="protocol">VLESS</span></div>
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🇺🇸</span> США</span><span class="protocol">VLESS</span></div>
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🇹🇷</span> Турция</span><span class="protocol">VLESS</span></div>
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🇭🇰</span> Гонконг</span><span class="protocol">VLESS</span></div>
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🇭🇺</span> Венгрия</span><span class="protocol">VLESS</span></div>
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🇨🇭</span> Швейцария</span><span class="protocol">VLESS</span></div>
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🇮🇷</span> Иран</span><span class="protocol">VLESS</span></div>
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🇧🇪</span> Бельгия</span><span class="protocol">VLESS</span></div>
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🇪🇸</span> Испания</span><span class="protocol">VLESS</span></div>
+                        
                         <div style="padding: 8px 0; text-align: center; color: #00f3ff; font-size: 0.8rem; border-top: 1px dashed rgba(0,243,255,0.3); font-weight: bold;">+ ДОПОЛНИТЕЛЬНО БОНУС:</div>
-                        <div class="loc-item"><span class="loc-name"><span class="flag">🇷🇺</span> Автовыбор – SIM (LITE)</span><span class="protocol">VLESS | JSON</span></div>
+                        <div class="loc-item"><span class="loc-name"><span class="flag">🎁</span> Полный доступ к серверам ЛАЙТ</span><span class="protocol">Включено</span></div>
                     </div>
                 </div>
 
