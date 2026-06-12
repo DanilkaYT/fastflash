@@ -2,6 +2,7 @@
 #profile-update-interval: 1
 #support-url: https://t.me/fastflashmanager
 #profile-web-page-url: https://fastflash.shop
+#announce: base64:0J/QvtC00LTQtdGA0LbQutCwOiBAZmFzdGZsYXNobWFuYWdlcg==
 #hide-settings: 1
 vless://d8c53e79-4d7a-4605-9c93-a4c54a591b75@34.76.233.185:443?encryption=none&flow=xtls-rprx-vision&type=tcp&security=reality&sni=api-maps.yandex.ru&fp=chrome&pbk=Fq5JjTGB2NqS1VzXcN4stFnKU1AUvtAJaFx9FIe2ND4#🇧🇪 Бельгия | @fastflashvpnbot
 vless://43d78e97-d2a8-4371-b13f-2f4201c06bea@95.85.237.48:443?security=reality&type=tcp&headerType=&path=&host=&flow=xtls-rprx-vision&sni=cdnjs.com&fp=chrome&pbk=LCbjlpZeyt-k8ZwbFLMFsgE1-is1CWYGng-9nsKRWis&sid=#🇩🇪 Германия 1 | @fastflashvpnbot
