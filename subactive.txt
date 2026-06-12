@@ -1,6 +1,6 @@
 #profile-title: FastFlashVPN 🧅Standart🧅
 #profile-update-interval: 1
-#support-url: https://fastflash.shop
+#support-url: https://t.me/fastflashmanager
 #profile-web-page-url: https://fastflash.shop
 #hide-settings: 1
 vless://411c1913-996e-4aa6-89fe-0d25ac621e83@151.243.101.219:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=uk.novaboostervps.pro&fp=firefox&pbk=Io3RTdOBFSDsIiaSn95-sWsXh2n6EFeZfZg0P_kKRR8&sid=a3f9c2d7&type=tcp#🇬🇧 Великобритания | @fastflashvpnbot
