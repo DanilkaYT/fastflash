@@ -1,6 +1,6 @@
 #profile-title: 🧅FastFlashVPN🧅
 #profile-update-interval: 1
-#support-url: https://fastflash.shop
+#support-url: https://t.me/fastflashmanager
 #profile-web-page-url: https://fastflash.shop
 #hide-settings: 1
 vless://00000000-0000-0000-0000-000000000000@127.0.0.1:443?encryption=none&security=none#⚠️ ПОДПИСКА ЗАКОНЧИЛАСЬ @fastflashvpnbot
