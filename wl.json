@@ -1,6 +1,45 @@
 {
+  "remarks": "🇪🇺Автовыбор",
+  "inbounds": [
+    {
+      "sniffing": {
+        "enabled": true,
+        "routeOnly": true,
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ]
+      },
+      "tag": "SOCKS",
+      "settings": {
+        "udp": true,
+        "auth": "noauth"
+      },
+      "port": 10808,
+      "listen": "127.0.0.1",
+      "protocol": "socks"
+    },
+    {
+      "sniffing": {
+        "enabled": true,
+        "routeOnly": true,
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ]
+      },
+      "tag": "HTTP",
+      "settings": {
+        "allowTransparent": false
+      },
+      "port": 10809,
+      "listen": "127.0.0.1",
+      "protocol": "http"
+    }
+  ],
   "observatory": {
-    "probeUrl": "https://www.google.com/generate_204",
     "enableConcurrency": true,
     "probeInterval": "5m",
     "subjectSelector": [
@@ -10,10 +49,316 @@
       "YANDEX",
       "CDNV",
       "CONTELL"
+    ],
+    "probeUrl": "https://www.google.com/generate_204"
+  },
+  "outbounds": [
+    {
+      "streamSettings": {
+        "realitySettings": {
+          "fingerprint": "qq",
+          "serverName": "ads.x5.ru",
+          "publicKey": "drY21DHNOr6ezJLA2B10mzTExeJ9-gVBfTBNLwVBtWI"
+        },
+        "network": "tcp",
+        "tcpSettings": {},
+        "security": "reality"
+      },
+      "settings": {
+        "vnext": [
+          {
+            "port": 443,
+            "users": [
+              {
+                "encryption": "none",
+                "id": "feb9cdcb-a196-4e26-a039-a829d39e9f7d",
+                "flow": "xtls-rprx-vision"
+              }
+            ],
+            "address": "ya-51.herego.site"
+          }
+        ]
+      },
+      "tag": "YANDEX",
+      "protocol": "vless"
+    },
+    {
+      "streamSettings": {
+        "realitySettings": {
+          "fingerprint": "qq",
+          "serverName": "ads.x5.ru",
+          "publicKey": "drY21DHNOr6ezJLA2B10mzTExeJ9-gVBfTBNLwVBtWI"
+        },
+        "network": "tcp",
+        "tcpSettings": {},
+        "security": "reality"
+      },
+      "settings": {
+        "vnext": [
+          {
+            "port": 443,
+            "users": [
+              {
+                "encryption": "none",
+                "id": "feb9cdcb-a196-4e26-a039-a829d39e9f7d",
+                "flow": "xtls-rprx-vision"
+              }
+            ],
+            "address": "ya-84.herego.site"
+          }
+        ]
+      },
+      "tag": "YANDEX-2",
+      "protocol": "vless"
+    },
+    {
+      "streamSettings": {
+        "realitySettings": {
+          "fingerprint": "qq",
+          "serverName": "ads.x5.ru",
+          "publicKey": "drY21DHNOr6ezJLA2B10mzTExeJ9-gVBfTBNLwVBtWI"
+        },
+        "network": "tcp",
+        "tcpSettings": {},
+        "security": "reality"
+      },
+      "settings": {
+        "vnext": [
+          {
+            "port": 443,
+            "users": [
+              {
+                "encryption": "none",
+                "id": "feb9cdcb-a196-4e26-a039-a829d39e9f7d",
+                "flow": "xtls-rprx-vision"
+              }
+            ],
+            "address": "cdnv-78.xperia-gaming.site"
+          }
+        ]
+      },
+      "tag": "CDNV",
+      "protocol": "vless"
+    },
+    {
+      "streamSettings": {
+        "realitySettings": {
+          "fingerprint": "qq",
+          "serverName": "ads.x5.ru",
+          "publicKey": "drY21DHNOr6ezJLA2B10mzTExeJ9-gVBfTBNLwVBtWI"
+        },
+        "network": "tcp",
+        "tcpSettings": {},
+        "security": "reality"
+      },
+      "settings": {
+        "vnext": [
+          {
+            "port": 443,
+            "users": [
+              {
+                "encryption": "none",
+                "id": "feb9cdcb-a196-4e26-a039-a829d39e9f7d",
+                "flow": "xtls-rprx-vision"
+              }
+            ],
+            "address": "cdnv-151.xperia-gaming.site"
+          }
+        ]
+      },
+      "tag": "CDNV-2",
+      "protocol": "vless"
+    },
+    {
+      "streamSettings": {
+        "realitySettings": {
+          "fingerprint": "qq",
+          "serverName": "ads.x5.ru",
+          "publicKey": "drY21DHNOr6ezJLA2B10mzTExeJ9-gVBfTBNLwVBtWI"
+        },
+        "network": "tcp",
+        "tcpSettings": {},
+        "security": "reality"
+      },
+      "settings": {
+        "vnext": [
+          {
+            "port": 443,
+            "users": [
+              {
+                "encryption": "none",
+                "id": "feb9cdcb-a196-4e26-a039-a829d39e9f7d",
+                "flow": "xtls-rprx-vision"
+              }
+            ],
+            "address": "cdnv-185.xperia-gaming.site"
+          }
+        ]
+      },
+      "tag": "CDNV-3",
+      "protocol": "vless"
+    },
+    {
+      "streamSettings": {
+        "realitySettings": {
+          "fingerprint": "qq",
+          "serverName": "ads.x5.ru",
+          "publicKey": "drY21DHNOr6ezJLA2B10mzTExeJ9-gVBfTBNLwVBtWI"
+        },
+        "network": "tcp",
+        "tcpSettings": {},
+        "security": "reality"
+      },
+      "settings": {
+        "vnext": [
+          {
+            "port": 443,
+            "users": [
+              {
+                "encryption": "none",
+                "id": "feb9cdcb-a196-4e26-a039-a829d39e9f7d",
+                "flow": "xtls-rprx-vision"
+              }
+            ],
+            "address": "contell.xperia-gaming.site"
+          }
+        ]
+      },
+      "tag": "CONTELL",
+      "protocol": "vless"
+    },
+    {
+      "streamSettings": {
+        "realitySettings": {
+          "fingerprint": "qq",
+          "serverName": "ads.x5.ru",
+          "publicKey": "drY21DHNOr6ezJLA2B10mzTExeJ9-gVBfTBNLwVBtWI"
+        },
+        "network": "tcp",
+        "tcpSettings": {},
+        "security": "reality"
+      },
+      "settings": {
+        "vnext": [
+          {
+            "port": 443,
+            "users": [
+              {
+                "encryption": "none",
+                "id": "feb9cdcb-a196-4e26-a039-a829d39e9f7d",
+                "flow": "xtls-rprx-vision"
+              }
+            ],
+            "address": "nltw.xperia-gaming.site"
+          }
+        ]
+      },
+      "tag": "NO-LTE",
+      "protocol": "vless"
+    },
+    {
+      "streamSettings": {
+        "realitySettings": {
+          "fingerprint": "qq",
+          "serverName": "ads.x5.ru",
+          "publicKey": "drY21DHNOr6ezJLA2B10mzTExeJ9-gVBfTBNLwVBtWI"
+        },
+        "network": "tcp",
+        "tcpSettings": {},
+        "security": "reality"
+      },
+      "settings": {
+        "vnext": [
+          {
+            "port": 443,
+            "users": [
+              {
+                "encryption": "none",
+                "id": "feb9cdcb-a196-4e26-a039-a829d39e9f7d",
+                "flow": "xtls-rprx-vision"
+              }
+            ],
+            "address": "2.27.137.71"
+          }
+        ]
+      },
+      "tag": "NO-LTE-2",
+      "protocol": "vless"
+    },
+    {
+      "protocol": "freedom",
+      "tag": "DIRECT"
+    },
+    {
+      "protocol": "blackhole",
+      "tag": "BLOCK"
+    }
+  ],
+  "dns": {
+    "queryStrategy": "UseIP",
+    "servers": [
+      "https://8.8.8.8/dns-query",
+      "https://8.8.8.8/dns-query"
     ]
   },
-  "remarks": "🇪🇺 [PREM x10] Автовыбор",
   "routing": {
+    "domainStrategy": "IPIfNonMatch",
+    "balancers": [
+      {
+        "strategy": {
+          "type": "leastLoad",
+          "settings": {
+            "expected": 1,
+            "baselines": [
+              "2s"
+            ],
+            "costs": [
+              {
+                "match": "^NO-LTE",
+                "regexp": true,
+                "value": 0
+              },
+              {
+                "match": "^VK",
+                "regexp": true,
+                "value": 1
+              },
+              {
+                "match": "^CLOUD",
+                "regexp": true,
+                "value": 1
+              },
+              {
+                "match": "^YANDEX",
+                "regexp": true,
+                "value": 2
+              },
+              {
+                "match": "^CDNV",
+                "regexp": true,
+                "value": 2
+              },
+              {
+                "match": "^CONTELL",
+                "regexp": true,
+                "value": 2
+              }
+            ],
+            "maxRTT": "3s"
+          }
+        },
+        "fallbackTag": "BLOCK",
+        "selector": [
+          "NO-LTE",
+          "VK",
+          "CLOUD",
+          "YANDEX",
+          "CDNV",
+          "CONTELL"
+        ],
+        "tag": "MAIN-BALANCER"
+      }
+    ],
     "rules": [
       {
         "outboundTag": "BLOCK",
@@ -31,16 +376,17 @@
         ]
       },
       {
+        "outboundTag": "BLOCK",
         "domain": [
           "keyword:icecyber",
           "keyword:djijds",
           "keyword:dnsnb8",
           "keyword:associationlord",
           "domain:xl-ads.com"
-        ],
-        "outboundTag": "BLOCK"
+        ]
       },
       {
+        "outboundTag": "DIRECT",
         "domain": [
           "domain:drom.ru",
           "keyword:yookassa",
@@ -203,289 +549,13 @@
           "regexp:(^|\\.)(ya\\.ru|ya\\.cc|yaconnect\\.ru|clck\\.ru)$",
           "regexp:(^|\\.)(yandex.*|yango.*|yastatic.*|yastat\\.net|yccdn\\.ru|adfox\\.ru|admetrica\\.ru|webvisor\\..*|yads\\.tech|turbopages\\.org|meteum\\.ai|shedevrum\\.ai|clstorage\\.net|naydex\\.net)$",
           "regexp:(^|\\.)2gis\\..*$"
-        ],
-        "outboundTag": "DIRECT"
+        ]
       },
       {
-        "network": "tcp,udp",
-        "balancerTag": "MAIN-BALANCER"
+        "balancerTag": "MAIN-BALANCER",
+        "network": "tcp,udp"
       }
     ],
-    "domainMatcher": "hybrid",
-    "balancers": [
-      {
-        "fallbackTag": "BLOCK",
-        "selector": [
-          "NO-LTE",
-          "VK",
-          "CLOUD",
-          "YANDEX",
-          "CDNV",
-          "CONTELL"
-        ],
-        "tag": "MAIN-BALANCER",
-        "strategy": {
-          "type": "leastLoad",
-          "settings": {
-            "costs": [
-              {
-                "match": "^NO-LTE",
-                "regexp": true,
-                "value": 0
-              },
-              {
-                "match": "^VK",
-                "regexp": true,
-                "value": 1
-              },
-              {
-                "match": "^CLOUD",
-                "regexp": true,
-                "value": 1
-              },
-              {
-                "match": "^YANDEX",
-                "regexp": true,
-                "value": 2
-              },
-              {
-                "match": "^CDNV",
-                "regexp": true,
-                "value": 2
-              },
-              {
-                "match": "^CONTELL",
-                "regexp": true,
-                "value": 2
-              }
-            ],
-            "expected": 1,
-            "baselines": [
-              "2s"
-            ],
-            "maxRTT": "3s"
-          }
-        }
-      }
-    ],
-    "domainStrategy": "IPIfNonMatch"
-  },
-  "inbounds": [
-    {
-      "port": 10808,
-      "listen": "127.0.0.1",
-      "sniffing": {
-        "routeOnly": true,
-        "destOverride": [
-          "http",
-          "tls",
-          "quic"
-        ],
-        "enabled": true
-      },
-      "protocol": "socks",
-      "tag": "SOCKS",
-      "settings": {
-        "udp": true,
-        "auth": "noauth"
-      }
-    },
-    {
-      "port": 10809,
-      "listen": "127.0.0.1",
-      "sniffing": {
-        "routeOnly": true,
-        "destOverride": [
-          "http",
-          "tls",
-          "quic"
-        ],
-        "enabled": true
-      },
-      "protocol": "http",
-      "tag": "HTTP",
-      "settings": {
-        "allowTransparent": false
-      }
-    }
-  ],
-  "outbounds": [
-    {
-      "streamSettings": {
-        "network": "tcp",
-        "tcpSettings": {},
-        "realitySettings": {
-          "serverName": "ads.x5.ru",
-          "publicKey": "drY21DHNOr6ezJLA2B10mzTExeJ9-gVBfTBNLwVBtWI",
-          "fingerprint": "qq"
-        },
-        "security": "reality"
-      },
-      "protocol": "vless",
-      "tag": "YANDEX",
-      "settings": {
-        "vnext": [{
-            "port": 443,
-            "address": "ya-51.herego.site",
-            "users": [
-              {
-                "flow": "xtls-rprx-vision",
-                "id": "feb9cdcb-a196-4e26-a039-a829d39e9f7d",
-                "encryption": "none"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "streamSettings": {
-        "network": "tcp",
-        "tcpSettings": {},
-        "realitySettings": {
-          "serverName": "ads.x5.ru",
-          "publicKey": "drY21DHNOr6ezJLA2B10mzTExeJ9-gVBfTBNLwVBtWI",
-          "fingerprint": "qq"
-        },
-        "security": "reality"
-      },
-      "protocol": "vless",
-      "tag": "YANDEX-2",
-      "settings": {
-        "vnext": [
-          {
-            "port": 443,
-            "address": "ya-84.herego.site",
-            "users": [
-              {
-                "flow": "xtls-rprx-vision",
-                "id": "feb9cdcb-a196-4e26-a039-a829d39e9f7d",
-                "encryption": "none"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "streamSettings": {
-        "network": "tcp",
-        "tcpSettings": {},
-        "realitySettings": {
-          "serverName": "ads.x5.ru",
-          "publicKey": "drY21DHNOr6ezJLA2B10mzTExeJ9-gVBfTBNLwVBtWI",
-          "fingerprint": "qq"
-        },
-        "security": "reality"
-      },
-      "protocol": "vless",
-      "tag": "CDNV",
-      "settings": {
-        "vnext": [
-          {
-            "port": 443,
-            "address": "cdnv-78.xperia-gaming.site",
-            "users": [
-              {
-                "flow": "xtls-rprx-vision",
-                "id": "feb9cdcb-a196-4e26-a039-a829d39e9f7d",
-                "encryption": "none"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "streamSettings": {
-        "network": "tcp",
-        "tcpSettings": {},
-        "realitySettings": {
-          "serverName": "ads.x5.ru",
-          "publicKey": "drY21DHNOr6ezJLA2B10mzTExeJ9-gVBfTBNLwVBtWI",
-          "fingerprint": "qq"
-        },
-        "security": "reality"
-      },
-      "protocol": "vless",
-      "tag": "CDNV-2",
-      "settings": {
-        "vnext": [
-          {
-            "port": 443,
-            "address": "cdnv-151.xperia-gaming.site",
-            "users": [
-              {
-                "flow": "xtls-rprx-vision",
-                "id": "feb9cdcb-a196-4e26-a039-a829d39e9f7d",
-                "encryption": "none"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "streamSettings": {
-        "network": "tcp",
-        "tcpSettings": {},
-        "realitySettings": {
-          "serverName": "ads.x5.ru",
-          "publicKey": "drY21DHNOr6ezJLA2B10mzTExeJ9-gVBfTBNLwVBtWI",
-          "fingerprint": "qq"
-        },
-        "security": "reality"
-      },
-      "protocol": "vless",
-      "tag": "CDNV-3",
-      "settings": {
-        "vnext": [
-          {
-            "port": 443,
-            "address": "cdnv-185.xperia-gaming.site",
-            "users": [
-              {
-                "flow": "xtls-rprx-vision",
-                "id": "feb9cdcb-a196-4e26-a039-a829d39e9f7d",
-                "encryption": "none"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "streamSettings": {
-        "network": "tcp",
-        "tcpSettings": {},
-        "realitySettings": {
-          "serverName": "ads.x5.ru",
-          "publicKey": "drY21DHNOr6ezJLA2B10mzTExeJ9-gVBfTBNLwVBtWI",
-          "fingerprint": "qq"
-        },
-        "security": "reality"
-      },
-      "protocol": "vless",
-      "tag": "CONTELL",
-      "settings": {
-        "vnext": [
-          {
-            "port": 443,
-            "address": "contell.xperia-gaming.site",
-            "users": [
-              {
-                "flow": "xtls-rprx-vision",
-                "id": "feb9cdcb-a196-4e26-a039-a829d39e9f7d",
-                "encryption": "none"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "streamSettings": {
-        "network": "tcp",
-        "tcpSettings": {},
-        "realitySettings": {
-          "ser
+    "domainMatcher": "hybrid"
+  }
+}
