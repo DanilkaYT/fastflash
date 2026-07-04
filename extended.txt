@@ -1,4 +1,4 @@
-#profile-title: FastFlash🧅Extended🧅
+#profile-title: FastFlash🧅FAT🧅
 #profile-update-interval: 1
 #support-url: https://t.me/fastflashmanager
 #profile-web-page-url: https://fastflash.shop
