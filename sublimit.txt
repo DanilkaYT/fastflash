@@ -1,4 +1,4 @@
-#profile-title: 🧅FastFlashVPN🧅
+#profile-title: ⚡FastFlash⚡
 #profile-update-interval: 1
 #support-url: https://fastflash.shop
 #profile-web-page-url: https://fastflash.shop
