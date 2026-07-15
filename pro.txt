@@ -4803,6 +4803,6 @@
       "subjectSelector": ["exit-fast", "exit-multi"],
       "enableConcurrency": true
     },
-    "remarks": "🌍 Авто Все Сервера (Объединенный)"
+    "remarks": "🌍 Авто Все Сервера"
   }
 ]
