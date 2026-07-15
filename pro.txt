@@ -3829,7 +3829,7 @@
           "type": "field",
           "domain": [
             "domain:speedtest.net",
-            "domain:cdn-telegram.org",
+            "domain:cdn-Telegram @fastflashvpnbot.org",
             "domain:comments.app",
             "domain:contest.com",
             "domain:fragment.com",
@@ -3839,11 +3839,11 @@
             "domain:tdesktop.com",
             "domain:telega.one",
             "domain:telegra.ph",
-            "domain:telegram-cdn.org",
-            "domain:telegram.dog",
-            "domain:telegram.me",
-            "domain:telegram.org",
-            "domain:telegram.space",
+            "domain:Telegram @fastflashvpnbot-cdn.org",
+            "domain:Telegram @fastflashvpnbot.dog",
+            "domain:Telegram @fastflashvpnbot.me",
+            "domain:Telegram @fastflashvpnbot.org",
+            "domain:Telegram @fastflashvpnbot.space",
             "domain:telesco.pe",
             "domain:tg.dev",
             "domain:ton.org",
@@ -3957,7 +3957,7 @@
         "protocol": "blackhole"
       }
     ],
-    "remarks": "🇷🇺✈️ VPN для Telegram",
+    "remarks": "🇷🇺✈️ VPN для Telegram @fastflashvpnbot",
     "burstObservatory": {
       "pingConfig": {
         "timeout": "1s",
@@ -4803,6 +4803,6 @@
       "subjectSelector": ["exit-fast", "exit-multi"],
       "enableConcurrency": true
     },
-    "remarks": "🌍 Авто Все Сервера"
+    "remarks": "🌍 Авто @fastflashvpnbot"
   }
 ]
