@@ -606,7 +606,7 @@
       "subjectSelector": ["exit-yt", "exit-lt-direct"],
       "enableConcurrency": true
     },
-    "remarks": "🇱🇹 Авто Литва Только в Happ"
+    "remarks": "🇱🇹 Авто Литва @fastflashvpnbot"
   },
   {
     "dns": {
@@ -1290,7 +1290,7 @@
       "subjectSelector": ["exit-yt", "exit-nl-direct"],
       "enableConcurrency": true
     },
-    "remarks": "🇳🇱 Авто Нидерланды Только в Happ"
+    "remarks": "🇳🇱 Авто Нидерланды @fastflashvpnbot"
   },
   {
     "dns": {
@@ -1821,7 +1821,7 @@
       "subjectSelector": ["exit-yt", "exit-sp-direct"],
       "enableConcurrency": true
     },
-    "remarks": "🇪🇸 Авто Испания Только в Happ"
+    "remarks": "🇪🇸 Авто Испания @fastflashvpnbot"
   },
   {
     "dns": {
@@ -2349,7 +2349,7 @@
       "subjectSelector": ["exit-yt", "exit-alb-direct"],
       "enableConcurrency": true
     },
-    "remarks": "🇦🇱 Авто Албания Только в Happ"
+    "remarks": "🇦🇱 Авто Албания @fastflashvpnbot"
   },
   {
     "dns": {
@@ -3099,7 +3099,7 @@
       "subjectSelector": ["exit-yt", "exit-de-direct"],
       "enableConcurrency": true
     },
-    "remarks": "🇩🇪 Авто Германия Только в Happ"
+    "remarks": "🇩🇪 Авто Германия @fastflashvpnbot"
   },
   {
     "dns": {
@@ -3773,7 +3773,7 @@
       "subjectSelector": ["exit-yt", "exit-pl-direct"],
       "enableConcurrency": true
     },
-    "remarks": "🇵🇱 Авто Польша Только в Happ"
+    "remarks": "🇵🇱 Авто Польша @fastflashvpnbot"
   },
   {
     "dns": {
