@@ -1,0 +1,18 @@
+[
+  {
+    "id": 101566,
+    "name": "Chill Flames",
+    "price": 1490,
+    "sold": false,
+    "icon": "🔥",
+    "attribute": "#101566"
+  },
+  {
+    "id": 122063,
+    "name": "Chill Flames",
+    "price": 1490,
+    "sold": true,
+    "icon": "🔥",
+    "attribute": "#122063"
+  }
+]
