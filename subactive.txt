@@ -3777,8 +3777,11 @@
   },
   {
     "dns": {
-      "servers": ["1.1.1.1", "1.0.0.1", "8.8.8.8"],
-      "queryStrategy": "UseIPv4"
+      "queryStrategy": "UseIPv4",
+      "servers": [
+        "https://8.8.8.8/dns-query",
+        "https://1.1.1.1/dns-query"
+      ]
     },
     "log": {
       "error": "none",
@@ -3809,27 +3812,13 @@
       }
     },
     "routing": {
+      "domainMatcher": "hybrid",
+      "domainStrategy": "IPIfNonMatch",
       "rules": [
         {
-          "ip": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "127.0.0.0/8", "::1/128", "fc00::/7", "fe80::/10"],
-          "type": "field",
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "protocol": ["bittorrent"],
-          "outboundTag": "block"
-        },
-        {
-          "type": "field",
-          "domain": ["domain:ru", "domain:xn--p1ai", "geosite:category-ru", "domain:wata.pro", "domain:mtalk.google.com", "domain:push.apple.com", "domain:avito.st", "domain:mangalib.me", "regexp:.*-courier\\.push\\.apple\\.com$"],
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
           "domain": [
             "domain:speedtest.net",
-            "domain:cdn-Telegram @fastflashvpnbot.org",
+            "domain:cdn-telegram.org",
             "domain:comments.app",
             "domain:contest.com",
             "domain:fragment.com",
@@ -3839,11 +3828,11 @@
             "domain:tdesktop.com",
             "domain:telega.one",
             "domain:telegra.ph",
-            "domain:Telegram @fastflashvpnbot-cdn.org",
-            "domain:Telegram @fastflashvpnbot.dog",
-            "domain:Telegram @fastflashvpnbot.me",
-            "domain:Telegram @fastflashvpnbot.org",
-            "domain:Telegram @fastflashvpnbot.space",
+            "domain:telegram-cdn.org",
+            "domain:telegram.dog",
+            "domain:telegram.me",
+            "domain:telegram.org",
+            "domain:telegram.space",
             "domain:telesco.pe",
             "domain:tg.dev",
             "domain:ton.org",
@@ -3854,7 +3843,6 @@
           "outboundTag": "proxy"
         },
         {
-          "type": "field",
           "ip": [
             "149.154.160.0/21",
             "149.154.168.0/22",
@@ -3878,49 +3866,45 @@
           "outboundTag": "proxy"
         },
         {
-          "type": "field",
           "inboundTag": ["SOCKS", "HTTP"],
           "network": "tcp,udp",
-          "outboundTag": "direct"
+          "outboundTag": "DIRECT"
         }
-      ],
-      "domainMatcher": "hybrid",
-      "domainStrategy": "IPIfNonMatch"
+      ]
     },
     "inbounds": [
       {
-        "tag": "SOCKS",
-        "port": 10808,
         "listen": "127.0.0.1",
+        "port": 10808,
         "protocol": "socks",
         "settings": {
-          "udp": true,
-          "auth": "noauth"
+          "auth": "noauth",
+          "udp": true
         },
         "sniffing": {
-          "enabled": true,
           "destOverride": ["http", "tls", "quic"],
+          "enabled": true,
           "routeOnly": true
-        }
+        },
+        "tag": "SOCKS"
       },
       {
-        "tag": "HTTP",
-        "port": 10809,
         "listen": "127.0.0.1",
+        "port": 10809,
         "protocol": "http",
         "settings": {
           "allowTransparent": false
         },
         "sniffing": {
-          "enabled": true,
           "destOverride": ["http", "tls", "quic"],
+          "enabled": true,
           "routeOnly": true
-        }
+        },
+        "tag": "HTTP"
       }
     ],
     "outbounds": [
       {
-        "tag": "proxy",
         "protocol": "vless",
         "settings": {
           "vnext": [
@@ -3929,9 +3913,9 @@
               "port": 443,
               "users": [
                 {
-                  "id": "eb78e1f0-d921-4ca9-a889-261fcc5a0547",
                   "encryption": "none",
-                  "flow": "xtls-rprx-vision"
+                  "flow": "xtls-rprx-vision",
+                  "id": "4054fdc2-ee80-4419-8a8e-d937df4719e2"
                 }
               ]
             }
@@ -3939,25 +3923,25 @@
         },
         "streamSettings": {
           "network": "tcp",
-          "security": "reality",
           "realitySettings": {
-            "serverName": "qq.utiltools.ru",
+            "fingerprint": "qq",
             "publicKey": "drY21DHNOr6ezJLA2B10mzTExeJ9-gVBfTBNLwVBtWI",
-            "fingerprint": "qq"
+            "serverName": "qq.utiltools.ru"
           },
+          "security": "reality",
           "tcpSettings": {}
-        }
+        },
+        "tag": "proxy"
       },
       {
-        "tag": "direct",
-        "protocol": "freedom"
+        "protocol": "freedom",
+        "tag": "DIRECT"
       },
       {
-        "tag": "block",
-        "protocol": "blackhole"
+        "protocol": "blackhole",
+        "tag": "BLOCK"
       }
     ],
-    "remarks": "🇷🇺✈️ VPN для Telegram @fastflashvpnbot",
     "burstObservatory": {
       "pingConfig": {
         "timeout": "1s",
@@ -3967,7 +3951,8 @@
       },
       "subjectSelector": ["proxy"],
       "enableConcurrency": true
-    }
+    },
+    "remarks": "🇷🇺✈️ VPN для Telegram"
   },
   {
     "dns": {
