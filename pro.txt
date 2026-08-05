@@ -3867,7 +3867,7 @@
         "tag": "block"
       }
     ],
-    "remarks": "🇷🇺 VPN для Telegram @fastflashvpnbot",
+    "remarks": "🇷🇺 LTE AUTO @fastflashvpnbot",
     "routing": {
       "domainMatcher": "hybrid",
       "domainStrategy": "IPIfNonMatch",
