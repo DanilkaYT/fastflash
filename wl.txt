@@ -90,7 +90,7 @@
             "tag": "block"
         }
     ],
-    "remarks": "🇻🇳 LTE AUTO",
+    "remarks": "🇻🇳 LTE AUTO @fastflashvpnbot",
     "routing": {
         "domainMatcher": "hybrid",
         "domainStrategy": "IPIfNonMatch",
