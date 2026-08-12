@@ -1,3874 +1,774 @@
 [
   {
-    "dns": {
-      "hosts": {
-        "dot.pub": ["1.12.12.12", "120.53.53.53"],
-        "dns.google": ["8.8.8.8", "8.8.4.4"],
-        "dns.quad9.net": ["9.9.9.9", "149.112.112.112"],
-        "dns.alidns.com": ["223.5.5.5", "223.6.6.6"],
-        "one.one.one.one": ["1.1.1.1", "1.0.0.1"],
-        "cloudflare-dns.com": ["1.1.1.1", "1.0.0.1"],
-        "dns.cloudflare.com": ["1.1.1.1", "1.0.0.1"],
-        "domain:googleapis.cn": "googleapis.com",
-        "common.dot.dns.yandex.net": ["77.88.8.8", "77.88.8.1"]
-      },
-      "servers": [
-        {
-          "port": 53,
-          "address": "77.88.8.8",
-          "domains": ["geosite:category-ru", "domain:ru", "domain:xn--p1ai", "domain:max.ru", "domain:gismeteo.com", "domain:mtalk.google.com", "domain:push.apple.com"],
-          "skipFallback": false
-        },
-        {
-          "port": 53,
-          "address": "8.8.8.8"
-        },
-        {
-          "port": 53,
-          "address": "9.9.9.9"
-        },
-        "1.1.1.1"
-      ],
-      "disableCache": false,
-      "queryStrategy": "UseIPv4",
-      "disableFallback": false
-    },
-    "log": {
-      "error": "none",
-      "access": "none",
-      "dnsLog": false,
-      "loglevel": "none"
-    },
-    "stats": {},
-    "policy": {
-      "levels": {
-        "0": {
-          "statsUserOnline": true,
-          "statsUserUplink": true,
-          "statsUserDownlink": true
-        },
-        "8": {
-          "connIdle": 600,
-          "handshake": 10,
-          "uplinkOnly": 5,
-          "downlinkOnly": 5
-        }
-      },
-      "system": {
-        "statsInboundUplink": true,
-        "statsOutboundUplink": true,
-        "statsInboundDownlink": true,
-        "statsOutboundDownlink": true
-      }
-    },
-    "routing": {
-      "rules": [
-        {
-          "ip": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "127.0.0.0/8", "::1/128", "fc00::/7", "fe80::/10"],
-          "type": "field",
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "protocol": ["bittorrent"],
-          "outboundTag": "block"
-        },
-        {
-          "type": "field",
-          "domain": ["domain:dns.google", "domain:cloudflare-dns.com", "domain:dns.cloudflare.com", "domain:doh.opendns.com", "domain:dns.quad9.net", "domain:dns11.quad9.net", "domain:mozilla.cloudflare-dns.com", "domain:dot.pub", "domain:dns.alidns.com"],
-          "outboundTag": "block"
-        },
-        {
-          "port": "853",
-          "type": "field",
-          "network": "tcp",
-          "outboundTag": "block"
-        },
-        {
-          "port": "25,587,465,2525",
-          "type": "field",
-          "network": "tcp",
-          "outboundTag": "block"
-        },
-        {
-          "type": "field",
-          "domain": ["domain:ru", "domain:xn--p1ai", "geosite:category-ru", "domain:wata.pro", "domain:mtalk.google.com", "domain:push.apple.com", "domain:avito.st", "domain:mangalib.me", "regexp:.*-courier\\.push\\.apple\\.com$"],
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "domain": ["geosite:youtube"],
-          "balancerTag": "youtube-balancer"
-        },
-        {
-          "type": "field",
-          "network": "tcp,udp",
-          "balancerTag": "lt-balancer"
-        }
-      ],
-      "balancers": [
-        {
-          "tag": "youtube-balancer",
-          "selector": ["exit-yt", "exit-yt-2", "exit-yt-3", "exit-yt-4", "exit-yt-5", "exit-yt-6", "exit-yt-7", "exit-yt-8"],
-          "strategy": {
-            "type": "leastLoad",
-            "settings": {
-              "maxRTT": "1s",
-              "expected": 1,
-              "baselines": ["500ms", "700ms"],
-              "tolerance": 0.1
-            }
-          }
-        },
-        {
-          "tag": "lt-balancer",
-          "selector": ["exit-lt-direct", "exit-lt-direct-2", "exit-lt-direct-3"],
-          "strategy": {
-            "type": "leastLoad",
-            "settings": {
-              "maxRTT": "1s",
-              "expected": 1,
-              "baselines": ["550ms", "1000ms"],
-              "tolerance": 0.1
-            }
-          }
-        }
-      ],
-      "domainMatcher": "hybrid",
-      "domainStrategy": "IPIfNonMatch"
-    },
-    "inbounds": [
-      {
-        "tag": "socks",
-        "port": 10808,
-        "listen": "127.0.0.1",
-        "protocol": "socks",
-        "settings": {
-          "udp": true,
-          "auth": "noauth",
-          "userLevel": 8
-        },
-        "sniffing": {
-          "enabled": true,
-          "routeOnly": true,
-          "destOverride": ["http", "tls", "quic"]
-        }
-      },
-      {
-        "tag": "http",
-        "port": 10809,
-        "listen": "127.0.0.1",
-        "protocol": "http",
-        "settings": {
-          "userLevel": 8
-        },
-        "sniffing": {
-          "enabled": true,
-          "routeOnly": true,
-          "destOverride": ["http", "tls", "quic"]
-        }
-      }
-    ],
-    "outbounds": [
-      {
-        "tag": "exit-yt",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "78.159.131.46",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "alb4vp40.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["h2"]
-          }
-        }
-      },
-      {
-        "tag": "exit-yt-2",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "45.89.60.123",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "aldamn.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["h2", "http/1.1"]
-          }
-        }
-      },
-      {
-        "tag": "exit-yt-3",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.83.129.123",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "50gport1.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-4",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.83.129.124",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "50gport3.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-5",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.83.129.242",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "detk28.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-6",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.175.178.81",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "esttk31.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-7",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.175.178.70",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "pototk47.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-8",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "188.255.236.131",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "pototk48.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-lt-direct",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "84.32.209.102",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "ltcher25.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-lt-direct-2",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "84.32.209.130",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "ltcher26.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-lt-direct-3",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.199.171.27",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "ltcher29.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "direct",
-        "protocol": "freedom"
-      },
-      {
-        "tag": "block",
-        "protocol": "blackhole"
-      }
-    ],
     "burstObservatory": {
       "pingConfig": {
-        "timeout": "1s",
-        "interval": "10m",
-        "sampling": 2,
-        "destination": "https://www.gstatic.com/generate_204"
-      },
-      "subjectSelector": ["exit-yt", "exit-lt-direct"],
-      "enableConcurrency": true
-    },
-    "remarks": "🇱🇹 Авто Литва @fastflashvpnbot"
-  },
-  {
-    "dns": {
-      "servers": ["1.1.1.1", "1.0.0.1", "8.8.8.8"],
-      "queryStrategy": "UseIPv4"
-    },
-    "log": {
-      "error": "none",
-      "access": "none",
-      "dnsLog": false,
-      "loglevel": "none"
-    },
-    "stats": {},
-    "policy": {
-      "levels": {
-        "0": {
-          "statsUserOnline": true,
-          "statsUserUplink": true,
-          "statsUserDownlink": true
-        },
-        "8": {
-          "connIdle": 600,
-          "handshake": 10,
-          "uplinkOnly": 5,
-          "downlinkOnly": 5
-        }
-      },
-      "system": {
-        "statsInboundUplink": true,
-        "statsOutboundUplink": true,
-        "statsInboundDownlink": true,
-        "statsOutboundDownlink": true
-      }
-    },
-    "routing": {
-      "rules": [
-        {
-          "ip": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "127.0.0.0/8", "::1/128", "fc00::/7", "fe80::/10"],
-          "type": "field",
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "protocol": ["bittorrent"],
-          "outboundTag": "block"
-        },
-        {
-          "type": "field",
-          "domain": ["domain:dns.google", "domain:cloudflare-dns.com", "domain:dns.cloudflare.com", "domain:doh.opendns.com", "domain:dns.quad9.net", "domain:dns11.quad9.net", "domain:mozilla.cloudflare-dns.com", "domain:dot.pub", "domain:dns.alidns.com"],
-          "outboundTag": "block"
-        },
-        {
-          "port": "853",
-          "type": "field",
-          "network": "tcp",
-          "outboundTag": "block"
-        },
-        {
-          "port": "25,587,465,2525",
-          "type": "field",
-          "network": "tcp",
-          "outboundTag": "block"
-        },
-        {
-          "type": "field",
-          "domain": ["domain:ru", "domain:xn--p1ai", "geosite:category-ru", "domain:wata.pro", "domain:mtalk.google.com", "domain:push.apple.com", "domain:avito.st", "domain:mangalib.me", "regexp:.*-courier\\.push\\.apple\\.com$"],
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "domain": ["geosite:youtube"],
-          "balancerTag": "youtube-balancer"
-        },
-        {
-          "type": "field",
-          "network": "tcp,udp",
-          "balancerTag": "nl-balancer"
-        }
-      ],
-      "balancers": [
-        {
-          "tag": "youtube-balancer",
-          "selector": ["exit-yt", "exit-yt-2", "exit-yt-3", "exit-yt-4", "exit-yt-5", "exit-yt-6", "exit-yt-7", "exit-yt-8"],
-          "strategy": {
-            "type": "leastLoad",
-            "settings": {
-              "maxRTT": "1s",
-              "expected": 1,
-              "baselines": ["500ms", "700ms"],
-              "tolerance": 0.1
-            }
-          }
-        },
-        {
-          "tag": "nl-balancer",
-          "selector": ["exit-nl-direct", "exit-nl-direct-2", "exit-nl-direct-3", "exit-nl-direct-4", "exit-nl-direct-5", "exit-nl-direct-6"],
-          "strategy": {
-            "type": "leastLoad",
-            "settings": {
-              "maxRTT": "1s",
-              "expected": 1,
-              "baselines": ["500ms", "700ms"],
-              "tolerance": 0.1
-            }
-          }
-        }
-      ],
-      "domainMatcher": "hybrid",
-      "domainStrategy": "IPIfNonMatch"
-    },
-    "inbounds": [
-      {
-        "tag": "socks",
-        "port": 10808,
-        "listen": "127.0.0.1",
-        "protocol": "socks",
-        "settings": {
-          "udp": true,
-          "auth": "noauth",
-          "userLevel": 8
-        },
-        "sniffing": {
-          "enabled": true,
-          "destOverride": ["http", "tls", "quic"]
-        }
-      },
-      {
-        "tag": "http",
-        "port": 10809,
-        "listen": "127.0.0.1",
-        "protocol": "http",
-        "settings": {
-          "userLevel": 8
-        },
-        "sniffing": {
-          "enabled": true,
-          "routeOnly": true,
-          "destOverride": ["http", "tls", "quic"]
-        }
-      }
-    ],
-    "outbounds": [
-      {
-        "tag": "exit-yt",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "78.159.131.46",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "alb4vp40.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["h2"]
-          }
-        }
-      },
-      {
-        "tag": "exit-yt-2",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "45.89.60.123",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "aldamn.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["h2", "http/1.1"]
-          }
-        }
-      },
-      {
-        "tag": "exit-yt-3",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.83.129.123",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "50gport1.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-4",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.83.129.124",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "50gport3.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-5",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.83.129.242",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "detk28.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-6",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.175.178.81",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "esttk31.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-7",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.175.178.70",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "pototk47.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-8",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "188.255.236.131",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "pototk48.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-nl-direct",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "95.85.240.86",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "reality",
-          "realitySettings": {
-            "serverName": "ads.x5.ru",
-            "publicKey": "5IH4GxRn58hemmfY2nr_cETdTXwFC1PHngCLY2OiWz8",
-            "fingerprint": "chrome"
-          }
-        }
-      },
-      {
-        "tag": "exit-nl-direct-2",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "95.85.240.91",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "reality",
-          "realitySettings": {
-            "serverName": "ads.x5.ru",
-            "publicKey": "5IH4GxRn58hemmfY2nr_cETdTXwFC1PHngCLY2OiWz8",
-            "fingerprint": "chrome"
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 16,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-nl-direct-3",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "94.249.225.125",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "nltk39.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-nl-direct-4",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "89.106.86.100",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "potonltk41.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["h2", "http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-nl-direct-5",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "84.32.102.248",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "nlcher20.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["h2", "http/1.1"]
-          }
-        }
-      },
-      {
-        "tag": "exit-nl-direct-6",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "84.32.188.46",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "nlcher21.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["h2", "http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "direct",
-        "protocol": "freedom"
-      },
-      {
-        "tag": "block",
-        "protocol": "blackhole"
-      }
-    ],
-    "burstObservatory": {
-      "pingConfig": {
-        "timeout": "1s",
+        "connectivity": "http://edge-http.microsoft.com/captiveportal/generate_204",
+        "destination": "http://edge-http.microsoft.com/captiveportal/generate_204",
         "interval": "5m",
-        "sampling": 2,
-        "destination": "https://www.gstatic.com/generate_204"
+        "sampling": 1,
+        "timeout": "5s"
       },
-      "subjectSelector": ["exit-yt", "exit-nl-direct"],
-      "enableConcurrency": true
+      "subjectSelector": ["proxy"]
     },
-    "remarks": "🇳🇱 Авто Нидерланды @fastflashvpnbot"
-  },
-  {
-    "dns": {
-      "hosts": {
-        "dot.pub": ["1.12.12.12", "120.53.53.53"],
-        "dns.google": ["8.8.8.8", "8.8.4.4"],
-        "dns.quad9.net": ["9.9.9.9", "149.112.112.112"],
-        "dns.alidns.com": ["223.5.5.5", "223.6.6.6"],
-        "one.one.one.one": ["1.1.1.1", "1.0.0.1"],
-        "cloudflare-dns.com": ["1.1.1.1", "1.0.0.1"],
-        "dns.cloudflare.com": ["1.1.1.1", "1.0.0.1"],
-        "domain:googleapis.cn": "googleapis.com",
-        "common.dot.dns.yandex.net": ["77.88.8.8", "77.88.8.1"]
-      },
-      "servers": [
-        {
-          "port": 53,
-          "address": "77.88.8.8",
-          "domains": ["geosite:category-ru", "domain:ru", "domain:xn--p1ai", "domain:max.ru", "domain:gismeteo.com", "domain:mtalk.google.com", "domain:push.apple.com"],
-          "skipFallback": false
-        },
-        {
-          "port": 53,
-          "address": "8.8.8.8"
-        },
-        {
-          "port": 53,
-          "address": "9.9.9.9"
-        },
-        "1.1.1.1"
-      ],
-      "disableCache": false,
-      "queryStrategy": "UseIPv4",
-      "disableFallback": false
-    },
-    "log": {
-      "error": "none",
-      "access": "none",
-      "dnsLog": false,
-      "loglevel": "none"
-    },
-    "stats": {},
-    "policy": {
-      "levels": {
-        "0": {
-          "statsUserOnline": true,
-          "statsUserUplink": true,
-          "statsUserDownlink": true
-        },
-        "8": {
-          "connIdle": 600,
-          "handshake": 10,
-          "uplinkOnly": 5,
-          "downlinkOnly": 5
-        }
-      },
-      "system": {
-        "statsInboundUplink": true,
-        "statsOutboundUplink": true,
-        "statsInboundDownlink": true,
-        "statsOutboundDownlink": true
-      }
-    },
-    "routing": {
-      "rules": [
-        {
-          "ip": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "127.0.0.0/8", "::1/128", "fc00::/7", "fe80::/10"],
-          "type": "field",
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "protocol": ["bittorrent"],
-          "outboundTag": "block"
-        },
-        {
-          "type": "field",
-          "domain": ["domain:dns.google", "domain:cloudflare-dns.com", "domain:dns.cloudflare.com", "domain:doh.opendns.com", "domain:dns.quad9.net", "domain:dns11.quad9.net", "domain:mozilla.cloudflare-dns.com", "domain:dot.pub", "domain:dns.alidns.com"],
-          "outboundTag": "block"
-        },
-        {
-          "port": "853",
-          "type": "field",
-          "network": "tcp",
-          "outboundTag": "block"
-        },
-        {
-          "port": "25,587,465,2525",
-          "type": "field",
-          "network": "tcp",
-          "outboundTag": "block"
-        },
-        {
-          "type": "field",
-          "domain": ["domain:ru", "domain:xn--p1ai", "geosite:category-ru", "domain:wata.pro", "domain:mtalk.google.com", "domain:push.apple.com", "domain:avito.st", "domain:mangalib.me", "regexp:.*-courier\\.push\\.apple\\.com$"],
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "domain": ["geosite:youtube"],
-          "balancerTag": "youtube-balancer"
-        },
-        {
-          "type": "field",
-          "network": "tcp,udp",
-          "balancerTag": "sp-balancer"
-        }
-      ],
-      "balancers": [
-        {
-          "tag": "youtube-balancer",
-          "selector": ["exit-yt", "exit-yt-2", "exit-yt-3", "exit-yt-4", "exit-yt-5", "exit-yt-6", "exit-yt-7", "exit-yt-8"],
-          "strategy": {
-            "type": "leastLoad",
-            "settings": {
-              "maxRTT": "1s",
-              "expected": 1,
-              "baselines": ["500ms", "700ms"],
-              "tolerance": 0.1
-            }
-          }
-        },
-        {
-          "tag": "sp-balancer",
-          "selector": ["exit-sp-direct"],
-          "strategy": {
-            "type": "leastLoad",
-            "settings": {
-              "maxRTT": "1s",
-              "expected": 1,
-              "baselines": ["550ms", "1000ms"],
-              "tolerance": 0.1
-            }
-          }
-        }
-      ],
-      "domainMatcher": "hybrid",
-      "domainStrategy": "IPIfNonMatch"
-    },
-    "inbounds": [
-      {
-        "tag": "socks",
-        "port": 10808,
-        "listen": "127.0.0.1",
-        "protocol": "socks",
-        "settings": {
-          "udp": true,
-          "auth": "noauth",
-          "userLevel": 8
-        },
-        "sniffing": {
-          "enabled": true,
-          "routeOnly": true,
-          "destOverride": ["http", "tls", "quic"]
-        }
-      },
-      {
-        "tag": "http",
-        "port": 10809,
-        "listen": "127.0.0.1",
-        "protocol": "http",
-        "settings": {
-          "userLevel": 8
-        },
-        "sniffing": {
-          "enabled": true,
-          "routeOnly": true,
-          "destOverride": ["http", "tls", "quic"]
-        }
-      }
-    ],
-    "outbounds": [
-      {
-        "tag": "exit-yt",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "78.159.131.46",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "alb4vp40.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["h2"]
-          }
-        }
-      },
-      {
-        "tag": "exit-yt-2",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "45.89.60.123",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "aldamn.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["h2", "http/1.1"]
-          }
-        }
-      },
-      {
-        "tag": "exit-yt-3",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.83.129.123",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "50gport1.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-4",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.83.129.124",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "50gport3.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-5",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.83.129.242",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "detk28.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-6",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.175.178.81",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "esttk31.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-7",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.175.178.70",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "pototk47.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-8",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "188.255.236.131",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "pototk48.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-sp-direct",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "94.249.176.68",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "spain1.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "direct",
-        "protocol": "freedom"
-      },
-      {
-        "tag": "block",
-        "protocol": "blackhole"
-      }
-    ],
-    "burstObservatory": {
-      "pingConfig": {
-        "timeout": "1s",
-        "interval": "10m",
-        "sampling": 2,
-        "destination": "https://www.gstatic.com/generate_204"
-      },
-      "subjectSelector": ["exit-yt", "exit-sp-direct"],
-      "enableConcurrency": true
-    },
-    "remarks": "🇪🇸 Авто Испания @fastflashvpnbot"
-  },
-  {
-    "dns": {
-      "servers": ["1.1.1.1", "1.0.0.1", "8.8.8.8"],
-      "queryStrategy": "UseIPv4"
-    },
-    "log": {
-      "error": "none",
-      "access": "none",
-      "dnsLog": false,
-      "loglevel": "none"
-    },
-    "stats": {},
-    "policy": {
-      "levels": {
-        "0": {
-          "statsUserOnline": true,
-          "statsUserUplink": true,
-          "statsUserDownlink": true
-        },
-        "8": {
-          "connIdle": 600,
-          "handshake": 10,
-          "uplinkOnly": 5,
-          "downlinkOnly": 5
-        }
-      },
-      "system": {
-        "statsInboundUplink": true,
-        "statsOutboundUplink": true,
-        "statsInboundDownlink": true,
-        "statsOutboundDownlink": true
-      }
-    },
-    "routing": {
-      "rules": [
-        {
-          "ip": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "127.0.0.0/8", "::1/128", "fc00::/7", "fe80::/10"],
-          "type": "field",
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "protocol": ["bittorrent"],
-          "outboundTag": "block"
-        },
-        {
-          "type": "field",
-          "domain": ["domain:dns.google", "domain:cloudflare-dns.com", "domain:dns.cloudflare.com", "domain:doh.opendns.com", "domain:dns.quad9.net", "domain:dns11.quad9.net", "domain:mozilla.cloudflare-dns.com", "domain:dot.pub", "domain:dns.alidns.com"],
-          "outboundTag": "block"
-        },
-        {
-          "port": "853",
-          "type": "field",
-          "network": "tcp",
-          "outboundTag": "block"
-        },
-        {
-          "port": "25,587,465,2525",
-          "type": "field",
-          "network": "tcp",
-          "outboundTag": "block"
-        },
-        {
-          "type": "field",
-          "domain": ["domain:ru", "domain:xn--p1ai", "geosite:category-ru", "domain:wata.pro", "domain:mtalk.google.com", "domain:push.apple.com", "domain:avito.st", "domain:mangalib.me", "regexp:.*-courier\\.push\\.apple\\.com$"],
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "domain": ["geosite:youtube"],
-          "balancerTag": "youtube-balancer"
-        },
-        {
-          "type": "field",
-          "network": "tcp,udp",
-          "balancerTag": "alb-balancer"
-        }
-      ],
-      "balancers": [
-        {
-          "tag": "youtube-balancer",
-          "selector": ["exit-yt", "exit-yt-2", "exit-yt-3", "exit-yt-4", "exit-yt-5", "exit-yt-6", "exit-yt-7", "exit-yt-8"],
-          "strategy": {
-            "type": "leastLoad",
-            "settings": {
-              "maxRTT": "1s",
-              "expected": 1,
-              "baselines": ["500ms", "700ms"],
-              "tolerance": 0.1
-            }
-          }
-        },
-        {
-          "tag": "alb-balancer",
-          "selector": ["exit-alb-direct", "exit-alb-direct-2"],
-          "strategy": {
-            "type": "leastLoad",
-            "settings": {
-              "maxRTT": "1s",
-              "expected": 1,
-              "baselines": ["550ms", "1000ms"],
-              "tolerance": 0.1
-            }
-          }
-        }
-      ],
-      "domainMatcher": "hybrid",
-      "domainStrategy": "IPIfNonMatch"
-    },
-    "inbounds": [
-      {
-        "tag": "socks",
-        "port": 10808,
-        "listen": "127.0.0.1",
-        "protocol": "socks",
-        "settings": {
-          "udp": true,
-          "auth": "noauth",
-          "userLevel": 8
-        },
-        "sniffing": {
-          "enabled": true,
-          "destOverride": ["http", "tls", "quic"]
-        }
-      },
-      {
-        "tag": "http",
-        "port": 10809,
-        "listen": "127.0.0.1",
-        "protocol": "http",
-        "settings": {
-          "userLevel": 8
-        },
-        "sniffing": {
-          "enabled": true,
-          "routeOnly": true,
-          "destOverride": ["http", "tls", "quic"]
-        }
-      }
-    ],
-    "outbounds": [
-      {
-        "tag": "exit-yt",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "78.159.131.46",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "alb4vp40.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["h2"]
-          }
-        }
-      },
-      {
-        "tag": "exit-yt-2",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "45.89.60.123",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "aldamn.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["h2", "http/1.1"]
-          }
-        }
-      },
-      {
-        "tag": "exit-yt-3",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.83.129.123",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "50gport1.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-4",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.83.129.124",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "50gport3.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-5",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.83.129.242",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "detk28.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-6",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.175.178.81",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "esttk31.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-7",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.175.178.70",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "pototk47.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-8",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "188.255.236.131",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "pototk48.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-alb-direct",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "78.159.131.46",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "alb4vp40.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["h2"]
-          }
-        }
-      },
-      {
-        "tag": "exit-alb-direct-2",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "45.89.60.123",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "aldamn.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["h2", "http/1.1"]
-          }
-        }
-      },
-      {
-        "tag": "direct",
-        "protocol": "freedom"
-      },
-      {
-        "tag": "block",
-        "protocol": "blackhole"
-      }
-    ],
-    "burstObservatory": {
-      "pingConfig": {
-        "timeout": "1s",
-        "interval": "10m",
-        "sampling": 2,
-        "destination": "https://www.gstatic.com/generate_204"
-      },
-      "subjectSelector": ["exit-yt", "exit-alb-direct"],
-      "enableConcurrency": true
-    },
-    "remarks": "🇦🇱 Авто Албания @fastflashvpnbot"
-  },
-  {
-    "dns": {
-      "servers": ["1.1.1.1", "1.0.0.1", "8.8.8.8"],
-      "queryStrategy": "UseIPv4"
-    },
-    "log": {
-      "error": "none",
-      "access": "none",
-      "dnsLog": false,
-      "loglevel": "none"
-    },
-    "stats": {},
-    "policy": {
-      "levels": {
-        "0": {
-          "statsUserOnline": true,
-          "statsUserUplink": true,
-          "statsUserDownlink": true
-        },
-        "8": {
-          "connIdle": 600,
-          "handshake": 10,
-          "uplinkOnly": 5,
-          "downlinkOnly": 5
-        }
-      },
-      "system": {
-        "statsInboundUplink": true,
-        "statsOutboundUplink": true,
-        "statsInboundDownlink": true,
-        "statsOutboundDownlink": true
-      }
-    },
-    "routing": {
-      "rules": [
-        {
-          "ip": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "127.0.0.0/8", "::1/128", "fc00::/7", "fe80::/10"],
-          "type": "field",
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "protocol": ["bittorrent"],
-          "outboundTag": "block"
-        },
-        {
-          "type": "field",
-          "domain": ["domain:dns.google", "domain:cloudflare-dns.com", "domain:dns.cloudflare.com", "domain:doh.opendns.com", "domain:dns.quad9.net", "domain:dns11.quad9.net", "domain:mozilla.cloudflare-dns.com", "domain:dot.pub", "domain:dns.alidns.com"],
-          "outboundTag": "block"
-        },
-        {
-          "port": "853",
-          "type": "field",
-          "network": "tcp",
-          "outboundTag": "block"
-        },
-        {
-          "port": "25,587,465,2525",
-          "type": "field",
-          "network": "tcp",
-          "outboundTag": "block"
-        },
-        {
-          "type": "field",
-          "domain": ["domain:ru", "domain:xn--p1ai", "geosite:category-ru", "domain:wata.pro", "domain:mtalk.google.com", "domain:push.apple.com", "domain:avito.st", "domain:mangalib.me", "regexp:.*-courier\\.push\\.apple\\.com$"],
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "domain": ["geosite:youtube"],
-          "balancerTag": "youtube-balancer"
-        },
-        {
-          "type": "field",
-          "network": "tcp,udp",
-          "balancerTag": "de-balancer"
-        }
-      ],
-      "balancers": [
-        {
-          "tag": "youtube-balancer",
-          "selector": ["exit-yt", "exit-yt-2", "exit-yt-3", "exit-yt-4", "exit-yt-5", "exit-yt-6", "exit-yt-7", "exit-yt-8"],
-          "strategy": {
-            "type": "leastLoad",
-            "settings": {
-              "maxRTT": "1s",
-              "expected": 1,
-              "baselines": ["500ms", "700ms"],
-              "tolerance": 0.1
-            }
-          }
-        },
-        {
-          "tag": "de-balancer",
-          "selector": ["exit-de-direct", "exit-de-direct-2", "exit-de-direct-3", "exit-de-direct-4", "exit-de-direct-5", "exit-de-direct-6", "exit-de-direct-7", "exit-de-direct-8"],
-          "strategy": {
-            "type": "leastLoad",
-            "settings": {
-              "maxRTT": "1s",
-              "expected": 1,
-              "baselines": ["550ms", "700ms"],
-              "tolerance": 0.1
-            }
-          }
-        }
-      ],
-      "domainMatcher": "hybrid",
-      "domainStrategy": "IPIfNonMatch"
-    },
-    "inbounds": [
-      {
-        "tag": "socks",
-        "port": 10808,
-        "listen": "127.0.0.1",
-        "protocol": "socks",
-        "settings": {
-          "udp": true,
-          "auth": "noauth",
-          "userLevel": 8
-        },
-        "sniffing": {
-          "enabled": true,
-          "destOverride": ["http", "tls", "quic"]
-        }
-      },
-      {
-        "tag": "http",
-        "port": 10809,
-        "listen": "127.0.0.1",
-        "protocol": "http",
-        "settings": {
-          "userLevel": 8
-        },
-        "sniffing": {
-          "enabled": true,
-          "routeOnly": true,
-          "destOverride": ["http", "tls", "quic"]
-        }
-      }
-    ],
-    "outbounds": [
-      {
-        "tag": "exit-yt",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "78.159.131.46",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "alb4vp40.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["h2"]
-          }
-        }
-      },
-      {
-        "tag": "exit-yt-2",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "45.89.60.123",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "aldamn.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["h2", "http/1.1"]
-          }
-        }
-      },
-      {
-        "tag": "exit-yt-3",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.83.129.123",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "50gport1.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-4",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.83.129.124",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "50gport3.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-5",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.83.129.242",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "detk28.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-6",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.175.178.81",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "esttk31.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-7",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.175.178.70",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "pototk47.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-8",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "188.255.236.131",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "pototk48.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-de-direct",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "95.85.240.27",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "reality",
-          "realitySettings": {
-            "serverName": "ya.ru",
-            "publicKey": "5IH4GxRn58hemmfY2nr_cETdTXwFC1PHngCLY2OiWz8",
-            "fingerprint": "chrome"
-          }
-        }
-      },
-      {
-        "tag": "exit-de-direct-2",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "95.85.240.85",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "reality",
-          "realitySettings": {
-            "serverName": "ya.ru",
-            "publicKey": "5IH4GxRn58hemmfY2nr_cETdTXwFC1PHngCLY2OiWz8",
-            "fingerprint": "chrome"
-          }
-        }
-      },
-      {
-        "tag": "exit-de-direct-3",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.83.129.123",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "50gport1.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-de-direct-4",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.83.129.124",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "50gport3.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-de-direct-5",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "89.144.35.11",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "detk38.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-de-direct-6",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.83.129.242",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "detk28.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-de-direct-7",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "84.32.100.252",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "decher10.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["h2", "http/1.1"]
-          }
-        }
-      },
-      {
-        "tag": "exit-de-direct-8",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "84.32.59.15",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "decher11.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["h2", "http/1.1"]
-          }
-        }
-      },
-      {
-        "tag": "direct",
-        "protocol": "freedom"
-      },
-      {
-        "tag": "block",
-        "protocol": "blackhole"
-      }
-    ],
-    "burstObservatory": {
-      "pingConfig": {
-        "timeout": "1s",
-        "interval": "5m",
-        "sampling": 2,
-        "destination": "https://www.gstatic.com/generate_204"
-      },
-      "subjectSelector": ["exit-yt", "exit-de-direct"],
-      "enableConcurrency": true
-    },
-    "remarks": "🇩🇪 Авто Германия @fastflashvpnbot"
-  },
-  {
-    "dns": {
-      "hosts": {
-        "dot.pub": ["1.12.12.12", "120.53.53.53"],
-        "dns.google": ["8.8.8.8", "8.8.4.4"],
-        "dns.quad9.net": ["9.9.9.9", "149.112.112.112"],
-        "dns.alidns.com": ["223.5.5.5", "223.6.6.6"],
-        "one.one.one.one": ["1.1.1.1", "1.0.0.1"],
-        "cloudflare-dns.com": ["1.1.1.1", "1.0.0.1"],
-        "dns.cloudflare.com": ["1.1.1.1", "1.0.0.1"],
-        "domain:googleapis.cn": "googleapis.com",
-        "common.dot.dns.yandex.net": ["77.88.8.8", "77.88.8.1"]
-      },
-      "servers": [
-        {
-          "port": 53,
-          "address": "77.88.8.8",
-          "domains": ["geosite:category-ru", "domain:ru", "domain:xn--p1ai", "domain:max.ru", "domain:gismeteo.com", "domain:mtalk.google.com", "domain:push.apple.com"],
-          "skipFallback": false
-        },
-        {
-          "port": 53,
-          "address": "8.8.8.8"
-        },
-        {
-          "port": 53,
-          "address": "9.9.9.9"
-        },
-        "1.1.1.1"
-      ],
-      "disableCache": false,
-      "queryStrategy": "UseIPv4",
-      "disableFallback": false
-    },
-    "log": {
-      "error": "none",
-      "access": "none",
-      "dnsLog": false,
-      "loglevel": "none"
-    },
-    "stats": {},
-    "policy": {
-      "levels": {
-        "0": {
-          "statsUserOnline": true,
-          "statsUserUplink": true,
-          "statsUserDownlink": true
-        },
-        "8": {
-          "connIdle": 600,
-          "handshake": 10,
-          "uplinkOnly": 5,
-          "downlinkOnly": 5
-        }
-      },
-      "system": {
-        "statsInboundUplink": true,
-        "statsOutboundUplink": true,
-        "statsInboundDownlink": true,
-        "statsOutboundDownlink": true
-      }
-    },
-    "routing": {
-      "rules": [
-        {
-          "ip": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "127.0.0.0/8", "::1/128", "fc00::/7", "fe80::/10"],
-          "type": "field",
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "protocol": ["bittorrent"],
-          "outboundTag": "block"
-        },
-        {
-          "type": "field",
-          "domain": ["domain:dns.google", "domain:cloudflare-dns.com", "domain:dns.cloudflare.com", "domain:doh.opendns.com", "domain:dns.quad9.net", "domain:dns11.quad9.net", "domain:mozilla.cloudflare-dns.com", "domain:dot.pub", "domain:dns.alidns.com"],
-          "outboundTag": "block"
-        },
-        {
-          "port": "853",
-          "type": "field",
-          "network": "tcp",
-          "outboundTag": "block"
-        },
-        {
-          "port": "25,587,465,2525",
-          "type": "field",
-          "network": "tcp",
-          "outboundTag": "block"
-        },
-        {
-          "type": "field",
-          "domain": ["domain:ru", "domain:xn--p1ai", "geosite:category-ru", "domain:wata.pro", "domain:mtalk.google.com", "domain:push.apple.com", "domain:avito.st", "domain:mangalib.me", "regexp:.*-courier\\.push\\.apple\\.com$"],
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "domain": ["geosite:youtube"],
-          "balancerTag": "youtube-balancer"
-        },
-        {
-          "type": "field",
-          "network": "tcp,udp",
-          "balancerTag": "pl-balancer"
-        }
-      ],
-      "balancers": [
-        {
-          "tag": "youtube-balancer",
-          "selector": ["exit-yt", "exit-yt-2", "exit-yt-3", "exit-yt-4", "exit-yt-5", "exit-yt-6", "exit-yt-7", "exit-yt-8"],
-          "strategy": {
-            "type": "leastLoad",
-            "settings": {
-              "maxRTT": "1s",
-              "expected": 1,
-              "baselines": ["500ms", "700ms"],
-              "tolerance": 0.1
-            }
-          }
-        },
-        {
-          "tag": "pl-balancer",
-          "selector": ["exit-pl-direct", "exit-pl-direct-2", "exit-pl-direct-3", "exit-pl-direct-4", "exit-pl-direct-5"],
-          "strategy": {
-            "type": "leastLoad",
-            "settings": {
-              "maxRTT": "1s",
-              "expected": 1,
-              "baselines": ["550ms", "1000ms"],
-              "tolerance": 0.1
-            }
-          }
-        }
-      ],
-      "domainMatcher": "hybrid",
-      "domainStrategy": "IPIfNonMatch"
-    },
-    "inbounds": [
-      {
-        "tag": "socks",
-        "port": 10808,
-        "listen": "127.0.0.1",
-        "protocol": "socks",
-        "settings": {
-          "udp": true,
-          "auth": "noauth",
-          "userLevel": 8
-        },
-        "sniffing": {
-          "enabled": true,
-          "routeOnly": true,
-          "destOverride": ["http", "tls", "quic"]
-        }
-      },
-      {
-        "tag": "http",
-        "port": 10809,
-        "listen": "127.0.0.1",
-        "protocol": "http",
-        "settings": {
-          "userLevel": 8
-        },
-        "sniffing": {
-          "enabled": true,
-          "routeOnly": true,
-          "destOverride": ["http", "tls", "quic"]
-        }
-      }
-    ],
-    "outbounds": [
-      {
-        "tag": "exit-yt",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "78.159.131.46",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "alb4vp40.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["h2"]
-          }
-        }
-      },
-      {
-        "tag": "exit-yt-2",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "45.89.60.123",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "aldamn.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["h2", "http/1.1"]
-          }
-        }
-      },
-      {
-        "tag": "exit-yt-3",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.83.129.123",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "50gport1.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-4",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.83.129.124",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "50gport3.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-5",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.83.129.242",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "detk28.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-6",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.175.178.81",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "esttk31.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-7",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.175.178.70",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "pototk47.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-yt-8",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "188.255.236.131",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "pototk48.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-pl-direct",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "45.140.204.100",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "pldamn.potatosubge20.org",
-            "fingerprint": "chrome",
-            "alpn": ["h2", "http/1.1"]
-          }
-        }
-      },
-      {
-        "tag": "exit-pl-direct-2",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "95.85.246.47",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {},
-          "security": "reality",
-          "realitySettings": {
-            "serverName": "www.bing.com",
-            "publicKey": "Duxwa0WD9RhAy4EsGdWgo2ALlOUWGfZ2KCVLKEP_214",
-            "shortId": "3f8a2c1b",
-            "fingerprint": "firefox"
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-pl-direct-3",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "87.239.135.37",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "pltk37.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-pl-direct-4",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "87.239.135.23",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "pl2ram.potatosubge20.org",
-            "fingerprint": "chrome",
-            "alpn": ["h2", "http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-pl-direct-5",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "144.31.171.156",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {},
-          "security": "reality",
-          "realitySettings": {
-            "serverName": "www.bing.com",
-            "publicKey": "Duxwa0WD9RhAy4EsGdWgo2ALlOUWGfZ2KCVLKEP_214",
-            "fingerprint": "firefox"
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "direct",
-        "protocol": "freedom"
-      },
-      {
-        "tag": "block",
-        "protocol": "blackhole"
-      }
-    ],
-    "burstObservatory": {
-      "pingConfig": {
-        "timeout": "1s",
-        "interval": "10m",
-        "sampling": 2,
-        "destination": "https://www.gstatic.com/generate_204"
-      },
-      "subjectSelector": ["exit-yt", "exit-pl-direct"],
-      "enableConcurrency": true
-    },
-    "remarks": "🇵🇱 Авто Польша @fastflashvpnbot"
-  },
-  {
     "dns": {
       "queryStrategy": "UseIPv4",
       "servers": [
         "https://8.8.8.8/dns-query",
-        "https://1.1.1.1/dns-query"
-      ]
+        "https://8.8.4.4/dns-query",
+        "https://1.1.1.1/dns-query",
+        "https://1.0.0.1/dns-query"
+      ],
+      "tag": "dns-inbound"
     },
+    "inbounds": [
+      {
+        "listen": "127.0.0.1",
+        "port": 10808,
+        "protocol": "socks",
+        "settings": {
+          "auth": "noauth",
+          "udp": true,
+          "userLevel": 8
+        },
+        "sniffing": {
+          "destOverride": ["http", "tls", "quic"],
+          "enabled": true,
+          "routeOnly": true
+        },
+        "tag": "socks"
+      },
+      {
+        "listen": "127.0.0.1",
+        "port": 10809,
+        "protocol": "http",
+        "settings": {
+          "allowTransparent": false,
+          "userLevel": 8
+        },
+        "sniffing": {
+          "destOverride": ["http", "tls", "quic"],
+          "enabled": true,
+          "routeOnly": true
+        },
+        "tag": "http"
+      }
+    ],
     "log": {
-      "error": "none",
-      "access": "none",
-      "dnsLog": false,
-      "loglevel": "none"
+      "loglevel": "warning"
     },
-    "stats": {},
+    "meta": null,
+    "outbounds": [
+      {
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "main.workoneok.com",
+              "port": 443,
+              "users": [
+                {
+                  "encryption": "none",
+                  "flow": "",
+                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "grpcSettings": {
+            "authority": "",
+            "mode": false,
+            "serviceName": "api.v1.StreamService"
+          },
+          "network": "grpc",
+          "realitySettings": {
+            "fingerprint": "firefox",
+            "publicKey": "SGlYAebcHBfrR7VVVPp46Y1FLlFueS4Au7ui7bLCyxQ",
+            "serverName": "main.workoneok.com",
+            "shortId": "a212fe3d68037ef3"
+          },
+          "security": "reality"
+        },
+        "tag": "proxy"
+      },
+      {
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "stats.workoneok.com",
+              "port": 443,
+              "users": [
+                {
+                  "encryption": "none",
+                  "flow": "",
+                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "grpcSettings": {
+            "authority": "",
+            "mode": false,
+            "serviceName": "api.v1.StreamService"
+          },
+          "network": "grpc",
+          "realitySettings": {
+            "fingerprint": "firefox",
+            "publicKey": "OIIjAqKFPyTnGtFEDF0HEbHGH4U9tCVlSI-vBDPvL1A",
+            "serverName": "stats.workoneok.com",
+            "shortId": "eeb2cda4ead22a37"
+          },
+          "security": "reality"
+        },
+        "tag": "proxy-2"
+      },
+      {
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "api.workoneok.com",
+              "port": 443,
+              "users": [
+                {
+                  "encryption": "none",
+                  "flow": "",
+                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "grpcSettings": {
+            "authority": "",
+            "mode": false,
+            "serviceName": "api.v1.StreamService"
+          },
+          "network": "grpc",
+          "realitySettings": {
+            "fingerprint": "firefox",
+            "publicKey": "UhbquLQ1Qk0S9PRAC8U4u6Zyo3pL4ymUWcS6Ve6pFSo",
+            "serverName": "api.workoneok.com",
+            "shortId": "68a68b557b43e92e"
+          },
+          "security": "reality"
+        },
+        "tag": "proxy-3"
+      },
+      {
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "app.workoneok.com",
+              "port": 443,
+              "users": [
+                {
+                  "encryption": "none",
+                  "flow": "",
+                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "grpcSettings": {
+            "authority": "",
+            "mode": false,
+            "serviceName": "api.v1.StreamService"
+          },
+          "network": "grpc",
+          "realitySettings": {
+            "fingerprint": "firefox",
+            "publicKey": "1mWv4iXe6t7L9HFAYT24IXxSXGxAeHQ3JmrNyrPMFVo",
+            "serverName": "app.workoneok.com",
+            "shortId": "731eed625fd7e5da"
+          },
+          "security": "reality"
+        },
+        "tag": "proxy-4"
+      },
+      {
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "home.workoneok.com",
+              "port": 443,
+              "users": [
+                {
+                  "encryption": "none",
+                  "flow": "",
+                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "grpcSettings": {
+            "authority": "",
+            "mode": false,
+            "serviceName": "api.v1.StreamService"
+          },
+          "network": "grpc",
+          "realitySettings": {
+            "fingerprint": "firefox",
+            "publicKey": "2eb4t-FgbjLFZHl9pzYtMM3DambYcjRDOJHWMQRC3Uw",
+            "serverName": "home.workoneok.com",
+            "shortId": "d08b68d57f97d6ea"
+          },
+          "security": "reality"
+        },
+        "tag": "proxy-5"
+      },
+      {
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "add.workoneok.com",
+              "port": 443,
+              "users": [
+                {
+                  "encryption": "none",
+                  "flow": "",
+                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "grpcSettings": {
+            "authority": "",
+            "mode": false,
+            "serviceName": "api.v1.StreamService"
+          },
+          "network": "grpc",
+          "realitySettings": {
+            "fingerprint": "firefox",
+            "publicKey": "DsGKafEfh9BaXeF4yaX_ReZRCCxMv96bSy9Kw4IeiRw",
+            "serverName": "add.workoneok.com",
+            "shortId": "8260193b10bb912a"
+          },
+          "security": "reality"
+        },
+        "tag": "proxy-6"
+      },
+      {
+        "protocol": "freedom",
+        "settings": {
+          "domainStrategy": "UseIP"
+        },
+        "tag": "direct"
+      },
+      {
+        "protocol": "blackhole",
+        "tag": "block"
+      },
+      {
+        "protocol": "dns",
+        "tag": "dns-out"
+      }
+    ],
     "policy": {
       "levels": {
-        "0": {
-          "statsUserOnline": true,
-          "statsUserUplink": true,
-          "statsUserDownlink": true
-        },
         "8": {
-          "connIdle": 600,
-          "handshake": 10,
-          "uplinkOnly": 5,
-          "downlinkOnly": 5
+          "connIdle": 120,
+          "downlinkOnly": 1,
+          "handshake": 4,
+          "uplinkOnly": 1
         }
       },
       "system": {
-        "statsInboundUplink": true,
-        "statsOutboundUplink": true,
-        "statsInboundDownlink": true,
-        "statsOutboundDownlink": true
+        "statsOutboundDownlink": true,
+        "statsOutboundUplink": true
       }
     },
+    "remarks": "🇬🇧 Великобритания @fastflashvpnbot",
     "routing": {
+      "balancers": [
+        {
+          "fallbackTag": "proxy",
+          "selector": ["proxy"],
+          "strategy": {
+            "settings": {
+              "baselines": ["400ms", "800ms"],
+              "expected": 1,
+              "maxRTT": "3s",
+              "tolerance": 0.25
+            },
+            "type": "leastLoad"
+          },
+          "tag": "balancer"
+        }
+      ],
       "domainMatcher": "hybrid",
       "domainStrategy": "IPIfNonMatch",
       "rules": [
         {
+          "outboundTag": "dns-out",
+          "port": 53,
+          "type": "field"
+        },
+        {
+          "domain": ["geosite:TORRENT"],
+          "outboundTag": "block",
+          "ruleTag": "TORRENT_BY_DOMAIN"
+        },
+        {
+          "outboundTag": "block",
+          "port": "6881-6889,51413,21413,17417,37305",
+          "ruleTag": "TORRENT_BY_PORT"
+        },
+        {
+          "balancerTag": "balancer",
           "domain": [
-            "domain:speedtest.net",
-            "domain:cdn-telegram.org",
-            "domain:comments.app",
-            "domain:contest.com",
-            "domain:fragment.com",
-            "domain:graph.org",
-            "domain:quiz.directory",
-            "domain:t.me",
-            "domain:tdesktop.com",
-            "domain:telega.one",
-            "domain:telegra.ph",
-            "domain:telegram-cdn.org",
-            "domain:telegram.dog",
-            "domain:telegram.me",
-            "domain:telegram.org",
-            "domain:telegram.space",
-            "domain:telesco.pe",
-            "domain:tg.dev",
-            "domain:ton.org",
-            "domain:toncenter.com",
-            "domain:tx.me",
-            "domain:usercontent.dev"
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram"
           ],
-          "outboundTag": "proxy"
+          "type": "field"
         },
         {
-          "ip": [
-            "149.154.160.0/21",
-            "149.154.168.0/22",
-            "149.154.172.0/22",
-            "185.76.151.0/24",
-            "91.105.192.0/23",
-            "91.108.12.0/22",
-            "91.108.16.0/22",
-            "91.108.20.0/22",
-            "91.108.4.0/22",
-            "91.108.56.0/23",
-            "91.108.58.0/23",
-            "91.108.8.0/22",
-            "95.161.64.0/20",
-            "2001:67c:4e8::/48",
-            "2001:b28:f23c::/48",
-            "2001:b28:f23d::/48",
-            "2001:b28:f23f::/48",
-            "2a0a:f280:203::/48"
+          "domain": [
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit"
           ],
-          "outboundTag": "proxy"
+          "outboundTag": "direct",
+          "type": "field"
         },
         {
-          "inboundTag": ["SOCKS", "HTTP"],
+          "outboundTag": "block",
+          "protocol": ["bittorrent"],
+          "type": "field"
+        },
+        {
+          "ip": ["geoip:private", "geoip:direct"],
+          "outboundTag": "direct",
+          "type": "field"
+        },
+        {
+          "balancerTag": "balancer",
           "network": "tcp,udp",
-          "outboundTag": "DIRECT"
+          "type": "field"
+        }
+      ]
+    },
+    "stats": {}
+  },
+  {
+    "burstObservatory": {
+      "pingConfig": {
+        "connectivity": "http://edge-http.microsoft.com/captiveportal/generate_204",
+        "destination": "http://edge-http.microsoft.com/captiveportal/generate_204",
+        "interval": "5m",
+        "sampling": 1,
+        "timeout": "5s"
+      },
+      "subjectSelector": ["proxy"]
+    },
+    "dns": {
+      "queryStrategy": "UseIPv4",
+      "servers": [
+        "https://8.8.8.8/dns-query",
+        "https://8.8.4.4/dns-query",
+        "https://1.1.1.1/dns-query",
+        "https://1.0.0.1/dns-query"
+      ],
+      "tag": "dns-inbound"
+    },
+    "inbounds": [
+      {
+        "listen": "127.0.0.1",
+        "port": 10808,
+        "protocol": "socks",
+        "settings": {
+          "auth": "noauth",
+          "udp": true,
+          "userLevel": 8
+        },
+        "sniffing": {
+          "destOverride": ["http", "tls", "quic"],
+          "enabled": true,
+          "routeOnly": true
+        },
+        "tag": "socks"
+      },
+      {
+        "listen": "127.0.0.1",
+        "port": 10809,
+        "protocol": "http",
+        "settings": {
+          "allowTransparent": false,
+          "userLevel": 8
+        },
+        "sniffing": {
+          "destOverride": ["http", "tls", "quic"],
+          "enabled": true,
+          "routeOnly": true
+        },
+        "tag": "http"
+      }
+    ],
+    "log": {
+      "loglevel": "warning"
+    },
+    "meta": null,
+    "outbounds": [
+      {
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "live.on3ok.com",
+              "port": 443,
+              "users": [
+                {
+                  "encryption": "none",
+                  "flow": "",
+                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "grpcSettings": {
+            "authority": "",
+            "mode": false,
+            "serviceName": "api.v1.StreamService"
+          },
+          "network": "grpc",
+          "realitySettings": {
+            "fingerprint": "firefox",
+            "publicKey": "_4x6mU7USpNESoYSD2qzwA2pdvq8f30m0UwALXAqqzY",
+            "serverName": "live.on3ok.com",
+            "shortId": "5877634632cd9b75"
+          },
+          "security": "reality"
+        },
+        "tag": "proxy"
+      },
+      {
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "cloud.on3ok.com",
+              "port": 443,
+              "users": [
+                {
+                  "encryption": "none",
+                  "flow": "",
+                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "grpcSettings": {
+            "authority": "",
+            "mode": false,
+            "serviceName": "api.v1.StreamService"
+          },
+          "network": "grpc",
+          "realitySettings": {
+            "fingerprint": "firefox",
+            "publicKey": "shReJB9qcFJwR2jR0CElV3nrLVsxbi6DCQhA2nBLN3Q",
+            "serverName": "cloud.on3ok.com",
+            "shortId": "d1a124bd123d6fd6"
+          },
+          "security": "reality"
+        },
+        "tag": "proxy-2"
+      },
+      {
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "gw.on3ok.com",
+              "port": 443,
+              "users": [
+                {
+                  "encryption": "none",
+                  "flow": "",
+                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "grpcSettings": {
+            "authority": "",
+            "mode": false,
+            "serviceName": "api.v1.StreamService"
+          },
+          "network": "grpc",
+          "realitySettings": {
+            "fingerprint": "firefox",
+            "publicKey": "XbCXzBE48Mm7ONAj1u_J_dTAoszEXmrUJ_LXi81auCM",
+            "serverName": "gw.on3ok.com",
+            "shortId": "fa020441e9eb7b6b"
+          },
+          "security": "reality"
+        },
+        "tag": "proxy-3"
+      },
+      {
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "mt.on3ok.com",
+              "port": 443,
+              "users": [
+                {
+                  "encryption": "none",
+                  "flow": "",
+                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "grpcSettings": {
+            "authority": "",
+            "mode": false,
+            "serviceName": "api.v1.StreamService"
+          },
+          "network": "grpc",
+          "realitySettings": {
+            "fingerprint": "firefox",
+            "publicKey": "7Zaue_FAq70awc0df3pE7lIjaf7BcGjF5z43kbnjaHw",
+            "serverName": "mt.on3ok.com",
+            "shortId": "c85a9a8c2c3e8dbb"
+          },
+          "security": "reality"
+        },
+        "tag": "proxy-4"
+      },
+      {
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "sync.on3ok.com",
+              "port": 443,
+              "users": [
+                {
+                  "encryption": "none",
+                  "flow": "",
+                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "grpcSettings": {
+            "authority": "",
+            "mode": false,
+            "serviceName": "api.v1.StreamService"
+          },
+          "network": "grpc",
+          "realitySettings": {
+            "fingerprint": "firefox",
+            "publicKey": "2j9MbL9p_z1tmhfAOg8yJttmipPiG4IobC-RWYHkomM",
+            "serverName": "sync.on3ok.com",
+            "shortId": "57b9dece2c7ebfcf"
+          },
+          "security": "reality"
+        },
+        "tag": "proxy-5"
+      },
+      {
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "fetch.on3ok.com",
+              "port": 443,
+              "users": [
+                {
+                  "encryption": "none",
+                  "flow": "",
+                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "grpcSettings": {
+            "authority": "",
+            "mode": false,
+            "serviceName": "api.v1.StreamService"
+          },
+          "network": "grpc",
+          "realitySettings": {
+            "fingerprint": "firefox",
+            "publicKey": "54GDnm7DNlMJG9xRV1we7qiEGN7Q4O5VgkILnTEoOXc",
+            "serverName": "fetch.on3ok.com",
+            "shortId": "3c6224dbf85d9eb4"
+          },
+          "security": "reality"
+        },
+        "tag": "proxy-6"
+      },
+      {
+        "protocol": "freedom",
+        "settings": {
+          "domainStrategy": "UseIP"
+        },
+        "tag": "direct"
+      },
+      {
+        "protocol": "blackhole",
+        "tag": "block"
+      },
+      {
+        "protocol": "dns",
+        "tag": "dns-out"
+      }
+    ],
+    "policy": {
+      "levels": {
+        "8": {
+          "connIdle": 120,
+          "downlinkOnly": 1,
+          "handshake": 4,
+          "uplinkOnly": 1
+        }
+      },
+      "system": {
+        "statsOutboundDownlink": true,
+        "statsOutboundUplink": true
+      }
+    },
+    "remarks": "🇸🇪 Швеция @fastflashvpnbot",
+    "routing": {
+      "balancers": [
+        {
+          "fallbackTag": "proxy",
+          "selector": ["proxy"],
+          "strategy": {
+            "settings": {
+              "baselines": ["400ms", "800ms"],
+              "expected": 1,
+              "maxRTT": "3s",
+              "tolerance": 0.25
+            },
+            "type": "leastLoad"
+          },
+          "tag": "balancer"
+        }
+      ],
+      "domainMatcher": "hybrid",
+      "domainStrategy": "IPIfNonMatch",
+      "rules": [
+        {
+          "outboundTag": "dns-out",
+          "port": 53,
+          "type": "field"
+        },
+        {
+          "domain": ["geosite:TORRENT"],
+          "outboundTag": "block",
+          "ruleTag": "TORRENT_BY_DOMAIN"
+        },
+        {
+          "outboundTag": "block",
+          "port": "6881-6889,51413,21413,17417,37305",
+          "ruleTag": "TORRENT_BY_PORT"
+        },
+        {
+          "balancerTag": "balancer",
+          "domain": [
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram"
+          ],
+          "type": "field"
+        },
+        {
+          "domain": [
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit"
+          ],
+          "outboundTag": "direct",
+          "type": "field"
+        },
+        {
+          "outboundTag": "block",
+          "protocol": ["bittorrent"],
+          "type": "field"
+        },
+        {
+          "ip": ["geoip:private", "geoip:direct"],
+          "outboundTag": "direct",
+          "type": "field"
+        },
+        {
+          "balancerTag": "balancer",
+          "network": "tcp,udp",
+          "type": "field"
+        }
+      ]
+    },
+    "stats": {}
+  },
+  {
+    "dns": {
+      "hosts": {
+        "lkfl2.nalog.ru": "213.24.64.175",
+        "lknpd.nalog.ru": "213.24.64.181"
+      },
+      "queryStrategy": "UseIPv4",
+      "servers": [
+        "https://8.8.8.8/dns-query",
+        {
+          "address": "https://8.8.8.8/dns-query",
+          "domains": []
+        },
+        {
+          "address": "https://77.88.8.8/dns-query",
+          "domains": ["geosite:private", "geosite:whitelist"]
         }
       ]
     },
@@ -3879,915 +779,139 @@
         "protocol": "socks",
         "settings": {
           "auth": "noauth",
-          "udp": true
+          "udp": true,
+          "userLevel": 8
         },
         "sniffing": {
-          "destOverride": ["http", "tls", "quic"],
-          "enabled": true,
-          "routeOnly": true
+          "destOverride": ["http", "quic", "tls"],
+          "enabled": true
         },
-        "tag": "SOCKS"
+        "tag": "socks"
       },
       {
         "listen": "127.0.0.1",
         "port": 10809,
         "protocol": "http",
         "settings": {
-          "allowTransparent": false
+          "userLevel": 8
         },
         "sniffing": {
-          "destOverride": ["http", "tls", "quic"],
-          "enabled": true,
-          "routeOnly": true
+          "destOverride": ["http", "quic", "tls"],
+          "enabled": true
         },
-        "tag": "HTTP"
+        "tag": "http"
       }
     ],
+    "log": {
+      "loglevel": "warning"
+    },
+    "meta": null,
     "outbounds": [
       {
         "protocol": "vless",
         "settings": {
           "vnext": [
             {
-              "address": "qq.utiltools.ru",
+              "address": "cdnvps-dfdab37d.happ8.com",
               "port": 443,
               "users": [
                 {
                   "encryption": "none",
-                  "flow": "xtls-rprx-vision",
-                  "id": "4054fdc2-ee80-4419-8a8e-d937df4719e2"
+                  "flow": "",
+                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
                 }
               ]
             }
           ]
         },
         "streamSettings": {
-          "network": "tcp",
-          "realitySettings": {
-            "fingerprint": "qq",
-            "publicKey": "drY21DHNOr6ezJLA2B10mzTExeJ9-gVBfTBNLwVBtWI",
-            "serverName": "qq.utiltools.ru"
+          "network": "xhttp",
+          "security": "tls",
+          "tlsSettings": {
+            "alpn": ["h3", "h2", "http/1.1"],
+            "fingerprint": "firefox",
+            "serverName": "cdnvps-dfdab37d.happ8.com"
           },
-          "security": "reality",
-          "tcpSettings": {}
+          "xhttpSettings": {
+            "extra": {
+              "uplinkHTTPMethod": "GET",
+              "xPaddingHeader": "X-Cache",
+              "xPaddingKey": "_dc",
+              "xPaddingMethod": "tokenish",
+              "xPaddingObfsMode": true,
+              "xPaddingPlacement": "queryInHeader"
+            },
+            "host": "cdnvps-dfdab37d.happ8.com",
+            "mode": "packet-up",
+            "path": "/uploadfiles/"
+          }
         },
         "tag": "proxy"
       },
       {
         "protocol": "freedom",
-        "tag": "DIRECT"
+        "tag": "direct"
       },
       {
         "protocol": "blackhole",
-        "tag": "BLOCK"
+        "tag": "block"
+      },
+      {
+        "protocol": "dns",
+        "proxySettings": {
+          "tag": "proxy"
+        },
+        "tag": "dns-out"
       }
     ],
-    "burstObservatory": {
-      "pingConfig": {
-        "timeout": "1s",
-        "interval": "10m",
-        "sampling": 2,
-        "destination": "https://www.gstatic.com/generate_204"
-      },
-      "subjectSelector": ["proxy"],
-      "enableConcurrency": true
-    },
-    "remarks": "🇷🇺✈️ VPN для Telegram"
-  },
-  {
-    "dns": {
-      "servers": ["1.1.1.1", "1.0.0.1", "8.8.8.8"],
-      "queryStrategy": "UseIPv4"
-    },
-    "log": {
-      "error": "none",
-      "access": "none",
-      "dnsLog": false,
-      "loglevel": "none"
-    },
-    "stats": {},
     "policy": {
       "levels": {
-        "0": {
-          "statsUserOnline": true,
-          "statsUserUplink": true,
-          "statsUserDownlink": true
-        },
         "8": {
-          "connIdle": 600,
-          "handshake": 10,
-          "uplinkOnly": 5,
-          "downlinkOnly": 5
+          "connIdle": 120,
+          "downlinkOnly": 1,
+          "handshake": 4,
+          "uplinkOnly": 1
         }
       },
       "system": {
-        "statsInboundUplink": true,
-        "statsOutboundUplink": true,
-        "statsInboundDownlink": true,
-        "statsOutboundDownlink": true
+        "statsOutboundDownlink": true,
+        "statsOutboundUplink": true
       }
     },
+    "remarks": "🇬🇧 Великобритания @fastflashvpnbot",
     "routing": {
+      "domainStrategy": "IPIfNonMatch",
       "rules": [
         {
-          "ip": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "127.0.0.0/8", "::1/128", "fc00::/7", "fe80::/10"],
-          "type": "field",
+          "outboundTag": "dns-out",
+          "port": 53
+        },
+        {
+          "domain": ["geosite:win-spy", "geosite:torrent", "geosite:category-ads"],
+          "outboundTag": "block"
+        },
+        {
+          "ip": ["77.88.8.8"],
           "outboundTag": "direct"
         },
         {
-          "type": "field",
-          "protocol": ["bittorrent"],
+          "ip": ["8.8.8.8"],
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": ["geosite:win-spy", "geosite:torrent", "geosite:category-ads"],
           "outboundTag": "block"
         },
         {
-          "port": "853",
-          "type": "field",
-          "network": "tcp",
-          "outboundTag": "block"
-        },
-        {
-          "port": "25,587,465,2525",
-          "type": "field",
-          "network": "tcp",
-          "outboundTag": "block"
-        },
-        {
-          "type": "field",
-          "domain": ["domain:ru", "domain:xn--p1ai", "geosite:category-ru", "domain:wata.pro", "domain:mtalk.google.com", "domain:push.apple.com", "domain:avito.st", "domain:mangalib.me", "regexp:.*-courier\\.push\\.apple\\.com$"],
+          "domain": ["geosite:private", "geosite:whitelist"],
           "outboundTag": "direct"
         },
         {
-          "type": "field",
-          "domain": ["geosite:youtube"],
-          "balancerTag": "youtube-balancer"
-        },
-        {
-          "type": "field",
-          "network": "tcp,udp",
-          "balancerTag": "main-balancer"
+          "ip": ["geoip:private", "geoip:whitelist"],
+          "outboundTag": "direct"
         }
-      ],
-      "balancers": [
-        {
-          "tag": "youtube-balancer",
-          "selector": ["exit-youtube", "exit-multi", "exit-fast", "exit-slow"],
-          "strategy": {
-            "type": "leastLoad",
-            "settings": {
-              "costs": [
-                {
-                  "match": "^exit-slow",
-                  "value": 300,
-                  "regexp": true
-                },
-                {
-                  "match": "^exit-fast",
-                  "value": 5,
-                  "regexp": true
-                }
-              ],
-              "maxRTT": "1s",
-              "expected": 2,
-              "baselines": ["700ms", "900ms"],
-              "tolerance": 0.05
-            }
-          }
-        },
-        {
-          "tag": "main-balancer",
-          "selector": ["exit-fast", "exit-multi", "exit-top", "exit-slow"],
-          "strategy": {
-            "type": "leastLoad",
-            "settings": {
-              "costs": [
-                {
-                  "match": "^exit-top",
-                  "value": 50,
-                  "regexp": true
-                },
-                {
-                  "match": "^exit-slow",
-                  "value": 300,
-                  "regexp": true
-                }
-              ],
-              "maxRTT": "2000ms",
-              "expected": 1,
-              "baselines": ["750ms", "900ms"],
-              "tolerance": 0.1
-            }
-          }
-        }
-      ],
-      "domainMatcher": "hybrid",
-      "domainStrategy": "IPIfNonMatch"
+      ]
     },
-    "inbounds": [
-      {
-        "tag": "socks",
-        "port": 10808,
-        "listen": "127.0.0.1",
-        "protocol": "socks",
-        "settings": {
-          "udp": true,
-          "auth": "noauth",
-          "userLevel": 8
-        },
-        "sniffing": {
-          "enabled": true,
-          "destOverride": ["http", "tls", "quic"]
-        }
-      },
-      {
-        "tag": "http",
-        "port": 10809,
-        "listen": "127.0.0.1",
-        "protocol": "http",
-        "settings": {
-          "userLevel": 8
-        },
-        "sniffing": {
-          "enabled": true,
-          "routeOnly": true,
-          "destOverride": ["http", "tls", "quic"]
-        }
-      }
-    ],
-    "outbounds": [
-      {
-        "tag": "exit-multi",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "78.159.131.46",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "alb4vp40.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["h2"]
-          }
-        }
-      },
-      {
-        "tag": "exit-multi-2",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "45.89.60.123",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "aldamn.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["h2", "http/1.1"]
-          }
-        }
-      },
-      {
-        "tag": "exit-multi-3",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.83.129.123",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "50gport1.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-multi-4",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.83.129.124",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "50gport3.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-multi-5",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.83.129.242",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "detk28.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-multi-6",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.175.178.81",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "esttk31.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-multi-7",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "5.175.178.70",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "pototk47.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-multi-8",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "188.255.236.131",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "pototk48.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-fast",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "94.249.176.68",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "spain1.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-fast-2",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "45.140.204.100",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "pldamn.potatosubge20.org",
-            "fingerprint": "chrome",
-            "alpn": ["h2", "http/1.1"]
-          }
-        }
-      },
-      {
-        "tag": "exit-fast-3",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "95.85.246.47",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {},
-          "security": "reality",
-          "realitySettings": {
-            "serverName": "www.bing.com",
-            "publicKey": "Duxwa0WD9RhAy4EsGdWgo2ALlOUWGfZ2KCVLKEP_214",
-            "shortId": "3f8a2c1b",
-            "fingerprint": "firefox"
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-fast-4",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "87.239.135.37",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "pltk37.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-fast-5",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "87.239.135.23",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "pl2ram.potatosubge20.org",
-            "fingerprint": "chrome",
-            "alpn": ["h2", "http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-fast-6",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "144.31.171.156",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {},
-          "security": "reality",
-          "realitySettings": {
-            "serverName": "www.bing.com",
-            "publicKey": "Duxwa0WD9RhAy4EsGdWgo2ALlOUWGfZ2KCVLKEP_214",
-            "fingerprint": "firefox"
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-fast-7",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "212.18.104.6",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {},
-          "security": "reality",
-          "realitySettings": {
-            "serverName": "www.bing.com",
-            "publicKey": "Duxwa0WD9RhAy4EsGdWgo2ALlOUWGfZ2KCVLKEP_214",
-            "fingerprint": "firefox"
-          }
-        }
-      },
-      {
-        "tag": "exit-fast-8",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "88.216.73.26",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "uscher30.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        }
-      },
-      {
-        "tag": "exit-fast-9",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "89.144.35.11",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "detk38.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["http/1.1"]
-          }
-        },
-        "mux": {
-          "enabled": true,
-          "concurrency": -1,
-          "xudpConcurrency": 8,
-          "xudpProxyUDP443": "reject"
-        }
-      },
-      {
-        "tag": "exit-fast-10",
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "84.32.100.252",
-              "port": 443,
-              "users": [
-                {
-                  "id": "641406ae-8e13-4963-8115-74d9c770064a",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          },
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": "decher10.potatosubge20.org",
-            "fingerprint": "firefox",
-            "alpn": ["h2", "http/1.1"]
-          }
-        }
-      },
-      {
-        "tag": "direct",
-        "protocol": "freedom"
-      },
-      {
-        "tag": "block",
-        "protocol": "blackhole"
-      }
-    ],
-    "burstObservatory": {
-      "pingConfig": {
-        "timeout": "1s",
-        "interval": "10m",
-        "sampling": 2,
-        "destination": "https://www.gstatic.com/generate_204"
-      },
-      "subjectSelector": ["exit-fast", "exit-multi"],
-      "enableConcurrency": true
-    },
-    "remarks": "🌍 Авто @fastflashvpnbot"
+    "stats": {}
   }
 ]
