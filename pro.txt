@@ -1,2751 +1,402 @@
-[
-  {
-    "burstObservatory": {
-      "pingConfig": {
-        "connectivity": "http://edge-http.microsoft.com/captiveportal/generate_204",
-        "destination": "http://edge-http.microsoft.com/captiveportal/generate_204",
-        "interval": "5m",
-        "sampling": 1,
-        "timeout": "5s"
-      },
-      "subjectSelector": ["proxy"]
+{
+  "burstObservatory" : {
+    "pingConfig" : {
+      "connectivity" : "http:\/\/edge-http.microsoft.com\/captiveportal\/generate_204",
+      "destination" : "http:\/\/edge-http.microsoft.com\/captiveportal\/generate_204",
+      "interval" : "5m",
+      "sampling" : 1,
+      "timeout" : "5s"
     },
-    "dns": {
-      "queryStrategy": "UseIPv4",
-      "servers": [
-        "https://8.8.8.8/dns-query",
-        "https://8.8.4.4/dns-query",
-        "https://1.1.1.1/dns-query",
-        "https://1.0.0.1/dns-query"
-      ],
-      "tag": "dns-inbound"
-    },
-    "inbounds": [
-      {
-        "listen": "127.0.0.1",
-        "port": 10808,
-        "protocol": "socks",
-        "settings": {
-          "auth": "noauth",
-          "udp": true,
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": ["http", "tls", "quic"],
-          "enabled": true,
-          "routeOnly": true
-        },
-        "tag": "socks"
-      },
-      {
-        "listen": "127.0.0.1",
-        "port": 10809,
-        "protocol": "http",
-        "settings": {
-          "allowTransparent": false,
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": ["http", "tls", "quic"],
-          "enabled": true,
-          "routeOnly": true
-        },
-        "tag": "http"
-      }
-    ],
-    "log": {
-      "loglevel": "warning"
-    },
-    "meta": null,
-    "outbounds": [
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "live.on3ok.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "api.v1.StreamService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "_4x6mU7USpNESoYSD2qzwA2pdvq8f30m0UwALXAqqzY",
-            "serverName": "live.on3ok.com",
-            "shortId": "5877634632cd9b75"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "cloud.on3ok.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "api.v1.StreamService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "shReJB9qcFJwR2jR0CElV3nrLVsxbi6DCQhA2nBLN3Q",
-            "serverName": "cloud.on3ok.com",
-            "shortId": "d1a124bd123d6fd6"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-2"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "gw.on3ok.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "api.v1.StreamService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "XbCXzBE48Mm7ONAj1u_J_dTAoszEXmrUJ_LXi81auCM",
-            "serverName": "gw.on3ok.com",
-            "shortId": "fa020441e9eb7b6b"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-3"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "mt.on3ok.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "api.v1.StreamService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "7Zaue_FAq70awc0df3pE7lIjaf7BcGjF5z43kbnjaHw",
-            "serverName": "mt.on3ok.com",
-            "shortId": "c85a9a8c2c3e8dbb"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-4"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "sync.on3ok.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "api.v1.StreamService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "2j9MbL9p_z1tmhfAOg8yJttmipPiG4IobC-RWYHkomM",
-            "serverName": "sync.on3ok.com",
-            "shortId": "57b9dece2c7ebfcf"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-5"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "fetch.on3ok.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "api.v1.StreamService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "54GDnm7DNlMJG9xRV1we7qiEGN7Q4O5VgkILnTEoOXc",
-            "serverName": "fetch.on3ok.com",
-            "shortId": "3c6224dbf85d9eb4"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-6"
-      },
-      {
-        "protocol": "freedom",
-        "settings": {
-          "domainStrategy": "UseIP"
-        },
-        "tag": "direct"
-      },
-      {
-        "protocol": "blackhole",
-        "tag": "block"
-      },
-      {
-        "protocol": "dns",
-        "tag": "dns-out"
-      }
-    ],
-    "policy": {
-      "levels": {
-        "8": {
-          "connIdle": 120,
-          "downlinkOnly": 1,
-          "handshake": 4,
-          "uplinkOnly": 1
-        }
-      },
-      "system": {
-        "statsOutboundDownlink": true,
-        "statsOutboundUplink": true
-      }
-    },
-    "remarks": "🇸🇪 Швеция @fastflashvpnbot",
-    "routing": {
-      "balancers": [
-        {
-          "fallbackTag": "proxy",
-          "selector": ["proxy"],
-          "strategy": {
-            "settings": {
-              "baselines": ["400ms", "800ms"],
-              "expected": 1,
-              "maxRTT": "3s",
-              "tolerance": 0.25
-            },
-            "type": "leastLoad"
-          },
-          "tag": "balancer"
-        }
-      ],
-      "domainMatcher": "hybrid",
-      "domainStrategy": "IPIfNonMatch",
-      "rules": [
-        {
-          "outboundTag": "dns-out",
-          "port": 53,
-          "type": "field"
-        },
-        {
-          "domain": ["geosite:TORRENT"],
-          "outboundTag": "block",
-          "ruleTag": "TORRENT_BY_DOMAIN"
-        },
-        {
-          "outboundTag": "block",
-          "port": "6881-6889,51413,21413,17417,37305",
-          "ruleTag": "TORRENT_BY_PORT"
-        },
-        {
-          "balancerTag": "balancer",
-          "domain": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram"
-          ],
-          "type": "field"
-        },
-        {
-          "domain": [
-            "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit"
-          ],
-          "outboundTag": "direct",
-          "type": "field"
-        },
-        {
-          "outboundTag": "block",
-          "protocol": ["bittorrent"],
-          "type": "field"
-        },
-        {
-          "ip": ["geoip:private", "geoip:direct"],
-          "outboundTag": "direct",
-          "type": "field"
-        },
-        {
-          "balancerTag": "balancer",
-          "network": "tcp,udp",
-          "type": "field"
-        }
-      ]
-    },
-    "stats": {}
+    "subjectSelector" : [
+      "proxy"
+    ]
   },
-  {
-    "burstObservatory": {
-      "pingConfig": {
-        "connectivity": "http://edge-http.microsoft.com/captiveportal/generate_204",
-        "destination": "http://edge-http.microsoft.com/captiveportal/generate_204",
-        "interval": "5m",
-        "sampling": 1,
-        "timeout": "5s"
-      },
-      "subjectSelector": ["proxy"]
-    },
-    "dns": {
-      "queryStrategy": "UseIPv4",
-      "servers": [
-        "https://8.8.8.8/dns-query",
-        "https://8.8.4.4/dns-query",
-        "https://1.1.1.1/dns-query",
-        "https://1.0.0.1/dns-query"
-      ],
-      "tag": "dns-inbound"
-    },
-    "inbounds": [
-      {
-        "listen": "127.0.0.1",
-        "port": 10808,
-        "protocol": "socks",
-        "settings": {
-          "auth": "noauth",
-          "udp": true,
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": ["http", "tls", "quic"],
-          "enabled": true,
-          "routeOnly": true
-        },
-        "tag": "socks"
-      },
-      {
-        "listen": "127.0.0.1",
-        "port": 10809,
-        "protocol": "http",
-        "settings": {
-          "allowTransparent": false,
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": ["http", "tls", "quic"],
-          "enabled": true,
-          "routeOnly": true
-        },
-        "tag": "http"
-      }
+  "dns" : {
+    "queryStrategy" : "UseIPv4",
+    "servers" : [
+      "https:\/\/8.8.8.8\/dns-query",
+      "https:\/\/8.8.4.4\/dns-query",
+      "https:\/\/1.1.1.1\/dns-query",
+      "https:\/\/1.0.0.1\/dns-query"
     ],
-    "log": {
-      "loglevel": "warning"
-    },
-    "meta": null,
-    "outbounds": [
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "main.workoneok.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "api.v1.StreamService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "SGlYAebcHBfrR7VVVPp46Y1FLlFueS4Au7ui7bLCyxQ",
-            "serverName": "main.workoneok.com",
-            "shortId": "a212fe3d68037ef3"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "stats.workoneok.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "api.v1.StreamService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "OIIjAqKFPyTnGtFEDF0HEbHGH4U9tCVlSI-vBDPvL1A",
-            "serverName": "stats.workoneok.com",
-            "shortId": "eeb2cda4ead22a37"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-2"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "api.workoneok.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "api.v1.StreamService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "UhbquLQ1Qk0S9PRAC8U4u6Zyo3pL4ymUWcS6Ve6pFSo",
-            "serverName": "api.workoneok.com",
-            "shortId": "68a68b557b43e92e"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-3"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "app.workoneok.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "api.v1.StreamService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "1mWv4iXe6t7L9HFAYT24IXxSXGxAeHQ3JmrNyrPMFVo",
-            "serverName": "app.workoneok.com",
-            "shortId": "731eed625fd7e5da"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-4"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "home.workoneok.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "api.v1.StreamService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "2eb4t-FgbjLFZHl9pzYtMM3DambYcjRDOJHWMQRC3Uw",
-            "serverName": "home.workoneok.com",
-            "shortId": "d08b68d57f97d6ea"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-5"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "add.workoneok.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "api.v1.StreamService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "DsGKafEfh9BaXeF4yaX_ReZRCCxMv96bSy9Kw4IeiRw",
-            "serverName": "add.workoneok.com",
-            "shortId": "8260193b10bb912a"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-6"
-      },
-      {
-        "protocol": "freedom",
-        "settings": {
-          "domainStrategy": "UseIP"
-        },
-        "tag": "direct"
-      },
-      {
-        "protocol": "blackhole",
-        "tag": "block"
-      },
-      {
-        "protocol": "dns",
-        "tag": "dns-out"
-      }
-    ],
-    "policy": {
-      "levels": {
-        "8": {
-          "connIdle": 120,
-          "downlinkOnly": 1,
-          "handshake": 4,
-          "uplinkOnly": 1
-        }
-      },
-      "system": {
-        "statsOutboundDownlink": true,
-        "statsOutboundUplink": true
-      }
-    },
-    "remarks": "🇬🇧 Великобритания @fastflashvpnbot",
-    "routing": {
-      "balancers": [
-        {
-          "fallbackTag": "proxy",
-          "selector": ["proxy"],
-          "strategy": {
-            "settings": {
-              "baselines": ["400ms", "800ms"],
-              "expected": 1,
-              "maxRTT": "3s",
-              "tolerance": 0.25
-            },
-            "type": "leastLoad"
-          },
-          "tag": "balancer"
-        }
-      ],
-      "domainMatcher": "hybrid",
-      "domainStrategy": "IPIfNonMatch",
-      "rules": [
-        {
-          "outboundTag": "dns-out",
-          "port": 53,
-          "type": "field"
-        },
-        {
-          "domain": ["geosite:TORRENT"],
-          "outboundTag": "block",
-          "ruleTag": "TORRENT_BY_DOMAIN"
-        },
-        {
-          "outboundTag": "block",
-          "port": "6881-6889,51413,21413,17417,37305",
-          "ruleTag": "TORRENT_BY_PORT"
-        },
-        {
-          "balancerTag": "balancer",
-          "domain": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram"
-          ],
-          "type": "field"
-        },
-        {
-          "domain": [
-            "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit"
-          ],
-          "outboundTag": "direct",
-          "type": "field"
-        },
-        {
-          "outboundTag": "block",
-          "protocol": ["bittorrent"],
-          "type": "field"
-        },
-        {
-          "ip": ["geoip:private", "geoip:direct"],
-          "outboundTag": "direct",
-          "type": "field"
-        },
-        {
-          "balancerTag": "balancer",
-          "network": "tcp,udp",
-          "type": "field"
-        }
-      ]
-    },
-    "stats": {}
+    "tag" : "dns-inbound"
   },
-  {
-    "burstObservatory": {
-      "pingConfig": {
-        "connectivity": "http://edge-http.microsoft.com/captiveportal/generate_204",
-        "destination": "http://edge-http.microsoft.com/captiveportal/generate_204",
-        "interval": "5m",
-        "sampling": 1,
-        "timeout": "5s"
+  "inbounds" : [
+    {
+      "listen" : "127.0.0.1",
+      "port" : 10808,
+      "protocol" : "socks",
+      "settings" : {
+        "auth" : "noauth",
+        "udp" : true,
+        "userLevel" : 8
       },
-      "subjectSelector": ["proxy"]
+      "sniffing" : {
+        "destOverride" : [
+          "http",
+          "tls",
+          "quic"
+        ],
+        "enabled" : true,
+        "routeOnly" : true
+      },
+      "tag" : "socks"
     },
-    "dns": {
-      "queryStrategy": "UseIPv4",
-      "servers": [
-        "https://8.8.8.8/dns-query",
-        "https://8.8.4.4/dns-query",
-        "https://1.1.1.1/dns-query",
-        "https://1.0.0.1/dns-query"
-      ],
-      "tag": "dns-inbound"
-    },
-    "inbounds": [
-      {
-        "listen": "127.0.0.1",
-        "port": 10808,
-        "protocol": "socks",
-        "settings": {
-          "auth": "noauth",
-          "udp": true,
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": ["http", "tls", "quic"],
-          "enabled": true,
-          "routeOnly": true
-        },
-        "tag": "socks"
+    {
+      "listen" : "127.0.0.1",
+      "port" : 10809,
+      "protocol" : "http",
+      "settings" : {
+        "allowTransparent" : false,
+        "userLevel" : 8
       },
-      {
-        "listen": "127.0.0.1",
-        "port": 10809,
-        "protocol": "http",
-        "settings": {
-          "allowTransparent": false,
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": ["http", "tls", "quic"],
-          "enabled": true,
-          "routeOnly": true
-        },
-        "tag": "http"
-      }
-    ],
-    "log": {
-      "loglevel": "warning"
-    },
-    "meta": null,
-    "outbounds": [
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "fetch.getoneok.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "api.v1.StreamService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "djznridasJP_fyuK430Mp6YEuN572uhtDpx6v0fopGk",
-            "serverName": "fetch.getoneok.com",
-            "shortId": "9be6a99f9603dcdb"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy"
+      "sniffing" : {
+        "destOverride" : [
+          "http",
+          "tls",
+          "quic"
+        ],
+        "enabled" : true,
+        "routeOnly" : true
       },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "get.getoneok.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "api.v1.StreamService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "k3ipsZgQObLjNsW2_RrjzaIttgglYXovKeSPX55hWho",
-            "serverName": "get.getoneok.com",
-            "shortId": "4f4107b8579b9c79"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-2"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "app.getoneok.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "api.v1.StreamService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "OFHvCNoVCxj7ww3U7NKFgAQzsiLEyO5cardIfRsJQhc",
-            "serverName": "app.getoneok.com",
-            "shortId": "f56b35b0ce8fb8ff"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-3"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "io.getoneok.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "api.v1.StreamService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "mJELj4qcAUvJAKA795varIRTmaRqM3bTsFVvLawNP0g",
-            "serverName": "io.getoneok.com",
-            "shortId": "cf6feb0b4102ace8"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-4"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "net.getoneok.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "api.v1.StreamService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "k9Z7AXNFP635PURWcvYmjCI2i7CQBCwWkFdRSPbgbB0",
-            "serverName": "net.getoneok.com",
-            "shortId": "9e3c8727870f7f89"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-5"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "node.getoneok.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "api.v1.StreamService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "7f5PBpayoq4N1a2b-ouoiw8Eja9fjBCxSH6cbju7lQA",
-            "serverName": "node.getoneok.com",
-            "shortId": "2d150df401cf744e"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-6"
-      },
-      {
-        "protocol": "freedom",
-        "settings": {
-          "domainStrategy": "UseIP"
-        },
-        "tag": "direct"
-      },
-      {
-        "protocol": "blackhole",
-        "tag": "block"
-      },
-      {
-        "protocol": "dns",
-        "tag": "dns-out"
-      }
-    ],
-    "policy": {
-      "levels": {
-        "8": {
-          "connIdle": 120,
-          "downlinkOnly": 1,
-          "handshake": 4,
-          "uplinkOnly": 1
-        }
-      },
-      "system": {
-        "statsOutboundDownlink": true,
-        "statsOutboundUplink": true
-      }
-    },
-    "remarks": "🇳🇱 Нидерланды @fastflashvpnbot",
-    "routing": {
-      "balancers": [
-        {
-          "fallbackTag": "proxy",
-          "selector": ["proxy"],
-          "strategy": {
-            "settings": {
-              "baselines": ["400ms", "800ms"],
-              "expected": 1,
-              "maxRTT": "3s",
-              "tolerance": 0.25
-            },
-            "type": "leastLoad"
-          },
-          "tag": "balancer"
-        }
-      ],
-      "domainMatcher": "hybrid",
-      "domainStrategy": "IPIfNonMatch",
-      "rules": [
-        {
-          "outboundTag": "dns-out",
-          "port": 53,
-          "type": "field"
-        },
-        {
-          "domain": ["geosite:TORRENT"],
-          "outboundTag": "block",
-          "ruleTag": "TORRENT_BY_DOMAIN"
-        },
-        {
-          "outboundTag": "block",
-          "port": "6881-6889,51413,21413,17417,37305",
-          "ruleTag": "TORRENT_BY_PORT"
-        },
-        {
-          "balancerTag": "balancer",
-          "domain": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram"
-          ],
-          "type": "field"
-        },
-        {
-          "domain": [
-            "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit"
-          ],
-          "outboundTag": "direct",
-          "type": "field"
-        },
-        {
-          "outboundTag": "block",
-          "protocol": ["bittorrent"],
-          "type": "field"
-        },
-        {
-          "ip": ["geoip:private", "geoip:direct"],
-          "outboundTag": "direct",
-          "type": "field"
-        },
-        {
-          "balancerTag": "balancer",
-          "network": "tcp,udp",
-          "type": "field"
-        }
-      ]
-    },
-    "stats": {}
+      "tag" : "http"
+    }
+  ],
+  "log" : {
+    "access" : "\/Users\/drex\/Library\/Group Containers\/group.su.ffg.happ\/Library\/Application Support\/Xray\/logs\/access.log",
+    "dnsLog" : true,
+    "loglevel" : "Warning"
   },
-  {
-    "dns": {
-      "queryStrategy": "UseIPv4",
-      "servers": [
-        "https://8.8.8.8/dns-query",
-        "https://8.8.4.4/dns-query",
-        "https://1.1.1.1/dns-query",
-        "https://1.0.0.1/dns-query"
-      ],
-      "tag": "dns-inbound"
+  "outbounds" : [
+    {
+      "protocol" : "vless",
+      "settings" : {
+        "vnext" : [
+          {
+            "address" : "main.workoneok.com",
+            "port" : 443,
+            "users" : [
+              {
+                "encryption" : "none",
+                "flow" : "",
+                "id" : "d466de58-e7cf-4981-b81c-c55b8956ab88"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings" : {
+        "grpcSettings" : {
+          "authority" : "",
+          "mode" : false,
+          "serviceName" : "api.v1.StreamService"
+        },
+        "network" : "grpc",
+        "realitySettings" : {
+          "fingerprint" : "firefox",
+          "publicKey" : "SGlYAebcHBfrR7VVVPp46Y1FLlFueS4Au7ui7bLCyxQ",
+          "serverName" : "main.workoneok.com",
+          "shortId" : "a212fe3d68037ef3"
+        },
+        "security" : "reality"
+      },
+      "tag" : "proxy"
     },
-    "inbounds": [
-      {
-        "listen": "127.0.0.1",
-        "port": 10808,
-        "protocol": "socks",
-        "settings": {
-          "auth": "noauth",
-          "udp": true
-        },
-        "sniffing": {
-          "destOverride": ["http", "tls", "quic"],
-          "enabled": true,
-          "routeOnly": true
-        },
-        "tag": "socks"
+    {
+      "protocol" : "vless",
+      "settings" : {
+        "vnext" : [
+          {
+            "address" : "stats.workoneok.com",
+            "port" : 443,
+            "users" : [
+              {
+                "encryption" : "none",
+                "flow" : "",
+                "id" : "d466de58-e7cf-4981-b81c-c55b8956ab88"
+              }
+            ]
+          }
+        ]
       },
-      {
-        "listen": "127.0.0.1",
-        "port": 10809,
-        "protocol": "http",
-        "settings": {
-          "allowTransparent": false
+      "streamSettings" : {
+        "grpcSettings" : {
+          "authority" : "",
+          "mode" : false,
+          "serviceName" : "api.v1.StreamService"
         },
-        "sniffing": {
-          "destOverride": ["http", "tls", "quic"],
-          "enabled": true,
-          "routeOnly": true
+        "network" : "grpc",
+        "realitySettings" : {
+          "fingerprint" : "firefox",
+          "publicKey" : "OIIjAqKFPyTnGtFEDF0HEbHGH4U9tCVlSI-vBDPvL1A",
+          "serverName" : "stats.workoneok.com",
+          "shortId" : "eeb2cda4ead22a37"
         },
-        "tag": "http"
-      }
-    ],
-    "log": {
-      "loglevel": "warning"
+        "security" : "reality"
+      },
+      "tag" : "proxy-2"
     },
-    "meta": null,
-    "outbounds": [
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "core.univesalsrv.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "edge.v2.ObjectService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "qC6RGWAH6tWFe2xGC9IGxpu9hQtxvOclI8yuj0AT8Eg",
-            "serverName": "core.univesalsrv.com",
-            "shortId": "f42242bed20425b5"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy"
+    {
+      "protocol" : "vless",
+      "settings" : {
+        "vnext" : [
+          {
+            "address" : "api.workoneok.com",
+            "port" : 443,
+            "users" : [
+              {
+                "encryption" : "none",
+                "flow" : "",
+                "id" : "d466de58-e7cf-4981-b81c-c55b8956ab88"
+              }
+            ]
+          }
+        ]
       },
-      {
-        "protocol": "freedom",
-        "settings": {
-          "domainStrategy": "UseIP"
+      "streamSettings" : {
+        "grpcSettings" : {
+          "authority" : "",
+          "mode" : false,
+          "serviceName" : "api.v1.StreamService"
         },
-        "tag": "direct"
+        "network" : "grpc",
+        "realitySettings" : {
+          "fingerprint" : "firefox",
+          "publicKey" : "UhbquLQ1Qk0S9PRAC8U4u6Zyo3pL4ymUWcS6Ve6pFSo",
+          "serverName" : "api.workoneok.com",
+          "shortId" : "68a68b557b43e92e"
+        },
+        "security" : "reality"
       },
-      {
-        "protocol": "blackhole",
-        "tag": "block"
+      "tag" : "proxy-3"
+    },
+    {
+      "protocol" : "vless",
+      "settings" : {
+        "vnext" : [
+          {
+            "address" : "app.workoneok.com",
+            "port" : 443,
+            "users" : [
+              {
+                "encryption" : "none",
+                "flow" : "",
+                "id" : "d466de58-e7cf-4981-b81c-c55b8956ab88"
+              }
+            ]
+          }
+        ]
       },
-      {
-        "protocol": "dns",
-        "tag": "dns-out"
+      "streamSettings" : {
+        "grpcSettings" : {
+          "authority" : "",
+          "mode" : false,
+          "serviceName" : "api.v1.StreamService"
+        },
+        "network" : "grpc",
+        "realitySettings" : {
+          "fingerprint" : "firefox",
+          "publicKey" : "1mWv4iXe6t7L9HFAYT24IXxSXGxAeHQ3JmrNyrPMFVo",
+          "serverName" : "app.workoneok.com",
+          "shortId" : "731eed625fd7e5da"
+        },
+        "security" : "reality"
+      },
+      "tag" : "proxy-4"
+    },
+    {
+      "protocol" : "vless",
+      "settings" : {
+        "vnext" : [
+          {
+            "address" : "home.workoneok.com",
+            "port" : 443,
+            "users" : [
+              {
+                "encryption" : "none",
+                "flow" : "",
+                "id" : "d466de58-e7cf-4981-b81c-c55b8956ab88"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings" : {
+        "grpcSettings" : {
+          "authority" : "",
+          "mode" : false,
+          "serviceName" : "api.v1.StreamService"
+        },
+        "network" : "grpc",
+        "realitySettings" : {
+          "fingerprint" : "firefox",
+          "publicKey" : "2eb4t-FgbjLFZHl9pzYtMM3DambYcjRDOJHWMQRC3Uw",
+          "serverName" : "home.workoneok.com",
+          "shortId" : "d08b68d57f97d6ea"
+        },
+        "security" : "reality"
+      },
+      "tag" : "proxy-5"
+    },
+    {
+      "protocol" : "vless",
+      "settings" : {
+        "vnext" : [
+          {
+            "address" : "add.workoneok.com",
+            "port" : 443,
+            "users" : [
+              {
+                "encryption" : "none",
+                "flow" : "",
+                "id" : "d466de58-e7cf-4981-b81c-c55b8956ab88"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings" : {
+        "grpcSettings" : {
+          "authority" : "",
+          "mode" : false,
+          "serviceName" : "api.v1.StreamService"
+        },
+        "network" : "grpc",
+        "realitySettings" : {
+          "fingerprint" : "firefox",
+          "publicKey" : "DsGKafEfh9BaXeF4yaX_ReZRCCxMv96bSy9Kw4IeiRw",
+          "serverName" : "add.workoneok.com",
+          "shortId" : "8260193b10bb912a"
+        },
+        "security" : "reality"
+      },
+      "tag" : "proxy-6"
+    },
+    {
+      "protocol" : "freedom",
+      "settings" : {
+        "domainStrategy" : "UseIP"
+      },
+      "tag" : "direct"
+    },
+    {
+      "protocol" : "blackhole",
+      "tag" : "block"
+    },
+    {
+      "protocol" : "dns",
+      "tag" : "dns-out"
+    }
+  ],
+  "policy" : {
+    "levels" : {
+      "8" : {
+        "connIdle" : 120,
+        "downlinkOnly" : 1,
+        "handshake" : 4,
+        "uplinkOnly" : 1
       }
-    ],
-    "remarks": "🇷🇺 Россия @fastflashvpnbot",
-    "routing": {
-      "domainMatcher": "hybrid",
-      "domainStrategy": "IPIfNonMatch",
-      "rules": [
-        {
-          "outboundTag": "dns-out",
-          "port": 53,
-          "type": "field"
-        },
-        {
-          "domain": ["geosite:torrent"],
-          "outboundTag": "block",
-          "type": "field"
-        },
-        {
-          "domain": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram"
-          ],
-          "outboundTag": "proxy",
-          "type": "field"
-        },
-        {
-          "outboundTag": "block",
-          "protocol": ["bittorrent"],
-          "type": "field"
-        },
-        {
-          "ip": ["geoip:private", "geoip:direct"],
-          "outboundTag": "direct",
-          "type": "field"
-        },
-        {
-          "network": "tcp,udp",
-          "outboundTag": "proxy",
-          "type": "field"
-        }
-      ]
+    },
+    "system" : {
+      "statsOutboundDownlink" : true,
+      "statsOutboundUplink" : true
     }
   },
-  {
-    "dns": {
-      "hosts": {
-        "lkfl2.nalog.ru": "213.24.64.175",
-        "lknpd.nalog.ru": "213.24.64.181"
-      },
-      "queryStrategy": "UseIPv4",
-      "servers": [
-        "https://8.8.8.8/dns-query",
-        {
-          "address": "https://8.8.8.8/dns-query",
-          "domains": []
-        },
-        {
-          "address": "https://77.88.8.8/dns-query",
-          "domains": ["geosite:private", "geosite:whitelist"]
-        }
-      ]
-    },
-    "inbounds": [
+  "remarks" : "🇬🇧 Великобритания [1]",
+  "routing" : {
+    "balancers" : [
       {
-        "listen": "127.0.0.1",
-        "port": 10808,
-        "protocol": "socks",
-        "settings": {
-          "auth": "noauth",
-          "udp": true,
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": ["http", "quic", "tls"],
-          "enabled": true
-        },
-        "tag": "socks"
-      },
-      {
-        "listen": "127.0.0.1",
-        "port": 10809,
-        "protocol": "http",
-        "settings": {
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": ["http", "quic", "tls"],
-          "enabled": true
-        },
-        "tag": "http"
-      }
-    ],
-    "log": {
-      "loglevel": "warning"
-    },
-    "meta": null,
-    "outbounds": [
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "cdnvps-dfdab37d.happ8.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "xhttp",
-          "security": "tls",
-          "tlsSettings": {
-            "alpn": ["h3", "h2", "http/1.1"],
-            "fingerprint": "firefox",
-            "serverName": "cdnvps-dfdab37d.happ8.com"
+        "fallbackTag" : "proxy",
+        "selector" : [
+          "proxy"
+        ],
+        "strategy" : {
+          "settings" : {
+            "baselines" : [
+              "400ms",
+              "800ms"
+            ],
+            "expected" : 1,
+            "maxRTT" : "3s",
+            "tolerance" : 0.25
           },
-          "xhttpSettings": {
-            "extra": {
-              "uplinkHTTPMethod": "GET",
-              "xPaddingHeader": "X-Cache",
-              "xPaddingKey": "_dc",
-              "xPaddingMethod": "tokenish",
-              "xPaddingObfsMode": true,
-              "xPaddingPlacement": "queryInHeader"
-            },
-            "host": "cdnvps-dfdab37d.happ8.com",
-            "mode": "packet-up",
-            "path": "/uploadfiles/"
-          }
+          "type" : "leastLoad"
         },
-        "tag": "proxy"
-      },
-      {
-        "protocol": "freedom",
-        "tag": "direct"
-      },
-      {
-        "protocol": "blackhole",
-        "tag": "block"
-      },
-      {
-        "protocol": "dns",
-        "proxySettings": {
-          "tag": "proxy"
-        },
-        "tag": "dns-out"
+        "tag" : "balancer"
       }
     ],
-    "policy": {
-      "levels": {
-        "8": {
-          "connIdle": 120,
-          "downlinkOnly": 1,
-          "handshake": 4,
-          "uplinkOnly": 1
-        }
+    "domainMatcher" : "hybrid",
+    "domainStrategy" : "IPIfNonMatch",
+    "rules" : [
+      {
+        "outboundTag" : "dns-out",
+        "port" : 53,
+        "type" : "field"
       },
-      "system": {
-        "statsOutboundDownlink": true,
-        "statsOutboundUplink": true
+      {
+        "domain" : [
+          "geosite:TORRENT"
+        ],
+        "outboundTag" : "block",
+        "ruleTag" : "TORRENT_BY_DOMAIN"
+      },
+      {
+        "outboundTag" : "block",
+        "port" : "6881-6889,51413,21413,17417,37305",
+        "ruleTag" : "TORRENT_BY_PORT"
+      },
+      {
+        "balancerTag" : "balancer",
+        "domain" : [
+          "geosite:google-play",
+          "geosite:github",
+          "geosite:twitch-ads",
+          "geosite:youtube",
+          "geosite:telegram"
+        ],
+        "type" : "field"
+      },
+      {
+        "domain" : [
+          "geosite:private",
+          "geosite:category-ru",
+          "geosite:whitelist",
+          "geosite:microsoft",
+          "geosite:apple",
+          "geosite:epicgames",
+          "geosite:riot",
+          "geosite:escapefromtarkov",
+          "geosite:steam",
+          "geosite:twitch",
+          "geosite:pinterest",
+          "geosite:faceit"
+        ],
+        "outboundTag" : "direct",
+        "type" : "field"
+      },
+      {
+        "outboundTag" : "block",
+        "protocol" : [
+          "bittorrent"
+        ],
+        "type" : "field"
+      },
+      {
+        "ip" : [
+          "geoip:private",
+          "geoip:direct"
+        ],
+        "outboundTag" : "direct",
+        "type" : "field"
+      },
+      {
+        "balancerTag" : "balancer",
+        "network" : "tcp,udp",
+        "type" : "field"
       }
-    },
-    "remarks": "🇬🇧 Великобритания @fastflashvpnbot",
-    "routing": {
-      "domainStrategy": "IPIfNonMatch",
-      "rules": [
-        {
-          "outboundTag": "dns-out",
-          "port": 53
-        },
-        {
-          "domain": ["geosite:win-spy", "geosite:torrent", "geosite:category-ads"],
-          "outboundTag": "block"
-        },
-        {
-          "ip": ["77.88.8.8"],
-          "outboundTag": "direct"
-        },
-        {
-          "ip": ["8.8.8.8"],
-          "outboundTag": "proxy"
-        },
-        {
-          "domain": ["geosite:win-spy", "geosite:torrent", "geosite:category-ads"],
-          "outboundTag": "block"
-        },
-        {
-          "domain": ["geosite:private", "geosite:whitelist"],
-          "outboundTag": "direct"
-        },
-        {
-          "ip": ["geoip:private", "geoip:whitelist"],
-          "outboundTag": "direct"
-        }
-      ]
-    },
-    "stats": {}
+    ]
   },
-  {
-    "dns": {
-      "hosts": {
-        "lkfl2.nalog.ru": "213.24.64.175",
-        "lknpd.nalog.ru": "213.24.64.181"
-      },
-      "queryStrategy": "UseIPv4",
-      "servers": [
-        "https://8.8.8.8/dns-query",
-        {
-          "address": "https://8.8.8.8/dns-query",
-          "domains": []
-        },
-        {
-          "address": "https://77.88.8.8/dns-query",
-          "domains": ["geosite:private", "geosite:whitelist"]
-        }
-      ]
-    },
-    "inbounds": [
-      {
-        "listen": "127.0.0.1",
-        "port": 10808,
-        "protocol": "socks",
-        "settings": {
-          "auth": "noauth",
-          "udp": true,
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": ["http", "quic", "tls"],
-          "enabled": true
-        },
-        "tag": "socks"
-      },
-      {
-        "listen": "127.0.0.1",
-        "port": 10809,
-        "protocol": "http",
-        "settings": {
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": ["http", "quic", "tls"],
-          "enabled": true
-        },
-        "tag": "http"
-      }
-    ],
-    "log": {
-      "loglevel": "warning"
-    },
-    "meta": null,
-    "outbounds": [
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "cdnvps-bfcaa20e.happ8.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "xhttp",
-          "security": "tls",
-          "tlsSettings": {
-            "alpn": ["h3", "h2", "http/1.1"],
-            "fingerprint": "firefox",
-            "serverName": "cdnvps-bfcaa20e.happ8.com"
-          },
-          "xhttpSettings": {
-            "extra": {
-              "uplinkHTTPMethod": "GET",
-              "xPaddingHeader": "X-Cache",
-              "xPaddingKey": "_dc",
-              "xPaddingMethod": "tokenish",
-              "xPaddingObfsMode": true,
-              "xPaddingPlacement": "queryInHeader"
-            },
-            "host": "cdnvps-bfcaa20e.happ8.com",
-            "mode": "packet-up",
-            "path": "/uploadfiles/"
-          }
-        },
-        "tag": "proxy"
-      },
-      {
-        "protocol": "freedom",
-        "tag": "direct"
-      },
-      {
-        "protocol": "blackhole",
-        "tag": "block"
-      },
-      {
-        "protocol": "dns",
-        "proxySettings": {
-          "tag": "proxy"
-        },
-        "tag": "dns-out"
-      }
-    ],
-    "policy": {
-      "levels": {
-        "8": {
-          "connIdle": 120,
-          "downlinkOnly": 1,
-          "handshake": 4,
-          "uplinkOnly": 1
-        }
-      },
-      "system": {
-        "statsOutboundDownlink": true,
-        "statsOutboundUplink": true
-      }
-    },
-    "remarks": "🇬🇧 Великобритания @fastflashvpnbot",
-    "routing": {
-      "domainStrategy": "IPIfNonMatch",
-      "rules": [
-        {
-          "outboundTag": "dns-out",
-          "port": 53
-        },
-        {
-          "domain": ["geosite:win-spy", "geosite:torrent", "geosite:category-ads"],
-          "outboundTag": "block"
-        },
-        {
-          "ip": ["77.88.8.8"],
-          "outboundTag": "direct"
-        },
-        {
-          "ip": ["8.8.8.8"],
-          "outboundTag": "proxy"
-        },
-        {
-          "domain": ["geosite:win-spy", "geosite:torrent", "geosite:category-ads"],
-          "outboundTag": "block"
-        },
-        {
-          "domain": ["geosite:private", "geosite:whitelist"],
-          "outboundTag": "direct"
-        },
-        {
-          "ip": ["geoip:private", "geoip:whitelist"],
-          "outboundTag": "direct"
-        }
-      ]
-    },
-    "stats": {}
-  },
-  {
-    "dns": {
-      "hosts": {
-        "lkfl2.nalog.ru": "213.24.64.175",
-        "lknpd.nalog.ru": "213.24.64.181"
-      },
-      "queryStrategy": "UseIPv4",
-      "servers": [
-        "https://8.8.8.8/dns-query",
-        {
-          "address": "https://8.8.8.8/dns-query",
-          "domains": []
-        },
-        {
-          "address": "https://77.88.8.8/dns-query",
-          "domains": ["geosite:private", "geosite:whitelist"]
-        }
-      ]
-    },
-    "inbounds": [
-      {
-        "listen": "127.0.0.1",
-        "port": 10808,
-        "protocol": "socks",
-        "settings": {
-          "auth": "noauth",
-          "udp": true,
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": ["http", "quic", "tls"],
-          "enabled": true
-        },
-        "tag": "socks"
-      },
-      {
-        "listen": "127.0.0.1",
-        "port": 10809,
-        "protocol": "http",
-        "settings": {
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": ["http", "quic", "tls"],
-          "enabled": true
-        },
-        "tag": "http"
-      }
-    ],
-    "log": {
-      "loglevel": "warning"
-    },
-    "meta": null,
-    "outbounds": [
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "cdnvps-b3782a37.happ8.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "xhttp",
-          "security": "tls",
-          "tlsSettings": {
-            "alpn": ["h3", "h2", "http/1.1"],
-            "fingerprint": "firefox",
-            "serverName": "cdnvps-b3782a37.happ8.com"
-          },
-          "xhttpSettings": {
-            "extra": {
-              "uplinkHTTPMethod": "GET",
-              "xPaddingHeader": "X-Cache",
-              "xPaddingKey": "_dc",
-              "xPaddingMethod": "tokenish",
-              "xPaddingObfsMode": true,
-              "xPaddingPlacement": "queryInHeader"
-            },
-            "host": "cdnvps-b3782a37.happ8.com",
-            "mode": "packet-up",
-            "path": "/uploadfiles/"
-          }
-        },
-        "tag": "proxy"
-      },
-      {
-        "protocol": "freedom",
-        "tag": "direct"
-      },
-      {
-        "protocol": "blackhole",
-        "tag": "block"
-      },
-      {
-        "protocol": "dns",
-        "proxySettings": {
-          "tag": "proxy"
-        },
-        "tag": "dns-out"
-      }
-    ],
-    "policy": {
-      "levels": {
-        "8": {
-          "connIdle": 120,
-          "downlinkOnly": 1,
-          "handshake": 4,
-          "uplinkOnly": 1
-        }
-      },
-      "system": {
-        "statsOutboundDownlink": true,
-        "statsOutboundUplink": true
-      }
-    },
-    "remarks": "🇬🇧 Великобритания @fastflashvpnbot",
-    "routing": {
-      "domainStrategy": "IPIfNonMatch",
-      "rules": [
-        {
-          "outboundTag": "dns-out",
-          "port": 53
-        },
-        {
-          "domain": ["geosite:win-spy", "geosite:torrent", "geosite:category-ads"],
-          "outboundTag": "block"
-        },
-        {
-          "ip": ["77.88.8.8"],
-          "outboundTag": "direct"
-        },
-        {
-          "ip": ["8.8.8.8"],
-          "outboundTag": "proxy"
-        },
-        {
-          "domain": ["geosite:win-spy", "geosite:torrent", "geosite:category-ads"],
-          "outboundTag": "block"
-        },
-        {
-          "domain": ["geosite:private", "geosite:whitelist"],
-          "outboundTag": "direct"
-        },
-        {
-          "ip": ["geoip:private", "geoip:whitelist"],
-          "outboundTag": "direct"
-        }
-      ]
-    },
-    "stats": {}
-  },
-  {
-    "burstObservatory": {
-      "pingConfig": {
-        "connectivity": "http://edge-http.microsoft.com/captiveportal/generate_204",
-        "destination": "http://edge-http.microsoft.com/captiveportal/generate_204",
-        "interval": "5m",
-        "sampling": 1,
-        "timeout": "5s"
-      },
-      "subjectSelector": ["proxy"]
-    },
-    "dns": {
-      "queryStrategy": "UseIPv4",
-      "servers": [
-        "https://8.8.8.8/dns-query",
-        "https://8.8.4.4/dns-query",
-        "https://1.1.1.1/dns-query",
-        "https://1.0.0.1/dns-query"
-      ],
-      "tag": "dns-inbound"
-    },
-    "inbounds": [
-      {
-        "listen": "127.0.0.1",
-        "port": 10808,
-        "protocol": "socks",
-        "settings": {
-          "auth": "noauth",
-          "udp": true,
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": ["http", "tls", "quic"],
-          "enabled": true,
-          "routeOnly": true
-        },
-        "tag": "socks"
-      },
-      {
-        "listen": "127.0.0.1",
-        "port": 10809,
-        "protocol": "http",
-        "settings": {
-          "allowTransparent": false,
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": ["http", "tls", "quic"],
-          "enabled": true,
-          "routeOnly": true
-        },
-        "tag": "http"
-      }
-    ],
-    "log": {
-      "loglevel": "warning"
-    },
-    "meta": null,
-    "outbounds": [
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "get.happ8.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "media.v2.PushService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "TU7RJgMCFTRGZ-_UST2qQTYKk-HINzJ9KgggfocX3mI",
-            "serverName": "get.happ8.com",
-            "shortId": "dbc89af8cca7e791"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "cloud.happ8.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "media.v2.PushService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "TU7RJgMCFTRGZ-_UST2qQTYKk-HINzJ9KgggfocX3mI",
-            "serverName": "cloud.happ8.com",
-            "shortId": "dbc89af8cca7e791"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-2"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "edge1.happ8.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "media.v2.PushService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "TU7RJgMCFTRGZ-_UST2qQTYKk-HINzJ9KgggfocX3mI",
-            "serverName": "edge1.happ8.com",
-            "shortId": "dbc89af8cca7e791"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-3"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "router.happ8.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "stats.v2.ApiService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "faXYaGIfuiJg3JDefXXpn6o1MC1pdrqpdO8YQ4pYtjs",
-            "serverName": "router.happ8.com",
-            "shortId": "23006f501f1ad11a"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-4"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "gateway.happ8.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "stats.v2.ApiService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "faXYaGIfuiJg3JDefXXpn6o1MC1pdrqpdO8YQ4pYtjs",
-            "serverName": "gateway.happ8.com",
-            "shortId": "23006f501f1ad11a"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-5"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "store.happ8.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "stats.v2.ApiService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "faXYaGIfuiJg3JDefXXpn6o1MC1pdrqpdO8YQ4pYtjs",
-            "serverName": "store.happ8.com",
-            "shortId": "23006f501f1ad11a"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-6"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "main.happ8.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "push.v1.PushService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "oxwiTb0ygaTprkmhMZFnDDd5YVoHxAWadhAf6xvBg2A",
-            "serverName": "main.happ8.com",
-            "shortId": "6a37ea3d257e905e"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-7"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "hub.happ8.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "push.v1.PushService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "oxwiTb0ygaTprkmhMZFnDDd5YVoHxAWadhAf6xvBg2A",
-            "serverName": "hub.happ8.com",
-            "shortId": "6a37ea3d257e905e"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-8"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "cdn2.happ8.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "push.v1.PushService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "oxwiTb0ygaTprkmhMZFnDDd5YVoHxAWadhAf6xvBg2A",
-            "serverName": "cdn2.happ8.com",
-            "shortId": "6a37ea3d257e905e"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-9"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "srv.happ8.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "edge.v2.ApiService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "iOjnroNZaO5MDGWGSBgDOsEAO-yVXYIRE_eWbA96liI",
-            "serverName": "srv.happ8.com",
-            "shortId": "1bbee1133d0739c9"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-10"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "static.happ8.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "edge.v2.ApiService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "iOjnroNZaO5MDGWGSBgDOsEAO-yVXYIRE_eWbA96liI",
-            "serverName": "static.happ8.com",
-            "shortId": "1bbee1133d0739c9"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-11"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "ingest.happ8.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "edge.v2.ApiService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "iOjnroNZaO5MDGWGSBgDOsEAO-yVXYIRE_eWbA96liI",
-            "serverName": "ingest.happ8.com",
-            "shortId": "1bbee1133d0739c9"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-12"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "mirror.happ8.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "app.v1.MetricsService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "Hl9qdBNTt4Zlq4KVSZmnMVsHgp-FHhqRQOiddK-LIx8",
-            "serverName": "mirror.happ8.com",
-            "shortId": "89d828399f2f69bc"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-13"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "assets.happ8.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "app.v1.MetricsService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "Hl9qdBNTt4Zlq4KVSZmnMVsHgp-FHhqRQOiddK-LIx8",
-            "serverName": "assets.happ8.com",
-            "shortId": "89d828399f2f69bc"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-14"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "feed.happ8.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "app.v1.MetricsService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "Hl9qdBNTt4Zlq4KVSZmnMVsHgp-FHhqRQOiddK-LIx8",
-            "serverName": "feed.happ8.com",
-            "shortId": "89d828399f2f69bc"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-15"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "cache.happ8.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "node.v2.PushService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "9FBgPsLP6zlTSkJgHgHw2L9Duxocwsu5TG_F-042ZR0",
-            "serverName": "cache.happ8.com",
-            "shortId": "d6cb9f8bc6d1cb44"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-16"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "app.happ8.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "node.v2.PushService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "9FBgPsLP6zlTSkJgHgHw2L9Duxocwsu5TG_F-042ZR0",
-            "serverName": "app.happ8.com",
-            "shortId": "d6cb9f8bc6d1cb44"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-17"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "cdn.happ8.com",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "d466de58-e7cf-4981-b81c-c55b8956ab88"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "",
-            "mode": false,
-            "serviceName": "node.v2.PushService"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "9FBgPsLP6zlTSkJgHgHw2L9Duxocwsu5TG_F-042ZR0",
-            "serverName": "cdn.happ8.com",
-            "shortId": "d6cb9f8bc6d1cb44"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-18"
-      },
-      {
-        "protocol": "freedom",
-        "settings": {
-          "domainStrategy": "UseIP"
-        },
-        "tag": "direct"
-      },
-      {
-        "protocol": "blackhole",
-        "tag": "block"
-      },
-      {
-        "protocol": "dns",
-        "tag": "dns-out"
-      }
-    ],
-    "policy": {
-      "levels": {
-        "8": {
-          "connIdle": 120,
-          "downlinkOnly": 1,
-          "handshake": 4,
-          "uplinkOnly": 1
-        }
-      },
-      "system": {
-        "statsOutboundDownlink": true,
-        "statsOutboundUplink": true
-      }
-    },
-    "remarks": "🇳🇱 Нидерланды @fastflashvpnbot",
-    "routing": {
-      "balancers": [
-        {
-          "fallbackTag": "proxy",
-          "selector": ["proxy"],
-          "strategy": {
-            "settings": {
-              "baselines": ["400ms", "800ms"],
-              "expected": 1,
-              "maxRTT": "3s",
-              "tolerance": 0.25
-            },
-            "type": "leastLoad"
-          },
-          "tag": "balancer"
-        }
-      ],
-      "domainMatcher": "hybrid",
-      "domainStrategy": "IPIfNonMatch",
-      "rules": [
-        {
-          "outboundTag": "dns-out",
-          "port": 53,
-          "type": "field"
-        },
-        {
-          "domain": ["geosite:TORRENT"],
-          "outboundTag": "block",
-          "ruleTag": "TORRENT_BY_DOMAIN"
-        },
-        {
-          "outboundTag": "block",
-          "port": "6881-6889,51413,21413,17417,37305",
-          "ruleTag": "TORRENT_BY_PORT"
-        },
-        {
-          "balancerTag": "balancer",
-          "domain": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram"
-          ],
-          "type": "field"
-        },
-        {
-          "domain": [
-            "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit"
-          ],
-          "outboundTag": "direct",
-          "type": "field"
-        },
-        {
-          "outboundTag": "block",
-          "protocol": ["bittorrent"],
-          "type": "field"
-        },
-        {
-          "ip": ["geoip:private", "geoip:direct"],
-          "outboundTag": "direct",
-          "type": "field"
-        },
-        {
-          "balancerTag": "balancer",
-          "network": "tcp,udp",
-          "type": "field"
-        }
-      ]
-    },
-    "stats": {}
-  },
-  {
-    "burstObservatory": {
-      "pingConfig": {
-        "connectivity": "http://edge-http.microsoft.com/captiveportal/generate_204",
-        "destination": "http://edge-http.microsoft.com/captiveportal/generate_204",
-        "interval": "5m",
-        "sampling": 1,
-        "timeout": "3s"
-      },
-      "subjectSelector": ["proxy-", "rw-proxy"]
-    },
-    "dns": {
-      "queryStrategy": "UseIPv4",
-      "servers": [
-        "https://8.8.8.8/dns-query",
-        "https://8.8.4.4/dns-query",
-        "https://1.1.1.1/dns-query",
-        "https://1.0.0.1/dns-query"
-      ],
-      "tag": "dns-inbound"
-    },
-    "inbounds": [
-      {
-        "listen": "127.0.0.1",
-        "port": 10808,
-        "protocol": "socks",
-        "settings": {
-          "auth": "noauth",
-          "udp": true,
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": ["http", "tls", "quic"],
-          "enabled": true,
-          "routeOnly": true
-        },
-        "tag": "socks"
-      },
-      {
-        "listen": "127.0.0.1",
-        "port": 10809,
-        "protocol": "http",
-        "settings": {
-          "allowTransparent": false,
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": ["http", "tls", "quic"],
-          "enabled": true,
-          "routeOnly": true
-        },
-        "tag": "http"
-      }
-    ],
-    "log": {
-      "loglevel": "warning"
-    },
-    "meta": null,
-    "outbounds": [
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "91.185.83.88",
-              "port": 8443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "5cc98053-9b26-4b54-8452-19cedb5c1ef0"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "yandex.ru",
-            "mode": false,
-            "serviceName": "ns"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "K9vJ2zLFxi3VTmrguyLC1KrC920axeFSeA8x_xY4Xhw",
-            "serverName": "yandex.ru"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-15"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "91.185.83.88",
-              "port": 8443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "",
-                  "id": "0a9c8669-e0da-42e8-9347-a1cba1c81fd3"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "grpcSettings": {
-            "authority": "yandex.ru",
-            "mode": false,
-            "serviceName": "ns"
-          },
-          "network": "grpc",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "K9vJ2zLFxi3VTmrguyLC1KrC920axeFSeA8x_xY4Xhw",
-            "serverName": "yandex.ru"
-          },
-          "security": "reality"
-        },
-        "tag": "proxy-16"
-      },
-      {
-        "protocol": "freedom",
-        "settings": {
-          "domainStrategy": "UseIP"
-        },
-        "tag": "direct"
-      },
-      {
-        "protocol": "blackhole",
-        "tag": "block"
-      },
-      {
-        "protocol": "dns",
-        "tag": "dns-out"
-      }
-    ],
-    "policy": {
-      "levels": {
-        "8": {
-          "connIdle": 120,
-          "downlinkOnly": 1,
-          "handshake": 4,
-          "uplinkOnly": 1
-        }
-      },
-      "system": {
-        "statsOutboundDownlink": true,
-        "statsOutboundUplink": true
-      }
-    },
-    "remarks": "🇪🇺 Европа @fastflashvpnbot",
-    "routing": {
-      "balancers": [
-        {
-          "fallbackTag": "block",
-          "selector": ["proxy-", "rw-proxy"],
-          "strategy": {
-            "settings": {
-              "baselines": ["400ms", "800ms"],
-              "expected": 1,
-              "maxRTT": "3s",
-              "tolerance": 0.25
-            },
-            "type": "leastLoad"
-          },
-          "tag": "balancer"
-        }
-      ],
-      "domainMatcher": "hybrid",
-      "domainStrategy": "IPIfNonMatch",
-      "rules": [
-        {
-          "outboundTag": "dns-out",
-          "port": 53,
-          "type": "field"
-        },
-        {
-          "domain": ["geosite:TORRENT"],
-          "outboundTag": "block",
-          "ruleTag": "TORRENT_BY_DOMAIN",
-          "type": "field"
-        },
-        {
-          "outboundTag": "block",
-          "port": "6881-6889,51413,21413,17417,37305",
-          "ruleTag": "TORRENT_BY_PORT",
-          "type": "field"
-        },
-        {
-          "outboundTag": "block",
-          "protocol": ["bittorrent"],
-          "ruleTag": "TORRENT_BY_PROTOCOL",
-          "type": "field"
-        },
-        {
-          "balancerTag": "balancer",
-          "network": "tcp,udp",
-          "ruleTag": "PRIMARY_BALANCER",
-          "type": "field"
-        }
-      ]
-    },
-    "stats": {}
+  "stats" : {
+
   }
-]
+}
