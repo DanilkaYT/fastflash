@@ -1,6 +1,2 @@
-#profile-title: ⚡FastFlash⚡
-#profile-update-interval: 1
-#support-url: https://fastflash.shop
-#profile-web-page-url: https://fastflash.shop
-#hide-settings: 1
-vless://00000000-0000-0000-0000-000000000000@127.0.0.1:443?encryption=none&security=none#⚠️ ЛИМИТ УСТРОЙСТВ @fastflashvpnbot
+vless://00000000-0000-0000-0000-000000000000@127.0.0.1:443?encryption=none&security=none#⚠️Не правильный метод добавления подписки @fastflashvpn
+vless://00000000-0000-0000-0000-000000000000@127.0.0.1:443?encryption=none&security=none#⚠️Перейди по выданной ссылке с браузера @fastflashvpn
