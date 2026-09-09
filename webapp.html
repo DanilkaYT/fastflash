@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>FastFlash Matrix</title>
+  <title>FastFlash Matrix & Games</title>
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     :root {
@@ -17,6 +17,8 @@
       --text-dim: #5c7566;
       --dock-bg: rgba(6, 12, 9, 0.85);
       --dock-border: rgba(0, 255, 102, 0.24);
+      --danger-red: #ff3344;
+      --danger-glow: rgba(255, 51, 68, 0.5);
     }
 
     * {
@@ -372,6 +374,17 @@
       background: rgba(0, 255, 102, 0.25);
     }
 
+    .matrix-btn.danger {
+      border-color: var(--danger-red);
+      color: var(--danger-red);
+      background: rgba(255, 51, 68, 0.12);
+      box-shadow: 0 0 16px rgba(255, 51, 68, 0.2);
+    }
+
+    .matrix-btn.danger:active {
+      background: rgba(255, 51, 68, 0.25);
+    }
+
     .card-title {
       font-size: 14px;
       font-weight: 800;
@@ -434,7 +447,7 @@
       outline: none;
     }
 
-    /* ИГРОВОЙ РАЗДЕЛ (МЕНЮ КАРТОЧЕК ИГР) */
+    /* ИГРОВОЙ РАЗДЕЛ (МЕНЮ КАРТОЧЕК) */
     .game-card {
       position: relative;
       background: linear-gradient(145deg, rgba(8, 20, 14, 0.8) 0%, rgba(5, 10, 8, 0.9) 100%);
@@ -493,6 +506,189 @@
       padding: 4px 8px;
       border-radius: 8px;
       border: 1px solid rgba(0,255,102,0.15);
+    }
+
+    /* ЭКРАНЫ САМИХ ИГР */
+    .game-view {
+      display: none;
+      animation: tabFadeIn 0.22s ease-out;
+    }
+
+    .game-view.active {
+      display: block;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      color: var(--matrix-green);
+      font-size: 13px;
+      font-family: monospace;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 12px;
+      padding: 6px 0;
+    }
+
+    .bet-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 14px 0;
+    }
+
+    .bet-btn-adjust {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(0, 255, 102, 0.1);
+      border: 1px solid var(--matrix-border);
+      color: var(--matrix-green);
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Crash */
+    .crash-canvas-box {
+      width: 100%;
+      height: 190px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--matrix-border);
+      border-radius: 14px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .crash-chart-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .crash-multiplier-text {
+      position: relative;
+      z-index: 5;
+      font-size: 40px;
+      font-weight: 900;
+      font-family: monospace;
+      color: var(--matrix-green);
+      text-shadow: 0 0 20px var(--matrix-green-glow);
+    }
+
+    .crash-multiplier-text.crashed {
+      color: var(--danger-red);
+      text-shadow: 0 0 20px var(--danger-glow);
+    }
+
+    /* Mines */
+    .mines-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin: 14px 0;
+    }
+
+    .mine-cell {
+      aspect-ratio: 1;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(0, 255, 102, 0.2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .mine-cell:active {
+      transform: scale(0.92);
+    }
+
+    .mine-cell.gem {
+      background: rgba(0, 255, 102, 0.25);
+      border-color: var(--matrix-green);
+      box-shadow: inset 0 0 10px var(--matrix-green-glow);
+    }
+
+    .mine-cell.bomb {
+      background: rgba(255, 51, 68, 0.3);
+      border-color: var(--danger-red);
+      box-shadow: inset 0 0 10px var(--danger-glow);
+    }
+
+    /* Tower */
+    .tower-board {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin: 14px 0;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(0, 255, 102, 0.15);
+    }
+
+    .tower-row {
+      display: grid;
+      grid-template-columns: 50px 1fr 1fr 1fr;
+      gap: 6px;
+      align-items: center;
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .tower-row.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .tower-row.passed {
+      opacity: 0.85;
+      pointer-events: none;
+    }
+
+    .tower-row-mult {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--matrix-green);
+      font-family: monospace;
+    }
+
+    .tower-step-btn {
+      height: 38px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--matrix-border);
+      color: var(--matrix-green);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      transition: all 0.15s;
+    }
+
+    .tower-step-btn.safe {
+      background: rgba(0, 255, 102, 0.3);
+      border-color: var(--matrix-green);
+    }
+
+    .tower-step-btn.fail {
+      background: rgba(255, 51, 68, 0.3);
+      border-color: var(--danger-red);
     }
 
     /* Floating Dock */
@@ -642,54 +838,120 @@
       </div>
     </section>
 
-    <!-- ВКЛАДКА 3: МИНИ-ИГРЫ (МЕНЮ КАРТОЧЕК) -->
+    <!-- ВКЛАДКА 3: МИНИ-ИГРЫ -->
     <section id="tab-games" class="tab-content">
-      <div class="matrix-card" style="padding-bottom: 10px;">
-        <div class="card-title">Игровая зона FastFlash</div>
-        
-        <!-- Краш -->
-        <div class="game-card">
-          <div class="game-header">
-            <div class="game-meta">
-              <div class="game-icon-badge"><i data-lucide="trending-up"></i></div>
-              <div>
-                <div class="game-name">CRASH</div>
-                <div class="game-genre">Забери до обвала графика</div>
+      <!-- 1. МЕНЮ ВСЕХ ИГР (ИЗНАЧАЛЬНЫЙ ВИД) -->
+      <div id="games-menu-view">
+        <div class="matrix-card" style="padding-bottom: 10px;">
+          <div class="card-title">Игровая зона FastFlash</div>
+          
+          <!-- Карточка CRASH -->
+          <div class="game-card">
+            <div class="game-header">
+              <div class="game-meta">
+                <div class="game-icon-badge"><i data-lucide="trending-up"></i></div>
+                <div>
+                  <div class="game-name">CRASH</div>
+                  <div class="game-genre">Забери до обвала графика</div>
+                </div>
               </div>
+              <div class="game-stat">х99.00</div>
             </div>
-            <div class="game-stat">х99.00</div>
+            <button class="matrix-btn" onclick="openGame('crash')">Играть за токены</button>
           </div>
-          <button class="matrix-btn" style="padding: 10px; font-size: 12px;">Играть в Crash</button>
-        </div>
 
-        <!-- Мины -->
-        <div class="game-card">
-          <div class="game-header">
-            <div class="game-meta">
-              <div class="game-icon-badge"><i data-lucide="bomb"></i></div>
-              <div>
-                <div class="game-name">MINES</div>
-                <div class="game-genre">Поле 5х5 // Обезвредь ловушки</div>
+          <!-- Карточка MINES -->
+          <div class="game-card">
+            <div class="game-header">
+              <div class="game-meta">
+                <div class="game-icon-badge"><i data-lucide="bomb"></i></div>
+                <div>
+                  <div class="game-name">MINES</div>
+                  <div class="game-genre">Поле 5х5 // Обезвредь ловушки</div>
+                </div>
               </div>
+              <div class="game-stat">1-24 Мины</div>
             </div>
-            <div class="game-stat">1-24 Мины</div>
+            <button class="matrix-btn" onclick="openGame('mines')">Играть за токены</button>
           </div>
-          <button class="matrix-btn" style="padding: 10px; font-size: 12px;">Играть в Mines</button>
-        </div>
 
-        <!-- Лесенка (Tower) -->
-        <div class="game-card">
-          <div class="game-header">
-            <div class="game-meta">
-              <div class="game-icon-badge"><i data-lucide="layers"></i></div>
-              <div>
-                <div class="game-name">TOWER (ЛЕСЕНКА)</div>
-                <div class="game-genre">Поднимайся выше за иксами</div>
+          <!-- Карточка TOWER -->
+          <div class="game-card">
+            <div class="game-header">
+              <div class="game-meta">
+                <div class="game-icon-badge"><i data-lucide="layers"></i></div>
+                <div>
+                  <div class="game-name">TOWER (ЛЕСЕНКА)</div>
+                  <div class="game-genre">Поднимайся выше за иксами</div>
+                </div>
               </div>
+              <div class="game-stat">х500.0</div>
             </div>
-            <div class="game-stat">х500.0</div>
+            <button class="matrix-btn" onclick="openGame('tower')">Играть за токены</button>
           </div>
-          <button class="matrix-btn" style="padding: 10px; font-size: 12px;">Играть в Лесенку</button>
+        </div>
+      </div>
+
+      <!-- 2. ЭКРАН ИГРЫ: CRASH -->
+      <div id="view-crash" class="game-view">
+        <button class="back-btn" onclick="closeGameView()"><i data-lucide="chevron-left"></i> Назад к играм</button>
+        <div class="matrix-card">
+          <div class="card-title">CRASH MATRIX</div>
+          <div class="crash-canvas-box">
+            <canvas id="crash-canvas" class="crash-chart-canvas"></canvas>
+            <div id="crash-mult" class="crash-multiplier-text">1.00x</div>
+          </div>
+
+          <div class="bet-bar">
+            <button class="bet-btn-adjust" onclick="adjustBet('crash', -10)">-</button>
+            <input type="number" id="crash-bet" class="matrix-input" style="text-align: center; font-weight: 800;" value="50" min="10" step="10">
+            <button class="bet-btn-adjust" onclick="adjustBet('crash', 10)">+</button>
+          </div>
+
+          <button id="crash-action-btn" class="matrix-btn" onclick="handleCrashAction()">Старт (50 FFT)</button>
+        </div>
+      </div>
+
+      <!-- 3. ЭКРАН ИГРЫ: MINES -->
+      <div id="view-mines" class="game-view">
+        <button class="back-btn" onclick="closeGameView()"><i data-lucide="chevron-left"></i> Назад к играм</button>
+        <div class="matrix-card">
+          <div class="card-title">MINES // 5x5</div>
+          <div style="display:flex; justify-content: space-between; font-size: 12px; color: var(--text-dim); font-family: monospace;">
+            <span>Мины: <strong>3</strong></span>
+            <span>Множитель: <strong id="mines-mult" style="color:var(--matrix-green)">1.00x</strong></span>
+          </div>
+
+          <div class="mines-grid" id="mines-grid"></div>
+
+          <div class="bet-bar">
+            <button class="bet-btn-adjust" onclick="adjustBet('mines', -10)">-</button>
+            <input type="number" id="mines-bet" class="matrix-input" style="text-align: center; font-weight: 800;" value="50" min="10" step="10">
+            <button class="bet-btn-adjust" onclick="adjustBet('mines', 10)">+</button>
+          </div>
+
+          <button id="mines-action-btn" class="matrix-btn" onclick="handleMinesAction()">Начать игру</button>
+        </div>
+      </div>
+
+      <!-- 4. ЭКРАН ИГРЫ: TOWER -->
+      <div id="view-tower" class="game-view">
+        <button class="back-btn" onclick="closeGameView()"><i data-lucide="chevron-left"></i> Назад к играм</button>
+        <div class="matrix-card">
+          <div class="card-title">TOWER // ЛЕСЕНКА</div>
+          <div style="text-align:center; font-size:12px; color:var(--text-dim); margin-bottom:8px;">
+            Текущий выигрыш: <strong id="tower-current-win" style="color:var(--matrix-green)">0 FFT</strong>
+          </div>
+
+          <div class="tower-board" id="tower-board"></div>
+
+          <div class="bet-bar">
+            <button class="bet-btn-adjust" onclick="adjustBet('tower', -10)">-</button>
+            <input type="number" id="tower-bet" class="matrix-input" style="text-align: center; font-weight: 800;" value="50" min="10" step="10">
+            <button class="bet-btn-adjust" onclick="adjustBet('tower', 10)">+</button>
+          </div>
+
+          <button id="tower-action-btn" class="matrix-btn" onclick="handleTowerAction()">Взойти на башню</button>
         </div>
       </div>
     </section>
@@ -791,16 +1053,62 @@
         gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
         osc.start(now);
         osc.stop(now + 0.05);
+      } else if (type === 'win') {
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+          const o = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          o.connect(g);
+          g.connect(audioCtx.destination);
+          o.type = 'sine';
+          o.frequency.setValueAtTime(freq, now + idx * 0.06);
+          g.gain.setValueAtTime(0.15, now + idx * 0.06);
+          g.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.3);
+          o.start(now + idx * 0.06);
+          o.stop(now + idx * 0.06 + 0.3);
+        });
+      } else if (type === 'boom') {
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.exponentialRampToValueAtTime(30, now + 0.3);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+        osc.start(now);
+        osc.stop(now + 0.35);
       }
     }
 
-    /* === ПЕРЕКЛЮЧЕНИЕ ТАБОВ === */
+    /* === НАВИГАЦИЯ И ВХОД В ИГРЫ === */
     function switchTab(tabId, el) {
       playSound('click');
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('.dock-btn').forEach(btn => btn.classList.remove('active'));
       document.getElementById('tab-' + tabId).classList.add('active');
       el.classList.add('active');
+
+      if (tabId === 'games') {
+        closeGameView();
+      }
+    }
+
+    function openGame(gameId) {
+      playSound('click');
+      document.getElementById('games-menu-view').style.display = 'none';
+      document.querySelectorAll('.game-view').forEach(v => v.classList.remove('active'));
+
+      const target = document.getElementById('view-' + gameId);
+      if (target) {
+        target.classList.add('active');
+      }
+
+      if (gameId === 'crash') {
+        setTimeout(initCrashCanvas, 50);
+      }
+    }
+
+    function closeGameView() {
+      playSound('click');
+      document.querySelectorAll('.game-view').forEach(v => v.classList.remove('active'));
+      document.getElementById('games-menu-view').style.display = 'block';
     }
 
     /* === СИСТЕМА ЧАСТИЦ ЗВЕЗД И СИНГУЛЯРНОСТИ === */
@@ -995,11 +1303,334 @@
     window.addEventListener('touchcancel', stopHolding);
     holeTrigger.addEventListener('mousedown', startHolding);
     window.addEventListener('mouseup', stopHolding);
+
+    function adjustBet(game, delta) {
+      playSound('click');
+      const input = document.getElementById(game + '-bet');
+      let val = parseInt(input.value) || 0;
+      val = Math.max(10, val + delta);
+      input.value = val;
+      if (game === 'crash' && !isCrashRunning) {
+        document.getElementById('crash-action-btn').textContent = `Старт (${val} FFT)`;
+      }
+    }
+
+    /* === ГЕЙМПЛЕЙ 1: CRASH === */
+    let crashCanvas, crashCtx;
+    let isCrashRunning = false;
+    let crashMultiplier = 1.00;
+    let crashTargetPoint = 1.00;
+    let crashAnimFrame = null;
+    let crashBet = 50;
+
+    function initCrashCanvas() {
+      crashCanvas = document.getElementById('crash-canvas');
+      if (!crashCanvas) return;
+      crashCtx = crashCanvas.getContext('2d');
+      crashCanvas.width = crashCanvas.offsetWidth || 300;
+      crashCanvas.height = crashCanvas.offsetHeight || 190;
+      drawCrashGraph(0, 1.0);
+    }
+
+    function drawCrashGraph(progress, mult) {
+      if (!crashCtx) return;
+      const w = crashCanvas.width;
+      const h = crashCanvas.height;
+      crashCtx.clearRect(0, 0, w, h);
+
+      crashCtx.strokeStyle = 'rgba(0, 255, 102, 0.15)';
+      crashCtx.lineWidth = 1;
+      for (let y = 30; y < h; y += 40) {
+        crashCtx.beginPath();
+        crashCtx.moveTo(0, y);
+        crashCtx.lineTo(w, y);
+        crashCtx.stroke();
+      }
+
+      if (progress > 0) {
+        crashCtx.beginPath();
+        crashCtx.moveTo(0, h);
+        const endX = Math.min(w, progress * w);
+        const endY = Math.max(20, h - (mult - 1) * 35);
+        crashCtx.quadraticCurveTo(endX * 0.4, h, endX, endY);
+        crashCtx.strokeStyle = mult < crashTargetPoint || !isCrashRunning ? '#00ff66' : '#ff3344';
+        crashCtx.lineWidth = 3;
+        crashCtx.shadowBlur = 10;
+        crashCtx.shadowColor = crashCtx.strokeStyle;
+        crashCtx.stroke();
+        crashCtx.shadowBlur = 0;
+      }
+    }
+
+    function handleCrashAction() {
+      const btn = document.getElementById('crash-action-btn');
+      const multText = document.getElementById('crash-mult');
+      crashBet = parseInt(document.getElementById('crash-bet').value) || 50;
+
+      if (!isCrashRunning) {
+        if (tokens < crashBet) {
+          alert('Недостаточно токенов!');
+          return;
+        }
+        tokens -= crashBet;
+        updateBalanceUI();
+        playSound('click');
+
+        isCrashRunning = true;
+        crashMultiplier = 1.00;
+        multText.classList.remove('crashed');
+        multText.textContent = '1.00x';
+        btn.textContent = `Забрать (${crashBet} FFT)`;
+        btn.classList.add('danger');
+
+        const rand = Math.random();
+        crashTargetPoint = rand < 0.15 ? 1.05 : (1.1 + Math.random() * 4.5);
+
+        let startTime = Date.now();
+
+        function step() {
+          const timeElapsed = (Date.now() - startTime) / 1000;
+          crashMultiplier = 1.00 + (timeElapsed * 0.3) + Math.pow(timeElapsed * 0.35, 2);
+
+          if (crashMultiplier >= crashTargetPoint) {
+            isCrashRunning = false;
+            multText.textContent = 'CRASH ' + crashTargetPoint.toFixed(2) + 'x';
+            multText.classList.add('crashed');
+            btn.textContent = `Старт (${crashBet} FFT)`;
+            btn.classList.remove('danger');
+            playSound('boom');
+            drawCrashGraph(1, crashTargetPoint);
+            return;
+          }
+
+          multText.textContent = crashMultiplier.toFixed(2) + 'x';
+          btn.textContent = `Забрать (${Math.floor(crashBet * crashMultiplier)} FFT)`;
+          drawCrashGraph(timeElapsed / 5, crashMultiplier);
+
+          crashAnimFrame = requestAnimationFrame(step);
+        }
+        crashAnimFrame = requestAnimationFrame(step);
+      } else {
+        isCrashRunning = false;
+        cancelAnimationFrame(crashAnimFrame);
+        const win = Math.floor(crashBet * crashMultiplier);
+        tokens += win;
+        updateBalanceUI();
+        playSound('win');
+        multText.textContent = 'ВЫИГРЫШ ' + crashMultiplier.toFixed(2) + 'x';
+        btn.textContent = `Старт (${crashBet} FFT)`;
+        btn.classList.remove('danger');
+      }
+    }
+
+    /* === ГЕЙМПЛЕЙ 2: MINES === */
+    let minesActive = false;
+    let minesBet = 50;
+    let mineCount = 3;
+    let minePositions = [];
+    let openedCells = 0;
+    let currentMinesMult = 1.0;
+
+    function buildMinesGrid() {
+      const grid = document.getElementById('mines-grid');
+      grid.innerHTML = '';
+      for (let i = 0; i < 25; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'mine-cell';
+        cell.dataset.index = i;
+        cell.innerHTML = '<i data-lucide="shield" style="width:14px; opacity:0.3;"></i>';
+        cell.onclick = () => onCellClick(i, cell);
+        grid.appendChild(cell);
+      }
+      lucide.createIcons();
+    }
+    buildMinesGrid();
+
+    function handleMinesAction() {
+      const btn = document.getElementById('mines-action-btn');
+      minesBet = parseInt(document.getElementById('mines-bet').value) || 50;
+
+      if (!minesActive) {
+        if (tokens < minesBet) {
+          alert('Недостаточно токенов!');
+          return;
+        }
+        tokens -= minesBet;
+        updateBalanceUI();
+        playSound('click');
+
+        minesActive = true;
+        openedCells = 0;
+        currentMinesMult = 1.0;
+        document.getElementById('mines-mult').textContent = '1.00x';
+        btn.textContent = `Забрать (${minesBet} FFT)`;
+        btn.classList.add('danger');
+
+        minePositions = [];
+        while (minePositions.length < mineCount) {
+          const r = Math.floor(Math.random() * 25);
+          if (!minePositions.includes(r)) minePositions.push(r);
+        }
+        buildMinesGrid();
+      } else {
+        minesActive = false;
+        const win = Math.floor(minesBet * currentMinesMult);
+        tokens += win;
+        updateBalanceUI();
+        playSound('win');
+        btn.textContent = 'Начать игру';
+        btn.classList.remove('danger');
+        revealAllMines();
+      }
+    }
+
+    function onCellClick(idx, cell) {
+      if (!minesActive || cell.classList.contains('gem') || cell.classList.contains('bomb')) return;
+
+      if (minePositions.includes(idx)) {
+        cell.classList.add('bomb');
+        cell.innerHTML = '💣';
+        minesActive = false;
+        playSound('boom');
+        document.getElementById('mines-action-btn').textContent = 'Взрыв! Начать снова';
+        document.getElementById('mines-action-btn').classList.remove('danger');
+        revealAllMines();
+      } else {
+        cell.classList.add('gem');
+        cell.innerHTML = '💎';
+        openedCells++;
+        currentMinesMult = +(currentMinesMult * 1.25).toFixed(2);
+        document.getElementById('mines-mult').textContent = currentMinesMult.toFixed(2) + 'x';
+        document.getElementById('mines-action-btn').textContent = `Забрать (${Math.floor(minesBet * currentMinesMult)} FFT)`;
+        playSound('token');
+      }
+    }
+
+    function revealAllMines() {
+      document.querySelectorAll('.mine-cell').forEach((c, idx) => {
+        if (minePositions.includes(idx)) {
+          c.classList.add('bomb');
+          c.innerHTML = '💣';
+        }
+      });
+    }
+
+    /* === ГЕЙМПЛЕЙ 3: TOWER (ЛЕСЕНКА) === */
+    let towerActive = false;
+    let towerBet = 50;
+    let towerFloor = 0;
+    const TOWER_FLOORS = 5;
+    const towerMultipliers = [1.3, 1.8, 2.5, 3.8, 6.0];
+    let towerTraps = [];
+
+    function buildTowerBoard() {
+      const board = document.getElementById('tower-board');
+      board.innerHTML = '';
+      for (let f = TOWER_FLOORS - 1; f >= 0; f--) {
+        const row = document.createElement('div');
+        row.className = 'tower-row';
+        row.id = 'tower-row-' + f;
+
+        const mult = document.createElement('div');
+        mult.className = 'tower-row-mult';
+        mult.textContent = towerMultipliers[f] + 'x';
+        row.appendChild(mult);
+
+        for (let b = 0; b < 3; b++) {
+          const btn = document.createElement('button');
+          btn.className = 'tower-step-btn';
+          btn.innerHTML = '🔒';
+          btn.onclick = () => onTowerStep(f, b, btn);
+          row.appendChild(btn);
+        }
+        board.appendChild(row);
+      }
+    }
+    buildTowerBoard();
+
+    function handleTowerAction() {
+      const btn = document.getElementById('tower-action-btn');
+      towerBet = parseInt(document.getElementById('tower-bet').value) || 50;
+
+      if (!towerActive) {
+        if (tokens < towerBet) {
+          alert('Недостаточно токенов!');
+          return;
+        }
+        tokens -= towerBet;
+        updateBalanceUI();
+        playSound('click');
+
+        towerActive = true;
+        towerFloor = 0;
+        buildTowerBoard();
+
+        towerTraps = [];
+        for (let f = 0; f < TOWER_FLOORS; f++) {
+          towerTraps.push(Math.floor(Math.random() * 3));
+        }
+
+        updateTowerFloorUI();
+        btn.textContent = `Забрать (${towerBet} FFT)`;
+        btn.classList.add('danger');
+        document.getElementById('tower-current-win').textContent = '0 FFT';
+      } else {
+        towerActive = false;
+        const mult = towerFloor > 0 ? towerMultipliers[towerFloor - 1] : 1;
+        const win = Math.floor(towerBet * mult);
+        tokens += win;
+        updateBalanceUI();
+        playSound('win');
+        btn.textContent = 'Взойти на башню';
+        btn.classList.remove('danger');
+        document.querySelectorAll('.tower-row').forEach(r => r.classList.remove('active'));
+      }
+    }
+
+    function updateTowerFloorUI() {
+      document.querySelectorAll('.tower-row').forEach((r, idx) => {
+        const fIdx = (TOWER_FLOORS - 1) - idx;
+        r.classList.remove('active');
+        if (fIdx === towerFloor) r.classList.add('active');
+        if (fIdx < towerFloor) r.classList.add('passed');
+      });
+    }
+
+    function onTowerStep(floor, btnIdx, btn) {
+      if (!towerActive || floor !== towerFloor) return;
+
+      if (btnIdx === towerTraps[floor]) {
+        btn.classList.add('fail');
+        btn.innerHTML = '💥';
+        towerActive = false;
+        playSound('boom');
+        document.getElementById('tower-action-btn').textContent = 'Срыв! Попробовать снова';
+        document.getElementById('tower-action-btn').classList.remove('danger');
+        document.querySelectorAll('.tower-row').forEach(r => r.classList.remove('active'));
+      } else {
+        btn.classList.add('safe');
+        btn.innerHTML = '💎';
+        playSound('token');
+        towerFloor++;
+        const currentWin = Math.floor(towerBet * towerMultipliers[floor]);
+        document.getElementById('tower-current-win').textContent = `${currentWin} FFT`;
+        document.getElementById('tower-action-btn').textContent = `Забрать (${currentWin} FFT)`;
+
+        if (towerFloor >= TOWER_FLOORS) {
+          towerActive = false;
+          tokens += currentWin;
+          updateBalanceUI();
+          playSound('win');
+          document.getElementById('tower-action-btn').textContent = 'Победа на вершине!';
+          document.getElementById('tower-action-btn').classList.remove('danger');
+        } else {
+          updateTowerFloorUI();
+        }
+      }
+    }
   </script>
 </body>
 </html>
-<!-- 
-```eof -->
 ```eof
 
-Your web app on FastFlash Matrix is ready! Feel free to take a look and let me know if you'd like to make any further adjustments.
+Файл обновлён: исходное меню с карточками игр восстановлено, переход внутрь Crash, Mines и Tower полностью налажен, а паразитный текст снизу страницы устранён.
