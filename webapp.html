@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>FastFlash Matrix & Games</title>
+  <title>FastFlash Matrix & Singularity</title>
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     :root {
@@ -37,7 +37,16 @@
       position: relative;
     }
 
-    /* Фоновый Canvas с летающими звездами */
+    /* Тряска экрана при зажатии черной дыры */
+    body.screen-shake {
+      animation: shake 0.08s infinite ease-in-out alternate;
+    }
+
+    @keyframes shake {
+      0% { transform: translate(-1.5px, 1px) rotate(0.1deg); }
+      100% { transform: translate(1.5px, -1.2px) rotate(-0.1deg); }
+    }
+
     #space-canvas {
       position: fixed;
       top: 0;
@@ -48,7 +57,6 @@
       z-index: 0;
     }
 
-    /* Верхняя панель */
     .app-header {
       position: sticky;
       top: 0;
@@ -100,42 +108,43 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Кибер-карточки */
     .matrix-card {
       background: var(--card-bg);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid var(--matrix-border);
       border-radius: 20px;
-      padding: 20px;
+      padding: 18px;
       margin-bottom: 16px;
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(0, 255, 102, 0.03);
     }
 
-    /* Профиль */
-    .user-card {
+    /* Верхняя объединенная карточка профиля */
+    .profile-header-top {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
+      margin-bottom: 16px;
     }
 
     .matrix-avatar {
-      width: 58px;
-      height: 58px;
+      width: 52px;
+      height: 52px;
       border-radius: 50%;
       background: radial-gradient(circle at 35% 35%, #00ff88, #004d26);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 800;
       color: #050807;
       border: 2px solid var(--matrix-green);
-      box-shadow: 0 0 20px var(--matrix-green-glow);
+      box-shadow: 0 0 18px var(--matrix-green-glow);
+      flex-shrink: 0;
     }
 
     .user-info .username {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 800;
       color: var(--matrix-green);
       text-shadow: 0 0 10px var(--matrix-green-glow);
@@ -143,57 +152,220 @@
     }
 
     .user-info .userid {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--text-dim);
       font-family: monospace;
     }
 
-    /* Тариф */
-    .plan-card {
+    /* Сетка статусов: Тариф, Дни, Токены */
+    .profile-stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.2fr;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.45);
+      padding: 12px 8px;
+      border-radius: 14px;
+      border: 1px solid rgba(0, 255, 102, 0.15);
+      margin-bottom: 14px;
+    }
+
+    .stat-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      padding: 28px 20px;
+      border-right: 1px solid rgba(0, 255, 102, 0.12);
     }
 
-    .plan-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-dim);
-      letter-spacing: 2px;
+    .stat-box:last-child {
+      border-right: none;
+    }
+
+    .stat-lbl {
+      font-size: 10px;
       text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-
-    .plan-pro {
-      font-size: 44px;
-      font-weight: 900;
-      color: var(--matrix-green);
-      text-shadow: 0 0 25px var(--matrix-green-glow);
-      margin-bottom: 8px;
-      letter-spacing: 1px;
-    }
-
-    .plan-days {
-      font-size: 14px;
       color: var(--text-dim);
-      margin-bottom: 22px;
+      letter-spacing: 0.5px;
+      margin-bottom: 3px;
+    }
+
+    .stat-val {
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
       font-family: monospace;
     }
 
-    .plan-days strong {
-      color: #fff;
+    .stat-val.accent {
+      color: var(--matrix-green);
+      text-shadow: 0 0 8px var(--matrix-green-glow);
     }
 
-    /* Неоновые кнопки */
+    .tokens-val-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tokens-val-wrapper i {
+      width: 14px;
+      height: 14px;
+      color: var(--matrix-green);
+    }
+
+    /* Блок Черной Дыры / Фарминга Токенов */
+    .hole-zone-card {
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hole-interactive-container {
+      position: relative;
+      width: 190px;
+      height: 190px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 10px 0 16px 0;
+      cursor: pointer;
+      touch-action: none;
+    }
+
+    /* Визуальный портал сингулярности */
+    .hole-core {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #020403 40%, #000000 100%);
+      box-shadow: 0 0 35px rgba(0, 255, 102, 0.4), inset 0 0 20px #000;
+      position: relative;
+      z-index: 3;
+      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 1px solid rgba(0, 255, 102, 0.35);
+    }
+
+    .hole-pulse-ring {
+      position: absolute;
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      border: 1.5px dashed rgba(0, 255, 102, 0.35);
+      animation: spinHole 8s linear infinite;
+      z-index: 2;
+    }
+
+    .hole-pulse-ring-outer {
+      position: absolute;
+      width: 175px;
+      height: 175px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 255, 102, 0.15);
+      animation: spinHoleReverse 12s linear infinite;
+      z-index: 1;
+    }
+
+    @keyframes spinHole {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes spinHoleReverse {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+
+    /* Реакция на удержание */
+    .hole-interactive-container.holding .hole-core {
+      transform: scale(0.85);
+      box-shadow: 0 0 50px rgba(0, 255, 102, 0.9), inset 0 0 25px rgba(0, 255, 102, 0.8);
+      border-color: var(--matrix-green);
+    }
+
+    .hole-interactive-container.holding .hole-pulse-ring {
+      animation-duration: 1.2s;
+      border-color: var(--matrix-green);
+    }
+
+    .hole-interactive-container.holding .hole-pulse-ring-outer {
+      animation-duration: 2s;
+      border-color: rgba(0, 255, 102, 0.5);
+    }
+
+    /* Прогресс-бар зажатия секунды */
+    .hold-progress-bar-bg {
+      width: 100%;
+      max-width: 240px;
+      height: 6px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(0, 255, 102, 0.2);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .hold-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--matrix-green);
+      box-shadow: 0 0 10px var(--matrix-green);
+      transition: width 0.05s linear;
+    }
+
+    .hold-hint {
+      font-size: 12px;
+      color: var(--text-dim);
+      font-family: monospace;
+    }
+
+    .daily-limit-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 255, 102, 0.08);
+      border: 1px solid rgba(0, 255, 102, 0.25);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-family: monospace;
+      color: var(--matrix-green);
+      margin-top: 10px;
+    }
+
+    /* Всплывающий токен при получении */
+    .floating-token-fx {
+      position: absolute;
+      color: var(--matrix-green);
+      font-weight: 900;
+      font-size: 18px;
+      font-family: monospace;
+      pointer-events: none;
+      animation: floatUp 0.8s ease-out forwards;
+      text-shadow: 0 0 10px var(--matrix-green-glow);
+      z-index: 10;
+    }
+
+    @keyframes floatUp {
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-50px) scale(1.4); }
+    }
+
+    /* Кнопки и формы */
     .matrix-btn {
       width: 100%;
-      padding: 15px;
+      padding: 14px;
       border-radius: 14px;
       background: var(--matrix-green-dim);
       border: 1.5px solid var(--matrix-green);
       color: var(--matrix-green);
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 700;
-      letter-spacing: 1px;
+      letter-spacing: 0.8px;
       text-transform: uppercase;
       cursor: pointer;
       display: flex;
@@ -207,11 +379,9 @@
 
     .matrix-btn:active {
       transform: scale(0.97);
-      box-shadow: 0 0 25px var(--matrix-green-glow);
       background: rgba(0, 255, 102, 0.25);
     }
 
-    /* Заголовки блоков */
     .card-title {
       font-size: 14px;
       font-weight: 800;
@@ -223,14 +393,12 @@
       text-shadow: 0 0 8px var(--matrix-green-glow);
     }
 
-    /* Список конфигов */
     .config-stack {
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
-    /* Рефералка и Промо */
     .data-row {
       display: flex;
       justify-content: space-between;
@@ -262,7 +430,6 @@
       word-break: break-all;
       margin: 16px 0 6px 0;
       cursor: pointer;
-      box-shadow: inset 0 0 10px rgba(0, 255, 102, 0.06);
     }
 
     .matrix-input {
@@ -283,7 +450,7 @@
       box-shadow: 0 0 10px var(--matrix-green-glow);
     }
 
-    /* РАЗДЕЛ МИНИ-ИГР */
+    /* Мини-игры */
     .game-card {
       position: relative;
       background: linear-gradient(145deg, rgba(8, 20, 14, 0.8) 0%, rgba(5, 10, 8, 0.9) 100%);
@@ -295,17 +462,6 @@
       flex-direction: column;
       gap: 12px;
       overflow: hidden;
-    }
-
-    .game-card::after {
-      content: "";
-      position: absolute;
-      top: -40px;
-      right: -40px;
-      width: 80px;
-      height: 80px;
-      background: radial-gradient(circle, var(--matrix-green-glow) 0%, transparent 70%);
-      pointer-events: none;
     }
 
     .game-header {
@@ -335,7 +491,6 @@
     .game-name {
       font-size: 16px;
       font-weight: 800;
-      letter-spacing: 0.5px;
       color: #fff;
     }
 
@@ -350,14 +505,13 @@
       font-size: 13px;
       font-weight: 800;
       color: var(--matrix-green);
-      text-shadow: 0 0 8px var(--matrix-green-glow);
       background: rgba(0,0,0,0.4);
       padding: 4px 8px;
       border-radius: 8px;
       border: 1px solid rgba(0,255,102,0.15);
     }
 
-    /* ФУТУРИСТИЧЕСКИЙ FLOATING DOCK */
+    /* Floating Dock */
     .dock-wrapper {
       position: fixed;
       bottom: 22px;
@@ -381,8 +535,7 @@
       align-items: center;
       gap: 4px;
       box-shadow: 0 16px 45px rgba(0, 0, 0, 0.8),
-                  0 0 1px rgba(0, 255, 102, 0.4) inset,
-                  0 0 20px rgba(0, 255, 102, 0.08);
+                  0 0 1px rgba(0, 255, 102, 0.4) inset;
     }
 
     .dock-btn {
@@ -396,7 +549,6 @@
       cursor: pointer;
       min-width: 68px;
       transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
     }
 
     .dock-btn i {
@@ -413,7 +565,6 @@
       letter-spacing: -0.2px;
     }
 
-    /* Активный таб в dock */
     .dock-btn.active {
       color: #ffffff;
       background: linear-gradient(135deg, rgba(0, 255, 102, 0.3) 0%, rgba(0, 150, 60, 0.15) 100%);
@@ -434,31 +585,67 @@
 </head>
 <body>
 
-  <!-- Canvas с мерцающими летающими звездами -->
+  <!-- Canvas с мерцающими и слетающимися звездами -->
   <canvas id="space-canvas"></canvas>
 
-  <!-- Шапка мини-приложения -->
   <header class="app-header">
     <div class="app-title">FastFlash Ускоритель</div>
-    <div class="app-subtitle">[ MATRIX NETWORK // ONLINE ]</div>
+    <div class="app-subtitle">[ MATRIX SINGULARITY // PROTOCOL ]</div>
   </header>
 
   <div class="container">
-    <!-- ВКЛАДКА 1: ПРОФИЛЬ -->
+    <!-- ВКЛАДКА 1: ПРОФИЛЬ + СИНГУЛЯРНОСТЬ -->
     <section id="tab-profile" class="tab-content active">
-      <div class="matrix-card user-card">
-        <div class="matrix-avatar">D</div>
-        <div class="user-info">
-          <div class="username">drex</div>
-          <div class="userid">ID: 5322531954</div>
+      <!-- Объединенная верхняя карта профиля -->
+      <div class="matrix-card">
+        <div class="profile-header-top">
+          <div class="matrix-avatar">D</div>
+          <div class="user-info">
+            <div class="username">drex</div>
+            <div class="userid">ID: 5322531954</div>
+          </div>
         </div>
+
+        <div class="profile-stats-grid">
+          <div class="stat-box">
+            <span class="stat-lbl">Тариф</span>
+            <span class="stat-val accent">PRO</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-lbl">Осталось</span>
+            <span class="stat-val">50 дн.</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-lbl">Токены</span>
+            <div class="tokens-val-wrapper">
+              <i data-lucide="sparkles"></i>
+              <span class="stat-val accent" id="token-balance">1,420</span>
+            </div>
+          </div>
+        </div>
+
+        <button class="matrix-btn">Продлить подписку</button>
       </div>
 
-      <div class="matrix-card plan-card">
-        <div class="plan-title">Ваш текущий статус</div>
-        <div class="plan-pro">PRO</div>
-        <div class="plan-days">Осталось дней: <strong>50</strong> (до 29.10.2026)</div>
-        <button class="matrix-btn">Продлить подписку</button>
+      <!-- Черная дыра / фарминг токенов зажатием -->
+      <div class="matrix-card hole-zone-card">
+        <div class="card-title" style="margin-bottom: 4px;">Сингулярность токенов</div>
+        <div class="hold-hint" id="status-hint">Удерживай сферу для поглощения звезд</div>
+
+        <div class="hole-interactive-container" id="holeTrigger">
+          <div class="hole-pulse-ring-outer"></div>
+          <div class="hole-pulse-ring"></div>
+          <div class="hole-core"></div>
+        </div>
+
+        <div class="hold-progress-bar-bg">
+          <div class="hold-progress-fill" id="holdProgress"></div>
+        </div>
+
+        <div class="daily-limit-badge">
+          <i data-lucide="zap" style="width: 14px; height: 14px;"></i>
+          <span>Дневной лимит: <strong id="limit-counter">0 / 100</strong> FFT</span>
+        </div>
       </div>
     </section>
 
@@ -492,7 +679,7 @@
             </div>
             <div class="game-stat">х99.00</div>
           </div>
-          <button class="matrix-btn" style="padding: 10px; font-size: 12px;">Играть в Crash</button>
+          <button class="matrix-btn" style="padding: 10px; font-size: 12px;">Играть за токены</button>
         </div>
 
         <!-- Мины -->
@@ -507,7 +694,7 @@
             </div>
             <div class="game-stat">1-24 Мины</div>
           </div>
-          <button class="matrix-btn" style="padding: 10px; font-size: 12px;">Играть в Mines</button>
+          <button class="matrix-btn" style="padding: 10px; font-size: 12px;">Играть за токены</button>
         </div>
 
         <!-- Лесенка (Tower) -->
@@ -522,12 +709,12 @@
             </div>
             <div class="game-stat">х500.0</div>
           </div>
-          <button class="matrix-btn" style="padding: 10px; font-size: 12px;">Играть в Лесенку</button>
+          <button class="matrix-btn" style="padding: 10px; font-size: 12px;">Играть за токены</button>
         </div>
       </div>
     </section>
 
-    <!-- ВКЛАДКА 4: ПРОМОКОДЫ -->
+    <!-- ВКЛАДКА 4: БОНУСЫ / ПРОМО -->
     <section id="tab-promos" class="tab-content">
       <div class="matrix-card">
         <div class="card-title">Реферальная сеть</div>
@@ -562,7 +749,7 @@
     </section>
   </div>
 
-  <!-- FLOATING MATRIX DOCK -->
+  <!-- FLOATING DOCK -->
   <div class="dock-wrapper">
     <nav class="matrix-dock">
       <div class="dock-btn active" onclick="switchTab('profile', this)">
@@ -585,19 +772,16 @@
   </div>
 
   <script>
-    // 1. Инициализация иконок Lucide
     lucide.createIcons();
 
-    // 2. Переключение табов
     function switchTab(tabId, el) {
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('.dock-btn').forEach(btn => btn.classList.remove('active'));
-
       document.getElementById('tab-' + tabId).classList.add('active');
       el.classList.add('active');
     }
 
-    // 3. Космический Matrix Canvas с летающими и мерцающими звездами
+    /* === СИСТЕМА ЧАСТИЦ ЗВЕЗД + СИНГУЛЯРНОСТЬ === */
     const canvas = document.getElementById('space-canvas');
     const ctx = canvas.getContext('2d');
 
@@ -609,60 +793,220 @@
     window.addEventListener('resize', resize);
     resize();
 
-    const STAR_COUNT = 75;
+    const STAR_COUNT = 130;
     const stars = [];
 
+    let isAttracting = false;
+    let singularityX = w / 2;
+    let singularityY = h / 2;
+
     for (let i = 0; i < STAR_COUNT; i++) {
-      stars.push({
+      stars.push(createStar());
+    }
+
+    function createStar() {
+      return {
         x: Math.random() * w,
         y: Math.random() * h,
-        radius: Math.random() * 1.5 + 0.4,
-        vx: (Math.random() - 0.5) * 0.25,
+        radius: Math.random() * 1.8 + 0.4,
+        vx: (Math.random() - 0.5) * 0.35,
         vy: (Math.random() - 0.5) * 0.35,
         alpha: Math.random(),
         dAlpha: (Math.random() * 0.02 + 0.005) * (Math.random() > 0.5 ? 1 : -1),
-        isGreen: Math.random() > 0.35 // 65% зеленых неоновых звезд, 35% белых
-      });
+        isGreen: Math.random() > 0.25,
+        tailLength: 0
+      };
+    }
+
+    function updateHolePosition() {
+      const el = document.getElementById('holeTrigger');
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        singularityX = rect.left + rect.width / 2;
+        singularityY = rect.top + rect.height / 2;
+      }
     }
 
     function animateStars() {
       ctx.clearRect(0, 0, w, h);
 
       for (let star of stars) {
+        if (isAttracting) {
+          // Вектор к сингулярности
+          const dx = singularityX - star.x;
+          const dy = singularityY - star.y;
+          const dist = Math.hypot(dx, dy);
+
+          if (dist < 22) {
+            // Поглощение черной дырой - возрождаем на краю экрана
+            const angle = Math.random() * Math.PI * 2;
+            const spawnRadius = Math.max(w, h) * 0.7;
+            star.x = singularityX + Math.cos(angle) * spawnRadius;
+            star.y = singularityY + Math.sin(angle) * spawnRadius;
+            star.vx = 0;
+            star.vy = 0;
+          } else {
+            // Ускорение в центр (гравитационное притяжение)
+            const force = Math.min(18, 250 / Math.max(dist, 40));
+            star.vx += (dx / dist) * force * 0.4;
+            star.vy += (dy / dist) * force * 0.4;
+
+            // Замедление трением
+            star.vx *= 0.94;
+            star.vy *= 0.94;
+          }
+        } else {
+          // Спокойное парение в космосе
+          star.vx *= 0.98;
+          star.vy *= 0.98;
+          if (Math.abs(star.vx) < 0.2) star.vx = (Math.random() - 0.5) * 0.4;
+          if (Math.abs(star.vy) < 0.2) star.vy = (Math.random() - 0.5) * 0.4;
+        }
+
         star.x += star.vx;
         star.y += star.vy;
-        star.alpha += star.dAlpha;
 
+        // Мерцание
+        star.alpha += star.dAlpha;
         if (star.alpha <= 0.1 || star.alpha >= 0.95) {
           star.dAlpha = -star.dAlpha;
         }
 
-        if (star.x < 0) star.x = w;
-        if (star.x > w) star.x = 0;
-        if (star.y < 0) star.y = h;
-        if (star.y > h) star.y = 0;
+        if (star.x < -50) star.x = w + 50;
+        if (star.x > w + 50) star.x = -50;
+        if (star.y < -50) star.y = h + 50;
+        if (star.y > h + 50) star.y = -50;
 
         ctx.beginPath();
-        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-
-        if (star.isGreen) {
-          ctx.fillStyle = `rgba(0, 255, 102, ${star.alpha})`;
-          ctx.shadowBlur = 8;
-          ctx.shadowColor = "rgba(0, 255, 102, 0.8)";
+        if (isAttracting) {
+          // Хвост скорости при падении в сингулярность
+          ctx.moveTo(star.x, star.y);
+          ctx.lineTo(star.x - star.vx * 3, star.y - star.vy * 3);
+          ctx.strokeStyle = star.isGreen ? `rgba(0, 255, 102, ${star.alpha})` : `rgba(255, 255, 255, ${star.alpha})`;
+          ctx.lineWidth = star.radius;
+          ctx.stroke();
         } else {
-          ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha * 0.8})`;
-          ctx.shadowBlur = 4;
-          ctx.shadowColor = "rgba(255, 255, 255, 0.6)";
+          ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+          ctx.fillStyle = star.isGreen ? `rgba(0, 255, 102, ${star.alpha})` : `rgba(255, 255, 255, ${star.alpha * 0.8})`;
+          ctx.fill();
         }
-
-        ctx.fill();
-        ctx.shadowBlur = 0; // Сброс теней
       }
 
       requestAnimationFrame(animateStars);
     }
 
     animateStars();
+
+    /* === МЕХАНИКА УДЕРЖАНИЯ И ФАРМИНГА ТОКЕНОВ (1 СЕК = 1 ТОКЕН) === */
+    let tokens = 1420;
+    let dailyMined = 0;
+    const DAILY_LIMIT = 100;
+
+    let holdStartTime = null;
+    let holdTimerInterval = null;
+
+    const holeTrigger = document.getElementById('holeTrigger');
+    const holdProgress = document.getElementById('holdProgress');
+    const tokenBalanceEl = document.getElementById('token-balance');
+    const limitCounterEl = document.getElementById('limit-counter');
+    const statusHint = document.getElementById('status-hint');
+
+    function startHolding(e) {
+      if (e) e.preventDefault();
+      if (dailyMined >= DAILY_LIMIT) {
+        statusHint.textContent = "Дневной лимит 100 FFT исчерпан!";
+        statusHint.style.color = "#ff4d4d";
+        return;
+      }
+
+      updateHolePosition();
+      isAttracting = true;
+      holeTrigger.classList.add('holding');
+      document.body.classList.add('screen-shake');
+      statusHint.textContent = "Поглощение сингулярности...";
+      statusHint.style.color = "var(--matrix-green)";
+
+      holdStartTime = Date.now();
+
+      holdTimerInterval = setInterval(() => {
+        if (dailyMined >= DAILY_LIMIT) {
+          stopHolding();
+          return;
+        }
+
+        const elapsed = Date.now() - holdStartTime;
+        const progressPercent = (elapsed % 1000) / 10;
+        holdProgress.style.width = progressPercent + '%';
+
+        // Прошла целая секунда -> начисляем токен
+        if (elapsed >= 1000) {
+          tokens += 1;
+          dailyMined += 1;
+          holdStartTime = Date.now();
+
+          tokenBalanceEl.textContent = tokens.toLocaleString();
+          limitCounterEl.textContent = `${dailyMined} / ${DAILY_LIMIT}`;
+
+          createFloatingTokenFx();
+
+          // Тактильная отдача на телефонах
+          if (navigator.vibrate) navigator.vibrate(40);
+
+          if (dailyMined >= DAILY_LIMIT) {
+            stopHolding();
+            statusHint.textContent = "Дневной лимит 100 FFT достигнут!";
+            statusHint.style.color = "var(--matrix-green)";
+          }
+        }
+      }, 50);
+    }
+
+    function stopHolding() {
+      isAttracting = false;
+      holeTrigger.classList.remove('holding');
+      document.body.classList.remove('screen-shake');
+      holdProgress.style.width = '0%';
+      clearInterval(holdTimerInterval);
+
+      if (dailyMined < DAILY_LIMIT) {
+        statusHint.textContent = "Удерживай сферу для поглощения звезд";
+        statusHint.style.color = "var(--text-dim)";
+      }
+    }
+
+    function createFloatingTokenFx() {
+      const fx = document.createElement('div');
+      fx.className = 'floating-token-fx';
+      fx.textContent = '+1 FFT';
+
+      const rect = holeTrigger.getBoundingClientRect();
+      const offsetX = (Math.random() - 0.5) * 60;
+      fx.style.left = (rect.left + rect.width / 2 + offsetX) + 'px';
+      fx.style.top = (rect.top + 20) + 'px';
+
+      document.body.appendChild(fx);
+      setTimeout(() => fx.remove(), 800);
+    }
+
+    // Слушатели событий тача и мыши
+    holeTrigger.addEventListener('touchstart', startHolding, { passive: false });
+    window.addEventListener('touchend', stopHolding);
+    window.addEventListener('touchcancel', stopHolding);
+
+    holeTrigger.addEventListener('mousedown', startHolding);
+    window.addEventListener('mouseup', stopHolding);
   </script>
 </body>
 </html>
+```eof
+
+### Что было изменено и добавлено:
+1. **Объединенная карточка профиля:**
+   - Тариф (`PRO`), оставшийся срок (`50 дн.`) и баланс токенов (`1,420 FFT`) теперь компактно сгруппированы в удобную верхнюю карточку рядом с аватаром `drex`.
+2. **Интерактивная сингулярность («Черная дыра»):**
+   - Расположена прямо по центру под карточкой профиля.
+   - При зажатии пальцем/мышью срабатывает физика гравитации: все летающие звезды с холста на огромной скорости закручиваются и слетаются в центр черной дыры.
+   - Добавлен эффект тряски экрана (`screen-shake`), виброотклик (`navigator.vibrate`) и индикатор прогресса зажатия.
+3. **Механика начисления:**
+   - Каждая **1 секунда** удержания начисляет **+1 токен**, сопровождаясь всплывающим неоновым текстом `+1 FFT`.
+   - Установлен дневной лимит в **100 токенов в день** с динамическим счетчиком `0 / 100 FFT`.
