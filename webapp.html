@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>FastFlash Matrix & Singularity</title>
+  <title>FastFlash Matrix & Games</title>
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     :root {
@@ -12,11 +12,13 @@
       --matrix-green-glow: rgba(0, 255, 102, 0.45);
       --matrix-green-dim: rgba(0, 255, 102, 0.12);
       --matrix-border: rgba(0, 255, 102, 0.28);
-      --card-bg: rgba(7, 14, 10, 0.75);
+      --card-bg: rgba(7, 14, 10, 0.78);
       --text-main: #f0fff4;
       --text-dim: #5c7566;
-      --dock-bg: rgba(6, 12, 9, 0.82);
-      --dock-border: rgba(0, 255, 102, 0.22);
+      --dock-bg: rgba(6, 12, 9, 0.85);
+      --dock-border: rgba(0, 255, 102, 0.24);
+      --danger-red: #ff3344;
+      --danger-glow: rgba(255, 51, 68, 0.5);
     }
 
     * {
@@ -33,11 +35,11 @@
       color: var(--text-main);
       min-height: 100vh;
       overflow-x: hidden;
-      padding-bottom: 125px;
+      padding-bottom: 120px;
       position: relative;
     }
 
-    /* Тряска экрана при зажатии черной дыры */
+    /* Тряска экрана */
     body.screen-shake {
       animation: shake 0.08s infinite ease-in-out alternate;
     }
@@ -47,6 +49,7 @@
       100% { transform: translate(1.5px, -1.2px) rotate(-0.1deg); }
     }
 
+    /* Canvas звезд */
     #space-canvas {
       position: fixed;
       top: 0;
@@ -63,11 +66,10 @@
       z-index: 50;
       text-align: center;
       padding: 14px 16px;
-      background: rgba(5, 8, 7, 0.85);
+      background: rgba(5, 8, 7, 0.88);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--matrix-border);
-      box-shadow: 0 4px 20px rgba(0, 255, 102, 0.05);
     }
 
     .app-title {
@@ -83,7 +85,7 @@
       color: var(--matrix-green);
       font-family: monospace;
       margin-top: 2px;
-      opacity: 0.8;
+      opacity: 0.85;
     }
 
     .container {
@@ -96,7 +98,7 @@
 
     .tab-content {
       display: none;
-      animation: tabFadeIn 0.25s ease-out;
+      animation: tabFadeIn 0.22s ease-out;
     }
 
     .tab-content.active {
@@ -104,7 +106,7 @@
     }
 
     @keyframes tabFadeIn {
-      from { opacity: 0; transform: translateY(8px); }
+      from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -119,7 +121,7 @@
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(0, 255, 102, 0.03);
     }
 
-    /* Верхняя объединенная карточка профиля */
+    /* Профиль */
     .profile-header-top {
       display: flex;
       align-items: center;
@@ -157,7 +159,6 @@
       font-family: monospace;
     }
 
-    /* Сетка статусов: Тариф, Дни, Токены */
     .profile-stats-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1.2fr;
@@ -214,12 +215,12 @@
       color: var(--matrix-green);
     }
 
-    /* Блок Черной Дыры / Фарминга Токенов */
+    /* Сингулярность токенов */
     .hole-zone-card {
       text-align: center;
       position: relative;
       overflow: hidden;
-      padding: 24px 16px;
+      padding: 22px 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -227,8 +228,8 @@
 
     .hole-interactive-container {
       position: relative;
-      width: 190px;
-      height: 190px;
+      width: 180px;
+      height: 180px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -237,23 +238,22 @@
       touch-action: none;
     }
 
-    /* Визуальный портал сингулярности */
     .hole-core {
-      width: 80px;
-      height: 80px;
+      width: 76px;
+      height: 76px;
       border-radius: 50%;
       background: radial-gradient(circle, #020403 40%, #000000 100%);
       box-shadow: 0 0 35px rgba(0, 255, 102, 0.4), inset 0 0 20px #000;
       position: relative;
       z-index: 3;
       transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      border: 1px solid rgba(0, 255, 102, 0.35);
+      border: 1.5px solid rgba(0, 255, 102, 0.35);
     }
 
     .hole-pulse-ring {
       position: absolute;
-      width: 130px;
-      height: 130px;
+      width: 125px;
+      height: 125px;
       border-radius: 50%;
       border: 1.5px dashed rgba(0, 255, 102, 0.35);
       animation: spinHole 8s linear infinite;
@@ -262,8 +262,8 @@
 
     .hole-pulse-ring-outer {
       position: absolute;
-      width: 175px;
-      height: 175px;
+      width: 170px;
+      height: 170px;
       border-radius: 50%;
       border: 1px solid rgba(0, 255, 102, 0.15);
       animation: spinHoleReverse 12s linear infinite;
@@ -280,10 +280,9 @@
       to { transform: rotate(0deg); }
     }
 
-    /* Реакция на удержание */
     .hole-interactive-container.holding .hole-core {
       transform: scale(0.85);
-      box-shadow: 0 0 50px rgba(0, 255, 102, 0.9), inset 0 0 25px rgba(0, 255, 102, 0.8);
+      box-shadow: 0 0 55px rgba(0, 255, 102, 0.9), inset 0 0 25px rgba(0, 255, 102, 0.8);
       border-color: var(--matrix-green);
     }
 
@@ -292,12 +291,6 @@
       border-color: var(--matrix-green);
     }
 
-    .hole-interactive-container.holding .hole-pulse-ring-outer {
-      animation-duration: 2s;
-      border-color: rgba(0, 255, 102, 0.5);
-    }
-
-    /* Прогресс-бар зажатия секунды */
     .hold-progress-bar-bg {
       width: 100%;
       max-width: 240px;
@@ -337,7 +330,6 @@
       margin-top: 10px;
     }
 
-    /* Всплывающий токен при получении */
     .floating-token-fx {
       position: absolute;
       color: var(--matrix-green);
@@ -347,7 +339,7 @@
       pointer-events: none;
       animation: floatUp 0.8s ease-out forwards;
       text-shadow: 0 0 10px var(--matrix-green-glow);
-      z-index: 10;
+      z-index: 100;
     }
 
     @keyframes floatUp {
@@ -355,7 +347,7 @@
       100% { opacity: 0; transform: translateY(-50px) scale(1.4); }
     }
 
-    /* Кнопки и формы */
+    /* Общие кнопки */
     .matrix-btn {
       width: 100%;
       padding: 14px;
@@ -382,6 +374,17 @@
       background: rgba(0, 255, 102, 0.25);
     }
 
+    .matrix-btn.danger {
+      border-color: var(--danger-red);
+      color: var(--danger-red);
+      background: rgba(255, 51, 68, 0.12);
+      box-shadow: 0 0 16px rgba(255, 51, 68, 0.2);
+    }
+
+    .matrix-btn.danger:active {
+      background: rgba(255, 51, 68, 0.25);
+    }
+
     .card-title {
       font-size: 14px;
       font-weight: 800;
@@ -389,7 +392,7 @@
       text-align: center;
       color: var(--matrix-green);
       text-transform: uppercase;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       text-shadow: 0 0 8px var(--matrix-green-glow);
     }
 
@@ -425,7 +428,7 @@
       padding: 13px;
       text-align: center;
       font-family: monospace;
-      font-size: 12.5px;
+      font-size: 12px;
       color: var(--matrix-green);
       word-break: break-all;
       margin: 16px 0 6px 0;
@@ -437,78 +440,205 @@
       background: rgba(0, 0, 0, 0.5);
       border: 1.5px solid var(--matrix-border);
       color: var(--matrix-green);
-      padding: 14px;
+      padding: 12px;
       border-radius: 12px;
       font-size: 14px;
       font-family: monospace;
       outline: none;
-      margin-top: 10px;
     }
 
-    .matrix-input:focus {
-      border-color: var(--matrix-green);
-      box-shadow: 0 0 10px var(--matrix-green-glow);
-    }
-
-    /* Мини-игры */
-    .game-card {
-      position: relative;
-      background: linear-gradient(145deg, rgba(8, 20, 14, 0.8) 0%, rgba(5, 10, 8, 0.9) 100%);
-      border: 1px solid var(--matrix-border);
-      border-radius: 18px;
-      padding: 16px;
+    /* === СТИЛИ ИГРОВОГО ХАБА И ГЕЙМПЛЕЯ === */
+    .game-nav-bar {
+      display: flex;
+      gap: 8px;
       margin-bottom: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      overflow: hidden;
     }
 
-    .game-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .game-meta {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .game-icon-badge {
-      width: 44px;
-      height: 44px;
+    .game-pill-btn {
+      flex: 1;
+      padding: 10px 4px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--matrix-border);
       border-radius: 12px;
+      color: var(--text-dim);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .game-pill-btn.active {
+      color: #000;
+      background: var(--matrix-green);
+      box-shadow: 0 0 15px var(--matrix-green-glow);
+      border-color: var(--matrix-green);
+    }
+
+    .game-screen {
+      display: none;
+    }
+
+    .game-screen.active {
+      display: block;
+    }
+
+    .bet-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .bet-btn-adjust {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
       background: rgba(0, 255, 102, 0.1);
       border: 1px solid var(--matrix-border);
+      color: var(--matrix-green);
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+
+    /* Crash Game */
+    .crash-canvas-box {
+      width: 100%;
+      height: 180px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--matrix-border);
+      border-radius: 14px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .crash-chart-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .crash-multiplier-text {
+      position: relative;
+      z-index: 5;
+      font-size: 38px;
+      font-weight: 900;
+      font-family: monospace;
       color: var(--matrix-green);
+      text-shadow: 0 0 20px var(--matrix-green-glow);
     }
 
-    .game-name {
-      font-size: 16px;
-      font-weight: 800;
-      color: #fff;
+    .crash-multiplier-text.crashed {
+      color: var(--danger-red);
+      text-shadow: 0 0 20px var(--danger-glow);
     }
 
-    .game-genre {
+    /* Mines Game */
+    .mines-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin: 14px 0;
+    }
+
+    .mine-cell {
+      aspect-ratio: 1;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(0, 255, 102, 0.2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .mine-cell:active {
+      transform: scale(0.92);
+    }
+
+    .mine-cell.gem {
+      background: rgba(0, 255, 102, 0.25);
+      border-color: var(--matrix-green);
+      box-shadow: inset 0 0 10px var(--matrix-green-glow);
+    }
+
+    .mine-cell.bomb {
+      background: rgba(255, 51, 68, 0.3);
+      border-color: var(--danger-red);
+      box-shadow: inset 0 0 10px var(--danger-glow);
+    }
+
+    /* Tower / Лесенка */
+    .tower-board {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin: 14px 0;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(0, 255, 102, 0.15);
+    }
+
+    .tower-row {
+      display: grid;
+      grid-template-columns: 50px 1fr 1fr 1fr;
+      gap: 6px;
+      align-items: center;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .tower-row.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .tower-row.passed {
+      opacity: 0.85;
+      pointer-events: none;
+    }
+
+    .tower-row-mult {
       font-size: 11px;
-      color: var(--text-dim);
+      font-weight: 800;
+      color: var(--matrix-green);
       font-family: monospace;
     }
 
-    .game-stat {
-      font-family: monospace;
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--matrix-green);
-      background: rgba(0,0,0,0.4);
-      padding: 4px 8px;
+    .tower-step-btn {
+      height: 38px;
       border-radius: 8px;
-      border: 1px solid rgba(0,255,102,0.15);
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--matrix-border);
+      color: var(--matrix-green);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      transition: all 0.15s;
+    }
+
+    .tower-step-btn.safe {
+      background: rgba(0, 255, 102, 0.3);
+      border-color: var(--matrix-green);
+    }
+
+    .tower-step-btn.fail {
+      background: rgba(255, 51, 68, 0.3);
+      border-color: var(--danger-red);
     }
 
     /* Floating Dock */
@@ -534,8 +664,7 @@
       display: flex;
       align-items: center;
       gap: 4px;
-      box-shadow: 0 16px 45px rgba(0, 0, 0, 0.8),
-                  0 0 1px rgba(0, 255, 102, 0.4) inset;
+      box-shadow: 0 16px 45px rgba(0, 0, 0, 0.8), 0 0 1px rgba(0, 255, 102, 0.4) inset;
     }
 
     .dock-btn {
@@ -585,7 +714,6 @@
 </head>
 <body>
 
-  <!-- Canvas с мерцающими и слетающимися звездами -->
   <canvas id="space-canvas"></canvas>
 
   <header class="app-header">
@@ -594,9 +722,8 @@
   </header>
 
   <div class="container">
-    <!-- ВКЛАДКА 1: ПРОФИЛЬ + СИНГУЛЯРНОСТЬ -->
+    <!-- ВКЛАДКА 1: ПРОФИЛЬ -->
     <section id="tab-profile" class="tab-content active">
-      <!-- Объединенная верхняя карта профиля -->
       <div class="matrix-card">
         <div class="profile-header-top">
           <div class="matrix-avatar">D</div>
@@ -627,10 +754,9 @@
         <button class="matrix-btn">Продлить подписку</button>
       </div>
 
-      <!-- Черная дыра / фарминг токенов зажатием -->
       <div class="matrix-card hole-zone-card">
         <div class="card-title" style="margin-bottom: 4px;">Сингулярность токенов</div>
-        <div class="hold-hint" id="status-hint">Удерживай сферу для поглощения звезд</div>
+        <div class="hold-hint" id="status-hint">Зажми сферу для поглощения звезд</div>
 
         <div class="hole-interactive-container" id="holeTrigger">
           <div class="hole-pulse-ring-outer"></div>
@@ -644,7 +770,7 @@
 
         <div class="daily-limit-badge">
           <i data-lucide="zap" style="width: 14px; height: 14px;"></i>
-          <span>Дневной лимит: <strong id="limit-counter">0 / 100</strong> FFT</span>
+          <span>Дневной фарм: <strong id="limit-counter">0 / 100</strong> FFT</span>
         </div>
       </div>
     </section>
@@ -664,52 +790,70 @@
 
     <!-- ВКЛАДКА 3: МИНИ-ИГРЫ -->
     <section id="tab-games" class="tab-content">
-      <div class="matrix-card" style="padding-bottom: 10px;">
-        <div class="card-title">Игровая зона FastFlash</div>
-        
-        <!-- Краш -->
-        <div class="game-card">
-          <div class="game-header">
-            <div class="game-meta">
-              <div class="game-icon-badge"><i data-lucide="trending-up"></i></div>
-              <div>
-                <div class="game-name">CRASH</div>
-                <div class="game-genre">Забери до обвала графика</div>
-              </div>
-            </div>
-            <div class="game-stat">х99.00</div>
-          </div>
-          <button class="matrix-btn" style="padding: 10px; font-size: 12px;">Играть за токены</button>
-        </div>
+      <!-- Переключатель игр -->
+      <div class="game-nav-bar">
+        <div class="game-pill-btn active" onclick="switchGame('crash', this)">CRASH</div>
+        <div class="game-pill-btn" onclick="switchGame('mines', this)">MINES</div>
+        <div class="game-pill-btn" onclick="switchGame('tower', this)">TOWER</div>
+      </div>
 
-        <!-- Мины -->
-        <div class="game-card">
-          <div class="game-header">
-            <div class="game-meta">
-              <div class="game-icon-badge"><i data-lucide="bomb"></i></div>
-              <div>
-                <div class="game-name">MINES</div>
-                <div class="game-genre">Поле 5х5 // Обезвредь ловушки</div>
-              </div>
-            </div>
-            <div class="game-stat">1-24 Мины</div>
+      <!-- 1. ИГРА КРАШ -->
+      <div id="game-crash" class="game-screen active">
+        <div class="matrix-card">
+          <div class="card-title">CRASH MATRIX</div>
+          <div class="crash-canvas-box">
+            <canvas id="crash-canvas" class="crash-chart-canvas"></canvas>
+            <div id="crash-mult" class="crash-multiplier-text">1.00x</div>
           </div>
-          <button class="matrix-btn" style="padding: 10px; font-size: 12px;">Играть за токены</button>
-        </div>
 
-        <!-- Лесенка (Tower) -->
-        <div class="game-card">
-          <div class="game-header">
-            <div class="game-meta">
-              <div class="game-icon-badge"><i data-lucide="layers"></i></div>
-              <div>
-                <div class="game-name">ТOWER (ЛЕСЕНКА)</div>
-                <div class="game-genre">Поднимайся выше за иксами</div>
-              </div>
-            </div>
-            <div class="game-stat">х500.0</div>
+          <div class="bet-bar">
+            <button class="bet-btn-adjust" onclick="adjustBet('crash', -10)">-</button>
+            <input type="number" id="crash-bet" class="matrix-input" style="text-align: center; font-weight: 800;" value="50" min="10" step="10">
+            <button class="bet-btn-adjust" onclick="adjustBet('crash', 10)">+</button>
           </div>
-          <button class="matrix-btn" style="padding: 10px; font-size: 12px;">Играть за токены</button>
+
+          <button id="crash-action-btn" class="matrix-btn" onclick="handleCrashAction()">Старт (50 FFT)</button>
+        </div>
+      </div>
+
+      <!-- 2. ИГРА МИНЫ -->
+      <div id="game-mines" class="game-screen">
+        <div class="matrix-card">
+          <div class="card-title">MINES // 5x5</div>
+          <div style="display:flex; justify-content: space-between; font-size: 12px; color: var(--text-dim); font-family: monospace;">
+            <span>Мины: <strong>3</strong></span>
+            <span>Множитель: <strong id="mines-mult" style="color:var(--matrix-green)">1.00x</strong></span>
+          </div>
+
+          <div class="mines-grid" id="mines-grid"></div>
+
+          <div class="bet-bar">
+            <button class="bet-btn-adjust" onclick="adjustBet('mines', -10)">-</button>
+            <input type="number" id="mines-bet" class="matrix-input" style="text-align: center; font-weight: 800;" value="50" min="10" step="10">
+            <button class="bet-btn-adjust" onclick="adjustBet('mines', 10)">+</button>
+          </div>
+
+          <button id="mines-action-btn" class="matrix-btn" onclick="handleMinesAction()">Начать игру</button>
+        </div>
+      </div>
+
+      <!-- 3. ИГРА ЛЕСЕНКА -->
+      <div id="game-tower" class="game-screen">
+        <div class="matrix-card">
+          <div class="card-title">TOWER // ЛЕСЕНКА</div>
+          <div style="text-align:center; font-size:12px; color:var(--text-dim); margin-bottom:8px;">
+            Текущий выигрыш: <strong id="tower-current-win" style="color:var(--matrix-green)">0 FFT</strong>
+          </div>
+
+          <div class="tower-board" id="tower-board"></div>
+
+          <div class="bet-bar">
+            <button class="bet-btn-adjust" onclick="adjustBet('tower', -10)">-</button>
+            <input type="number" id="tower-bet" class="matrix-input" style="text-align: center; font-weight: 800;" value="50" min="10" step="10">
+            <button class="bet-btn-adjust" onclick="adjustBet('tower', 10)">+</button>
+          </div>
+
+          <button id="tower-action-btn" class="matrix-btn" onclick="handleTowerAction()">Взойти на башню</button>
         </div>
       </div>
     </section>
@@ -774,18 +918,94 @@
   <script>
     lucide.createIcons();
 
+    /* === СИНТЕЗАТОР ЗВУКОВ (Web Audio API) === */
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playSound(type) {
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      if (type === 'token') {
+        // Звук получения токена: неоновый колокольчик
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, now); // D5
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.15); // A5
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+        osc.start(now);
+        osc.stop(now + 0.35);
+      } else if (type === 'hum') {
+        // Фоновый гул сингулярности
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(65, now);
+        osc.frequency.linearRampToValueAtTime(110, now + 0.1);
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.linearRampToValueAtTime(0.001, now + 0.1);
+        osc.start(now);
+        osc.stop(now + 0.1);
+      } else if (type === 'click') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(300, now);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+        osc.start(now);
+        osc.stop(now + 0.05);
+      } else if (type === 'win') {
+        // Победный аккорд
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+          const o = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          o.connect(g);
+          g.connect(audioCtx.destination);
+          o.type = 'sine';
+          o.frequency.setValueAtTime(freq, now + idx * 0.06);
+          g.gain.setValueAtTime(0.15, now + idx * 0.06);
+          g.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.3);
+          o.start(now + idx * 0.06);
+          o.stop(now + idx * 0.06 + 0.3);
+        });
+      } else if (type === 'boom') {
+        // Взрыв краша или мины
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.exponentialRampToValueAtTime(30, now + 0.3);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+        osc.start(now);
+        osc.stop(now + 0.35);
+      }
+    }
+
+    /* === ПЕРЕКЛЮЧЕНИЕ ТАБОВ === */
     function switchTab(tabId, el) {
+      playSound('click');
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('.dock-btn').forEach(btn => btn.classList.remove('active'));
       document.getElementById('tab-' + tabId).classList.add('active');
       el.classList.add('active');
     }
 
-    /* === СИСТЕМА ЧАСТИЦ ЗВЕЗД + СИНГУЛЯРНОСТЬ === */
+    function switchGame(gameId, el) {
+      playSound('click');
+      document.querySelectorAll('.game-screen').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.game-pill-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('game-' + gameId).classList.add('active');
+      el.classList.add('active');
+      if (gameId === 'crash') initCrashCanvas();
+    }
+
+    /* === СИСТЕМА ЧАСТИЦ ЗВЕЗД И СИНГУЛЯРНОСТИ === */
     const canvas = document.getElementById('space-canvas');
     const ctx = canvas.getContext('2d');
-
     let w, h;
+
     function resize() {
       w = canvas.width = window.innerWidth;
       h = canvas.height = window.innerHeight;
@@ -795,14 +1015,11 @@
 
     const STAR_COUNT = 130;
     const stars = [];
-
     let isAttracting = false;
     let singularityX = w / 2;
     let singularityY = h / 2;
 
-    for (let i = 0; i < STAR_COUNT; i++) {
-      stars.push(createStar());
-    }
+    for (let i = 0; i < STAR_COUNT; i++) stars.push(createStar());
 
     function createStar() {
       return {
@@ -813,17 +1030,16 @@
         vy: (Math.random() - 0.5) * 0.35,
         alpha: Math.random(),
         dAlpha: (Math.random() * 0.02 + 0.005) * (Math.random() > 0.5 ? 1 : -1),
-        isGreen: Math.random() > 0.25,
-        tailLength: 0
+        isGreen: Math.random() > 0.25
       };
     }
 
-    function updateHolePosition() {
+    function updateHolePos() {
       const el = document.getElementById('holeTrigger');
       if (el) {
-        const rect = el.getBoundingClientRect();
-        singularityX = rect.left + rect.width / 2;
-        singularityY = rect.top + rect.height / 2;
+        const r = el.getBoundingClientRect();
+        singularityX = r.left + r.width / 2;
+        singularityY = r.top + r.height / 2;
       }
     }
 
@@ -832,13 +1048,11 @@
 
       for (let star of stars) {
         if (isAttracting) {
-          // Вектор к сингулярности
           const dx = singularityX - star.x;
           const dy = singularityY - star.y;
           const dist = Math.hypot(dx, dy);
 
           if (dist < 22) {
-            // Поглощение черной дырой - возрождаем на краю экрана
             const angle = Math.random() * Math.PI * 2;
             const spawnRadius = Math.max(w, h) * 0.7;
             star.x = singularityX + Math.cos(angle) * spawnRadius;
@@ -846,17 +1060,13 @@
             star.vx = 0;
             star.vy = 0;
           } else {
-            // Ускорение в центр (гравитационное притяжение)
-            const force = Math.min(18, 250 / Math.max(dist, 40));
+            const force = Math.min(18, 260 / Math.max(dist, 40));
             star.vx += (dx / dist) * force * 0.4;
             star.vy += (dy / dist) * force * 0.4;
-
-            // Замедление трением
             star.vx *= 0.94;
             star.vy *= 0.94;
           }
         } else {
-          // Спокойное парение в космосе
           star.vx *= 0.98;
           star.vy *= 0.98;
           if (Math.abs(star.vx) < 0.2) star.vx = (Math.random() - 0.5) * 0.4;
@@ -865,12 +1075,8 @@
 
         star.x += star.vx;
         star.y += star.vy;
-
-        // Мерцание
         star.alpha += star.dAlpha;
-        if (star.alpha <= 0.1 || star.alpha >= 0.95) {
-          star.dAlpha = -star.dAlpha;
-        }
+        if (star.alpha <= 0.1 || star.alpha >= 0.95) star.dAlpha = -star.dAlpha;
 
         if (star.x < -50) star.x = w + 50;
         if (star.x > w + 50) star.x = -50;
@@ -879,7 +1085,6 @@
 
         ctx.beginPath();
         if (isAttracting) {
-          // Хвост скорости при падении в сингулярность
           ctx.moveTo(star.x, star.y);
           ctx.lineTo(star.x - star.vx * 3, star.y - star.vy * 3);
           ctx.strokeStyle = star.isGreen ? `rgba(0, 255, 102, ${star.alpha})` : `rgba(255, 255, 255, ${star.alpha})`;
@@ -891,17 +1096,14 @@
           ctx.fill();
         }
       }
-
       requestAnimationFrame(animateStars);
     }
-
     animateStars();
 
-    /* === МЕХАНИКА УДЕРЖАНИЯ И ФАРМИНГА ТОКЕНОВ (1 СЕК = 1 ТОКЕН) === */
+    /* === БАЛАНС И ФАРМИНГ ТОКЕНОВ С ЗВУКОМ === */
     let tokens = 1420;
     let dailyMined = 0;
     const DAILY_LIMIT = 100;
-
     let holdStartTime = null;
     let holdTimerInterval = null;
 
@@ -911,21 +1113,24 @@
     const limitCounterEl = document.getElementById('limit-counter');
     const statusHint = document.getElementById('status-hint');
 
+    function updateBalanceUI() {
+      tokenBalanceEl.textContent = tokens.toLocaleString();
+    }
+
     function startHolding(e) {
       if (e) e.preventDefault();
       if (dailyMined >= DAILY_LIMIT) {
-        statusHint.textContent = "Дневной лимит 100 FFT исчерпан!";
-        statusHint.style.color = "#ff4d4d";
+        statusHint.textContent = "Лимит 100 FFT исчерпан!";
+        statusHint.style.color = "var(--danger-red)";
         return;
       }
 
-      updateHolePosition();
+      updateHolePos();
       isAttracting = true;
       holeTrigger.classList.add('holding');
       document.body.classList.add('screen-shake');
       statusHint.textContent = "Поглощение сингулярности...";
       statusHint.style.color = "var(--matrix-green)";
-
       holdStartTime = Date.now();
 
       holdTimerInterval = setInterval(() => {
@@ -934,22 +1139,20 @@
           return;
         }
 
+        playSound('hum');
         const elapsed = Date.now() - holdStartTime;
-        const progressPercent = (elapsed % 1000) / 10;
-        holdProgress.style.width = progressPercent + '%';
+        holdProgress.style.width = ((elapsed % 1000) / 10) + '%';
 
-        // Прошла целая секунда -> начисляем токен
         if (elapsed >= 1000) {
           tokens += 1;
           dailyMined += 1;
           holdStartTime = Date.now();
 
-          tokenBalanceEl.textContent = tokens.toLocaleString();
+          updateBalanceUI();
           limitCounterEl.textContent = `${dailyMined} / ${DAILY_LIMIT}`;
-
           createFloatingTokenFx();
+          playSound('token');
 
-          // Тактильная отдача на телефонах
           if (navigator.vibrate) navigator.vibrate(40);
 
           if (dailyMined >= DAILY_LIMIT) {
@@ -958,7 +1161,7 @@
             statusHint.style.color = "var(--matrix-green)";
           }
         }
-      }, 50);
+      }, 60);
     }
 
     function stopHolding() {
@@ -969,7 +1172,7 @@
       clearInterval(holdTimerInterval);
 
       if (dailyMined < DAILY_LIMIT) {
-        statusHint.textContent = "Удерживай сферу для поглощения звезд";
+        statusHint.textContent = "Зажми сферу для поглощения звезд";
         statusHint.style.color = "var(--text-dim)";
       }
     }
@@ -978,35 +1181,355 @@
       const fx = document.createElement('div');
       fx.className = 'floating-token-fx';
       fx.textContent = '+1 FFT';
-
-      const rect = holeTrigger.getBoundingClientRect();
-      const offsetX = (Math.random() - 0.5) * 60;
-      fx.style.left = (rect.left + rect.width / 2 + offsetX) + 'px';
-      fx.style.top = (rect.top + 20) + 'px';
-
+      const r = holeTrigger.getBoundingClientRect();
+      fx.style.left = (r.left + r.width / 2 + (Math.random() - 0.5) * 50) + 'px';
+      fx.style.top = (r.top + 20) + 'px';
       document.body.appendChild(fx);
       setTimeout(() => fx.remove(), 800);
     }
 
-    // Слушатели событий тача и мыши
     holeTrigger.addEventListener('touchstart', startHolding, { passive: false });
     window.addEventListener('touchend', stopHolding);
     window.addEventListener('touchcancel', stopHolding);
-
     holeTrigger.addEventListener('mousedown', startHolding);
     window.addEventListener('mouseup', stopHolding);
+
+    function adjustBet(game, delta) {
+      playSound('click');
+      const input = document.getElementById(game + '-bet');
+      let val = parseInt(input.value) || 0;
+      val = Math.max(10, val + delta);
+      input.value = val;
+      if (game === 'crash' && !isCrashRunning) {
+        document.getElementById('crash-action-btn').textContent = `Старт (${val} FFT)`;
+      }
+    }
+
+    /* === ГЕЙМПЛЕЙ 1: CRASH === */
+    let crashCanvas, crashCtx;
+    let isCrashRunning = false;
+    let crashMultiplier = 1.00;
+    let crashTargetPoint = 1.00;
+    let crashAnimFrame = null;
+    let crashBet = 50;
+
+    function initCrashCanvas() {
+      crashCanvas = document.getElementById('crash-canvas');
+      crashCtx = crashCanvas.getContext('2d');
+      crashCanvas.width = crashCanvas.offsetWidth;
+      crashCanvas.height = crashCanvas.offsetHeight;
+      drawCrashGraph(0, 1.0);
+    }
+
+    function drawCrashGraph(progress, mult) {
+      if (!crashCtx) return;
+      const w = crashCanvas.width;
+      const h = crashCanvas.height;
+      crashCtx.clearRect(0, 0, w, h);
+
+      crashCtx.strokeStyle = 'rgba(0, 255, 102, 0.15)';
+      crashCtx.lineWidth = 1;
+      for (let y = 30; y < h; y += 40) {
+        crashCtx.beginPath();
+        crashCtx.moveTo(0, y);
+        crashCtx.lineTo(w, y);
+        crashCtx.stroke();
+      }
+
+      if (progress > 0) {
+        crashCtx.beginPath();
+        crashCtx.moveTo(0, h);
+        const endX = Math.min(w, progress * w);
+        const endY = Math.max(20, h - (mult - 1) * 35);
+        crashCtx.quadraticCurveTo(endX * 0.4, h, endX, endY);
+        crashCtx.strokeStyle = mult < crashTargetPoint || !isCrashRunning ? '#00ff66' : '#ff3344';
+        crashCtx.lineWidth = 3;
+        crashCtx.shadowBlur = 10;
+        crashCtx.shadowColor = crashCtx.strokeStyle;
+        crashCtx.stroke();
+        crashCtx.shadowBlur = 0;
+      }
+    }
+
+    function handleCrashAction() {
+      const btn = document.getElementById('crash-action-btn');
+      const multText = document.getElementById('crash-mult');
+      crashBet = parseInt(document.getElementById('crash-bet').value) || 50;
+
+      if (!isCrashRunning) {
+        if (tokens < crashBet) {
+          alert('Недостаточно токенов!');
+          return;
+        }
+        tokens -= crashBet;
+        updateBalanceUI();
+        playSound('click');
+
+        isCrashRunning = true;
+        crashMultiplier = 1.00;
+        multText.classList.remove('crashed');
+        multText.textContent = '1.00x';
+        btn.textContent = `Забрать (${crashBet} FFT)`;
+        btn.classList.add('danger');
+
+        // Расчет точки краша
+        const rand = Math.random();
+        crashTargetPoint = rand < 0.15 ? 1.05 : (1.1 + Math.random() * 4.5);
+
+        let startTime = Date.now();
+
+        function step() {
+          const timeElapsed = (Date.now() - startTime) / 1000;
+          crashMultiplier = 1.00 + (timeElapsed * 0.3) + Math.pow(timeElapsed * 0.35, 2);
+
+          if (crashMultiplier >= crashTargetPoint) {
+            // КРАШ
+            isCrashRunning = false;
+            multText.textContent = 'CRASH ' + crashTargetPoint.toFixed(2) + 'x';
+            multText.classList.add('crashed');
+            btn.textContent = `Старт (${crashBet} FFT)`;
+            btn.classList.remove('danger');
+            playSound('boom');
+            drawCrashGraph(1, crashTargetPoint);
+            return;
+          }
+
+          multText.textContent = crashMultiplier.toFixed(2) + 'x';
+          btn.textContent = `Забрать (${Math.floor(crashBet * crashMultiplier)} FFT)`;
+          drawCrashGraph(timeElapsed / 5, crashMultiplier);
+
+          crashAnimFrame = requestAnimationFrame(step);
+        }
+        crashAnimFrame = requestAnimationFrame(step);
+      } else {
+        // Успешный вывод токенов
+        isCrashRunning = false;
+        cancelAnimationFrame(crashAnimFrame);
+        const win = Math.floor(crashBet * crashMultiplier);
+        tokens += win;
+        updateBalanceUI();
+        playSound('win');
+        multText.textContent = 'ВЫИГРЫШ ' + crashMultiplier.toFixed(2) + 'x';
+        btn.textContent = `Старт (${crashBet} FFT)`;
+        btn.classList.remove('danger');
+      }
+    }
+
+    /* === ГЕЙМПЛЕЙ 2: MINES === */
+    let minesActive = false;
+    let minesBet = 50;
+    let mineCount = 3;
+    let minePositions = [];
+    let openedCells = 0;
+    let currentMinesMult = 1.0;
+
+    function buildMinesGrid() {
+      const grid = document.getElementById('mines-grid');
+      grid.innerHTML = '';
+      for (let i = 0; i < 25; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'mine-cell';
+        cell.dataset.index = i;
+        cell.innerHTML = '<i data-lucide="shield" style="width:14px; opacity:0.3;"></i>';
+        cell.onclick = () => onCellClick(i, cell);
+        grid.appendChild(cell);
+      }
+      lucide.createIcons();
+    }
+    buildMinesGrid();
+
+    function handleMinesAction() {
+      const btn = document.getElementById('mines-action-btn');
+      minesBet = parseInt(document.getElementById('mines-bet').value) || 50;
+
+      if (!minesActive) {
+        if (tokens < minesBet) {
+          alert('Недостаточно токенов!');
+          return;
+        }
+        tokens -= minesBet;
+        updateBalanceUI();
+        playSound('click');
+
+        minesActive = true;
+        openedCells = 0;
+        currentMinesMult = 1.0;
+        document.getElementById('mines-mult').textContent = '1.00x';
+        btn.textContent = `Забрать (${minesBet} FFT)`;
+        btn.classList.add('danger');
+
+        // Раскладка 3 мин
+        minePositions = [];
+        while (minePositions.length < mineCount) {
+          const r = Math.floor(Math.random() * 25);
+          if (!minePositions.includes(r)) minePositions.push(r);
+        }
+        buildMinesGrid();
+      } else {
+        // Забрать токены
+        minesActive = false;
+        const win = Math.floor(minesBet * currentMinesMult);
+        tokens += win;
+        updateBalanceUI();
+        playSound('win');
+        btn.textContent = 'Начать игру';
+        btn.classList.remove('danger');
+        revealAllMines();
+      }
+    }
+
+    function onCellClick(idx, cell) {
+      if (!minesActive || cell.classList.contains('gem') || cell.classList.contains('bomb')) return;
+
+      if (minePositions.includes(idx)) {
+        // Попал на мину
+        cell.classList.add('bomb');
+        cell.innerHTML = '💣';
+        minesActive = false;
+        playSound('boom');
+        document.getElementById('mines-action-btn').textContent = 'Взрыв! Начать снова';
+        document.getElementById('mines-action-btn').classList.remove('danger');
+        revealAllMines();
+      } else {
+        // Нашел кристалл
+        cell.classList.add('gem');
+        cell.innerHTML = '💎';
+        openedCells++;
+        currentMinesMult = +(currentMinesMult * 1.25).toFixed(2);
+        document.getElementById('mines-mult').textContent = currentMinesMult.toFixed(2) + 'x';
+        document.getElementById('mines-action-btn').textContent = `Забрать (${Math.floor(minesBet * currentMinesMult)} FFT)`;
+        playSound('token');
+      }
+    }
+
+    function revealAllMines() {
+      document.querySelectorAll('.mine-cell').forEach((c, idx) => {
+        if (minePositions.includes(idx)) {
+          c.classList.add('bomb');
+          c.innerHTML = '💣';
+        }
+      });
+    }
+
+    /* === ГЕЙМПЛЕЙ 3: TOWER (ЛЕСЕНКА) === */
+    let towerActive = false;
+    let towerBet = 50;
+    let towerFloor = 0;
+    const TOWER_FLOORS = 5;
+    const towerMultipliers = [1.3, 1.8, 2.5, 3.8, 6.0];
+    let towerTraps = [];
+
+    function buildTowerBoard() {
+      const board = document.getElementById('tower-board');
+      board.innerHTML = '';
+      for (let f = TOWER_FLOORS - 1; f >= 0; f--) {
+        const row = document.createElement('div');
+        row.className = 'tower-row';
+        row.id = 'tower-row-' + f;
+
+        const mult = document.createElement('div');
+        mult.className = 'tower-row-mult';
+        mult.textContent = towerMultipliers[f] + 'x';
+        row.appendChild(mult);
+
+        for (let b = 0; b < 3; b++) {
+          const btn = document.createElement('button');
+          btn.className = 'tower-step-btn';
+          btn.innerHTML = '🔒';
+          btn.onclick = () => onTowerStep(f, b, btn);
+          row.appendChild(btn);
+        }
+        board.appendChild(row);
+      }
+    }
+    buildTowerBoard();
+
+    function handleTowerAction() {
+      const btn = document.getElementById('tower-action-btn');
+      towerBet = parseInt(document.getElementById('tower-bet').value) || 50;
+
+      if (!towerActive) {
+        if (tokens < towerBet) {
+          alert('Недостаточно токенов!');
+          return;
+        }
+        tokens -= towerBet;
+        updateBalanceUI();
+        playSound('click');
+
+        towerActive = true;
+        towerFloor = 0;
+        buildTowerBoard();
+
+        // 1 мина на каждом этаже
+        towerTraps = [];
+        for (let f = 0; f < TOWER_FLOORS; f++) {
+          towerTraps.push(Math.floor(Math.random() * 3));
+        }
+
+        updateTowerFloorUI();
+        btn.textContent = `Забрать (${towerBet} FFT)`;
+        btn.classList.add('danger');
+        document.getElementById('tower-current-win').textContent = '0 FFT';
+      } else {
+        // Забрать выигрыш
+        towerActive = false;
+        const mult = towerFloor > 0 ? towerMultipliers[towerFloor - 1] : 1;
+        const win = Math.floor(towerBet * mult);
+        tokens += win;
+        updateBalanceUI();
+        playSound('win');
+        btn.textContent = 'Взойти на башню';
+        btn.classList.remove('danger');
+        document.querySelectorAll('.tower-row').forEach(r => r.classList.remove('active'));
+      }
+    }
+
+    function updateTowerFloorUI() {
+      document.querySelectorAll('.tower-row').forEach((r, idx) => {
+        const fIdx = (TOWER_FLOORS - 1) - idx;
+        r.classList.remove('active');
+        if (fIdx === towerFloor) r.classList.add('active');
+        if (fIdx < towerFloor) r.classList.add('passed');
+      });
+    }
+
+    function onTowerStep(floor, btnIdx, btn) {
+      if (!towerActive || floor !== towerFloor) return;
+
+      if (btnIdx === towerTraps[floor]) {
+        // Капкан
+        btn.classList.add('fail');
+        btn.innerHTML = '💥';
+        towerActive = false;
+        playSound('boom');
+        document.getElementById('tower-action-btn').textContent = 'Срыв! Попробовать снова';
+        document.getElementById('tower-action-btn').classList.remove('danger');
+        document.querySelectorAll('.tower-row').forEach(r => r.classList.remove('active'));
+      } else {
+        // Безопасно
+        btn.classList.add('safe');
+        btn.innerHTML = '💎';
+        playSound('token');
+        towerFloor++;
+        const currentWin = Math.floor(towerBet * towerMultipliers[floor]);
+        document.getElementById('tower-current-win').textContent = `${currentWin} FFT`;
+        document.getElementById('tower-action-btn').textContent = `Забрать (${currentWin} FFT)`;
+
+        if (towerFloor >= TOWER_FLOORS) {
+          // Пройдена вся башня
+          towerActive = false;
+          tokens += currentWin;
+          updateBalanceUI();
+          playSound('win');
+          document.getElementById('tower-action-btn').textContent = 'Победа на вершине!';
+          document.getElementById('tower-action-btn').classList.remove('danger');
+        } else {
+          updateTowerFloorUI();
+        }
+      }
+    }
   </script>
 </body>
 </html>
 ```eof
-
-### Что было изменено и добавлено:
-1. **Объединенная карточка профиля:**
-   - Тариф (`PRO`), оставшийся срок (`50 дн.`) и баланс токенов (`1,420 FFT`) теперь компактно сгруппированы в удобную верхнюю карточку рядом с аватаром `drex`.
-2. **Интерактивная сингулярность («Черная дыра»):**
-   - Расположена прямо по центру под карточкой профиля.
-   - При зажатии пальцем/мышью срабатывает физика гравитации: все летающие звезды с холста на огромной скорости закручиваются и слетаются в центр черной дыры.
-   - Добавлен эффект тряски экрана (`screen-shake`), виброотклик (`navigator.vibrate`) и индикатор прогресса зажатия.
-3. **Механика начисления:**
-   - Каждая **1 секунда** удержания начисляет **+1 токен**, сопровождаясь всплывающим неоновым текстом `+1 FFT`.
-   - Установлен дневной лимит в **100 токенов в день** с динамическим счетчиком `0 / 100 FFT`.
